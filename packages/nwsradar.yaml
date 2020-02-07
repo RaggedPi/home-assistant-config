@@ -1,0 +1,15 @@
+################################################################
+## Ragged Jack Farm                                           ##
+## Package: NWS Radar                                         ##
+## Author: David Durost <david.durost@gmail.com>              ##
+## Url: http://ragedjackfarm.net                              ##
+################################################################
+homeassistant:
+  customize:
+      package.node_anchors:
+        customize: &customize
+          package: 'nwsradar'
+camera:
+  - platform: nwsradar
+    station: GYX
+    style: Standard

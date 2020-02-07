@@ -1,0 +1,26 @@
+################################################################
+## Ragged Jack Farm                                           ##
+## Package: Darksky Weather                                   ##
+## Author: David Durost <david.durost@gmail.com>              ##
+## Url: http://ragedjackfarm.net                              ##
+################################################################
+homeassistant:
+  customize:
+      package.node_anchors:
+        customize: &customize
+          package: 'darksky'
+sensor:
+  - platform: darksky
+    name: pv
+    api_key: !secret darksky_key
+    forecast:
+      - 0
+      - 1
+    hourly_forecast:
+      - 0
+      - 1
+      - 2
+      - 3
+    monitored_conditions:
+      - cloud_cover
+      - visibility

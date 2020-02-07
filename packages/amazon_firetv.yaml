@@ -1,0 +1,17 @@
+################################################################
+## Ragged Jack Farm                                           ##
+## Package: Amazon FireTv 4k                                  ##
+## Author: David Durost <david.durost@gmail.com>              ##
+## Url: http://ragedjackfarm.net                              ##
+################################################################
+homeassistant:
+  customize:
+    package.node_anchors:
+      customize: &customize
+        package: 'amazon_firetv'    
+
+media_player:
+  - platform: androidtv
+    name: Workshop FireTv
+    host: !secret firestick_ip
+    adb_server_ip: !secret adb_server_ip
