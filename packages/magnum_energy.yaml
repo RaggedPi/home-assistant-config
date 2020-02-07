@@ -1,0 +1,453 @@
+################################################################
+## Ragged Jack Farm                                           ##
+## Package: Magnum Energy                                     ##
+## Author: David Durost <david.durost@gmail.com>              ##
+## Url: http://ragedjackfarm.net                              ##
+################################################################
+homeassistant:
+  customize:
+      package.node_anchors:
+        customize: &customize
+          package: 'magnum'
+      sensor.magnum_inverter_mode:
+        friendly_name: Inverter Mode
+      sensor.magnum_inverter_AACin:
+        friendly_name: Input AC Amps
+      sensor.magnum_inverter_AACout:
+        friendly_name: Output AC Amps
+      sensor.magnum_inverter_adc:
+        friendly_name: Inverter DC Amps
+      sensor.magnum_inverter_bat:
+        friendly_name: Battery Temperature
+      sensor.magnum_inverter_fault:
+        friendly_name: Fault
+      sensor.magnum_inverter_fet:
+        friendly_name: FET Temperature
+      sensor.magnum_inverter_model:
+        friendly_name: Inverter Model
+      sensor.magnum_inverter_revision:
+        friendly_name: Inverter Revision
+      sensor.magnum_inverter_tfmr:
+        friendly_name: Transformer Temperature
+      sensor.magnum_inverter_VACin:
+        friendly_name: Input AC Voltage
+      sensor.magnum_inverter_VACout:
+        friendly_name: Output AC Voltage
+      sensor.magnum_inverter_vdc:
+        friendly_name: Inverter DC Voltage
+      sensor.magnum_inverter_frequency:
+        friendly_name: Frequency
+      sensor.magnum_bmk_adc:
+        friendly_name: BMK DC Amperage
+      sensor.magnum_bmk_amph:
+        friendly_name: Amphours
+      sensor.magnum_bmk_fault:
+        friendly_name: BMK Fault Code
+      sensor.magnum_bmk_fault_text:
+        friendly_name: BMK Fault
+      sensor.magnum_bmk_soc:
+        friendly_name: State of Charge
+      sensor.magnum_bmk_vdc:
+        friendly_name: BMK DC Voltage
+      sensor.magnum_bmk_vmax:
+        friendly_name: Max Voltage
+      sensor.magnum_bmk_vmin:
+        friendly_name: Min Voltage
+      sensor.magnum_ags_revision:
+        friendly_name: AGS Revision
+      sensor.magnum_ags_running:
+        friendly_name: AGS Gen Running
+      sensor.magnum_ags_status:
+        friendly_name: AGS Status Code
+      sensor.magnum_ags_status_text:
+        friendly_name: AGS Status
+      sensor.magnum_ags_vdc:
+        friendly_name: AGS DC Voltage
+  customize_glob:
+    "sensor.magnum_*":
+      icon: mdi:power-socket-us
+      
+sensor:
+  # Inverter
+  - platform: mqtt
+    name: magnum_inverter_revision
+    state_topic: "magnum/inverter"
+    value_template: "{{ value_json.data.revision }}"
+    json_attributes_topic: "magnum/inverter"
+    json_attributes_template: "{{ value_json.data.revision | tojson }}" 
+  - platform: mqtt
+    name: magnum_inverter_mode
+    state_topic: "magnum/inverter"
+    value_template: >
+      {% if value_json.data.mode == 0 %}
+      Charger in Standby
+      {% elif value_json.data.mode == 1 %}
+      Equalizing
+      {% elif value_json.data.mode == 2 %}
+      Float
+      {% elif value_json.data.mode == 4 %}
+      Absorb  
+      {% elif value_json.data.mode == 8 %}
+      Bulk
+      {% elif value_json.data.mode == 9 %}
+      Battery Save
+      {% elif value_json.data.mode == 16 %}
+      Charging
+      {% elif value_json.data.mode == 32 %}
+      Off
+      {% elif value_json.data.mode == 64 %}
+      Inverting
+      {% elif value_json.data.mode == 80 %}
+      Inverter in Standby
+      {% elif value_json.data.mode == 128 %}
+      Searching
+      {% else %}
+      Unknown Code: {{ value_json.data.mode }}
+      {% endif %}      
+    json_attributes_topic: "magnum/inverter"
+    json_attributes_template: "{{ value_json.data.mode | tojson }}" 
+  - platform: mqtt
+    name: magnum_inverter_fault
+    state_topic: "magnum/inverter"
+    value_template: "{{ value_json.data.fault }}"
+    json_attributes_topic: "magnum/inverter"
+    json_attributes_template: "{{ value_json.data.fault | tojson }}" 
+  - platform: mqtt
+    name: magnum_inverter_vdc
+    state_topic: "magnum/inverter"
+    value_template: "{{ value_json.data.vdc }}"
+    json_attributes_topic: "magnum/inverter"
+    json_attributes_template: "{{ value_json.data.vdc | tojson }}"
+    unit_of_measurement: V
+  - platform: mqtt
+    name: magnum_inverter_adc
+    state_topic: "magnum/inverter"
+    value_template: "{{ value_json.data.adc }}"
+    json_attributes_topic: "magnum/inverter"
+    json_attributes_template: "{{ value_json.data.adc | tojson }}" 
+    unit_of_measurement: A
+  - platform: mqtt
+    name: magnum_inverter_VACout
+    state_topic: "magnum/inverter"
+    value_template: "{{ value_json.data.VACout }}"
+    json_attributes_topic: "magnum/inverter"
+    json_attributes_template: "{{ value_json.data.VACout | tojson }}"
+    unit_of_measurement: V
+  - platform: mqtt
+    name: magnum_inverter_VACin
+    state_topic: "magnum/inverter"
+    value_template: "{{ value_json.data.VACin }}"
+    json_attributes_topic: "magnum/inverter"
+    json_attributes_template: "{{ value_json.data.VACin | tojson }}"
+    unit_of_measurement: V
+  - platform: mqtt
+    name: magnum_inverter_AACin
+    state_topic: "magnum/inverter"
+    value_template: "{{ value_json.data.AACin }}"
+    json_attributes_topic: "magnum/inverter"
+    json_attributes_template: "{{ value_json.data.AACin | tojson }}" 
+    unit_of_measurement: A
+  - platform: mqtt
+    name: magnum_inverter_AACout
+    state_topic: "magnum/inverter"
+    value_template: "{{ value_json.data.AACout }}"
+    json_attributes_topic: "magnum/inverter"
+    json_attributes_template: "{{ value_json.data.AACout | tojson }}" 
+    unit_of_measurement: A
+  - platform: mqtt
+    name: magnum_inverter_bat
+    state_topic: "magnum/inverter"
+    value_template: "{{ value_json.data.bat }}"
+    json_attributes_topic: "magnum/inverter"
+    json_attributes_template: "{{ value_json.data.bat | tojson }}" 
+    unit_of_measurement: C
+  - platform: mqtt
+    name: magnum_inverter_tfmr
+    state_topic: "magnum/inverter"
+    value_template: "{{ value_json.data.tfmr }}"
+    json_attributes_topic: "magnum/inverter"
+    json_attributes_template: "{{ value_json.data.tfmr | tojson }}" 
+    unit_of_measurement: C
+  - platform: mqtt
+    name: magnum_inverter_fet
+    state_topic: "magnum/inverter"
+    value_template: "{{ value_json.data.fet }}"
+    json_attributes_topic: "magnum/inverter"
+    json_attributes_template: "{{ value_json.data.fet | tojson }}" 
+    unit_of_measurement: C
+  - platform: mqtt
+    name: magnum_inverter_model
+    state_topic: "magnum/inverter"
+    value_template: "{{ value_json.data.model_text }}"
+    json_attributes_topic: "magnum/inverter"
+    json_attributes_template: "{{ value_json.data.model_text | tojson }}" 
+  - platform: mqtt
+    name: magnum_inverter_frequency
+    state_topic: "magnum/inverter"
+    value_template: "{{ value_json.data.Hz }}"
+    json_attributes_topic: "magnum/inverter"
+    json_attributes_template: "{{ value_json.data.Hz | tojson }}" 
+    unit_of_measurement: Hz
+  # Bmk
+  - platform: mqtt
+    name: magnum_bmk_revision
+    state_topic: "magnum/bmk"
+    value_template: "{{ value_json.data.revision }}"
+    json_attributes_topic: "magnum/bmk"
+    json_attributes_template: "{{ value_json.data.revision | tojson }}"
+  - platform: mqtt
+    name: magnum_bmk_soc
+    state_topic: "magnum/bmk"
+    value_template: "{{ value_json.data.soc }}"
+    json_attributes_topic: "magnum/bmk"
+    json_attributes_template: "{{ value_json.data.soc | tojson }}" 
+    unit_of_measurement: '%'
+  - platform: mqtt
+    name: magnum_bmk_vdc
+    state_topic: "magnum/bmk"
+    value_template: "{{ value_json.data.vdc }}"
+    json_attributes_topic: "magnum/bmk"
+    json_attributes_template: "{{ value_json.data.vdc | tojson }}" 
+    unit_of_measurement: V
+  - platform: mqtt
+    name: magnum_bmk_adc
+    state_topic: "magnum/bmk"
+    value_template: "{{ value_json.data.adc }}"
+    json_attributes_topic: "magnum/bmk"
+    json_attributes_template: "{{ value_json.data.adc | tojson }}" 
+    unit_of_measurement: A
+  - platform: mqtt
+    name: magnum_bmk_vmin
+    state_topic: "magnum/bmk"
+    value_template: "{{ value_json.data.vmin }}"
+    json_attributes_topic: "magnum/bmk"
+    json_attributes_template: "{{ value_json.data.vmin | tojson }}" 
+    unit_of_measurement: V
+  - platform: mqtt
+    name: magnum_bmk_vmax
+    state_topic: "magnum/bmk"
+    value_template: "{{ value_json.data.vmax }}"
+    json_attributes_topic: "magnum/bmk"
+    json_attributes_template: "{{ value_json.data.vmax | tojson }}" 
+    unit_of_measurement: V
+  - platform: mqtt
+    name: magnum_bmk_amph
+    state_topic: "magnum/bmk"
+    value_template: "{{ value_json.data.amph }}"
+    json_attributes_topic: "magnum/bmk"
+    json_attributes_template: "{{ value_json.data.amph | tojson }}" 
+    unit_of_measurement: Ah
+  - platform: mqtt
+    name: magnum_bmk_fault_text
+    state_topic: "magnum/bmk"
+    value_template: "{{ value_json.data.Fault_Text }}"
+    json_attributes_topic: "magnum/bmk"
+    json_attributes_template: "{{ value_json.data.Fault_Text | tojson }}"
+  - platform: mqtt
+    name: magnum_bmk_fault
+    state_topic: "magnum/bmk"
+    value_template: "{{ value_json.data.Fault }}"
+    json_attributes_topic: "magnum/bmk"
+    json_attributes_template: "{{ value_json.data.Fault | tojson }}"
+  # AGS
+  - platform: mqtt
+    name: magnum_ags_revision
+    state_topic: "magnum/ags"
+    value_template: "{{ value_json.data.revision }}"
+    json_attributes_topic: "magnum/ags"
+    json_attributes_template: "{{ value_json.data.revision | tojson }}"
+  - platform: mqtt
+    name: magnum_ags_status
+    state_topic: "magnum/ags"
+    value_template: "{{ value_json.data.status }}"
+    json_attributes_topic: "magnum/ags"
+    json_attributes_template: "{{ value_json.data.status | tojson }}"
+  - platform: mqtt
+    name: magnum_ags_status_text
+    state_topic: "magnum/ags"
+    value_template: "{{ value_json.data.status_text }}"
+    json_attributes_topic: "magnum/ags"
+    json_attributes_template: "{{ value_json.data.status_text | tojson }}"
+  - platform: mqtt
+    name: magnum_ags_temp
+    state_topic: "magnum/ags"
+    value_template: "{{ value_json.data.temp }}"
+    json_attributes_topic: "magnum/ags"
+    json_attributes_template: "{{ value_json.data.temp | tojson }}"
+    unit_of_measurement: C
+  - platform: mqtt
+    name: magnum_ags_runtime
+    state_topic: "magnum/ags"
+    value_template: "{{ value_json.data.runtime| float(1) }}"
+    json_attributes_topic: "magnum/ags"
+    json_attributes_template: "{{ value_json.data.runtiume | tojson }}"
+    unit_of_measurement: Hrs
+  - platform: mqtt
+    name: magnum_ags_vdc
+    state_topic: "magnum/ags"
+    value_template: "{{ value_json.data.vdc }}"
+    json_attributes_topic: "magnum/ags"
+    json_attributes_template: "{{ value_json.data.vdc | tojson }}"
+    unit_of_measurement: V        
+  
+  # Remote
+  - platform: mqtt
+    name: magnum_remote_revision
+    state_topic: "magnum/remote"
+    value_template: "{{ value_json.data.revision }}"
+    json_attributes_topic: "magnum/ags"
+    json_attributes_template: "{{ value_json.data.revision | tojson }}"
+
+    # action
+    # searchwatts 
+    # batterysize
+    # battype 
+    # absorb 
+    # chargeramps 
+    # ainput 
+    # parallel 
+    # force_charge 
+    # genstart 
+    # lbco
+    # vaccutout 
+    # vsfloat 
+    # vEQ 
+    # absorbtime 
+    # remotetimehours 
+    # remotetimemins 
+    # runtime
+    # starttemp
+    # startvdc
+    # quiettime 
+    # begintime
+    # stoptime 
+    # vdcstop
+    # voltstartdelay 
+    # voltstopdelay
+    # maxrun 
+    # socstart
+    # socstop 
+    # ampstart 
+    # ampsstartdelay 
+    # ampstop 
+    # ampsstopdelay 
+    # quietbegintime 
+    # quietendtime 
+    # exercisedays 
+    # exercisestart 
+    # exerciseruntime 
+    # topoff 
+    # warmup 
+    # cool 
+    # batteryefficiency
+  - platform: template
+    sensors:
+      magnum_fault:
+        friendly_name: System Fault
+        value_template: >-
+          {% set ags_s = states('sensor.magnum_ags_status')|int %}
+          {% if states('sensor.magnum_inverter_fault')|int != 0 %} # we have a fault!
+            {% set fault = states('sensor.magnum_inverter_fault')|int %}
+            {% if fault == 1 %}Stuck Relay
+            {% elif fault == 2 %}DC Overload
+            {% elif fault == 3 %}AC Overload
+            {% elif fault == 4 %}Dead Battery
+            {% elif fault == 5 %}Backfeed
+            {% elif fault == 6 %}NOT USED
+            {% elif fault == 7 %}NOT USED
+            {% elif fault == 8 %}Low Battery Cutout
+            {% elif fault == 9 %}High Battery Cutout
+            {% elif fault == 10 %}High AC Voltage Output
+            {% elif fault == 16 %}Bad FET Bridge
+            {% elif fault == 18 %}FET Overheat
+            {% elif fault == 19 %}FET Overload
+            {% elif fault == 20 %}NOT USED
+            {% elif fault == 22 %}Stack Mode Mismatch
+            {% elif fault == 23 %}Stack Sync Clock Detection Fail
+            {% elif fault == 24 %}Stack Clock Not In Phase
+            {% elif fault == 25 %}Stack AC Voltage Output Not Phased
+            {% elif fault == 32 %}Over Temp Shutdown
+            {% elif fault == 33 %}Transfer Relay Open (Chg Mode)
+            {% elif fault == 128 %}Bridge Fault (Chg Mode)
+            {% elif fault == 129 %}High Battery Temp
+            {% elif fault == 144 %}Transformer Temp Cutout
+            {% elif fault == 145 %} CB3 30Amp Breaker Fail
+            {% endif %}
+          {% elif states('sensor.magnum_bmk_fault')|int == 2 %}BMK Fault
+          {% elif ags_s == 9 %}AGS Test Start Fault
+          {% elif ags_s == 10 %}AGS Temp Start Fault
+          {% elif ags_s == 11 %}AGS Voltage Start Fault
+          {% elif ags_s == 15 %}AGS Time Start Fault
+          {% elif ags_s == 16 %}AGS SOC Start Fault
+          {% elif ags_s == 17 %}AGS Exercise Start Fault
+          {% elif ags_s == 21 %}AGS Amperage Start Fault
+          {% elif ags_s == 22 %}AGS Topoff Fault
+          {% elif ags_s == 24 %}AGS Max Run Fault
+          {% elif ags_s == 25 %}AGS Generator Run Fault
+          {% else %}None
+          {% endif %}
+        
+binary_sensor:
+  - platform: mqtt
+    name: magnum_ags_running
+    state_topic: magnum/ags
+    value_template: "{{ value_json.data.running }}"
+    json_attributes_topic: "magnum/ags"
+    json_attributes_template: "{{ value_json.data.running | tojson }}"
+
+  - platform: template
+    sensors:
+      magnum_aux_ac_input:
+        friendly_name: Aux. AC Input
+        value_template: >-
+          {{ states('sensor.magnum_ags_status')|int == 4 }}
+
+switch:
+  - platform: mqtt
+    name: magnum_ags_manual
+    command_topic: "magnum/ags/manualRun/set"
+    state_topic: "magnum/ags/manualRun"
+    availability_topic: "magnum/ags/manualRun/available"
+
+group:
+  inverter_stats:
+    name: Inverter Stats
+    view: true
+    entities:
+      - sensor.magnum_inverter_AACin
+      - sensor.magnum_inverter_AACout
+      - sensor.magnum_inverter_adc
+      - sensor.magnum_inverter_bat
+      - sensor.magnum_inverter_fault
+      - sensor.magnum_inverter_fet
+      - sensor.magnum_inverter_frequency
+      - sensor.magnum_inverter_mode
+      - sensor.magnum_inverter_model
+      - sensor.magnum_inverter_revision
+      - sensor.magnum_inverter_tfmr
+      - sensor.magnum_inverter_VACin
+      - sensor.magnum_inverter_VACout
+      - sensor.magnum_inverter_vdc
+  bmk_stats:
+    name: BMK stats
+    view: true
+    entities:
+      - sensor.magnum_bmk_adc 
+      - sensor.magnum_bmk_amph
+      - sensor.magnum_bmk_fault
+      - sensor.magnum_bmk_fault_text
+      - sensor.magnum_bmk_revision
+      - sensor.magnum_bmk_soc
+      - sensor.magnum_bmk_vdc
+      - sensor.magnum_bmk_vmax
+      - sensor.magnum_bmk_vmin
+  ags_stats:
+    name: AGS stats
+    view: true
+    entities:
+      - sensor.magnum_ags_revision
+      - sensor.magnum_ags_running
+      - sensor.magnum_ags_status
+      - sensor.magnum_ags_status_text
+      - sensor.magnum_ags_temp
+      - sensor.magnum_ags_vdc
