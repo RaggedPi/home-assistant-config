@@ -238,12 +238,49 @@ sensor: # actual register numbers are +1
       classic_reason_for_rest:
         friendly_name: 'Rest Reason'
         value_template: >-
-          {% if (states('sensor.classic_rest_reason')|int) == 4 %}
-          PV input below battery voltage
-          {% elif (states('sensor.classic_rest_reason')|int) == 5 %}
-          Battery full or no draw > 90s
-          {% elif (states('sensor.classic_rest_reason')|int) == 0 %}
-          Not at rest
+          {% set rest = states('sensor.classic_rest_reason')|int %}
+          {% if rest == 1 %}
+            Anti-Click
+          {% elif rest == 2 %}
+            Insane Battery Measurement
+          {% elif rest == 3 %}
+            Negative Current
+          {% elif rest == 4 %}
+            PV Input Below Battery Vvoltage
+          {% elif rest == 5 %}
+            Battery Full Or No Draw
+          {% elif rest == 6 %}
+            FET Overheat
+          {% elif rest == 7 %}
+            Ground Fault
+          {% elif rest == 8 %}
+            Arc Fault
+          {% elif rest == 9 %}
+            Battery Backfeed To PV
+          {% elif rest == 10 %}
+            Battery Below 8V
+          {% elif rest in [11, 14] %}
+            Low Light
+          {% elif rest in [12, 15] %}
+            Low Light Recheck (Drop)
+          {% elif rest == 13 %}
+            Low Light Recheck (Rise)
+          {% elif rest == 16 %}
+            MPPT Off
+          {% elif rest in [17, 18, 19] %}
+            PV Input Too High
+          {% elif rest == 22 %}
+            Avg Battery Voltage Too High
+          {% elif rest == 25 %}
+            Battery Voltae Above Overshoot
+          {% elif rest == 26 %}
+            MPPT Mode Changed
+          {% elif rest == 27 %}
+            Bridge Center
+          {% elif rest == 28 %}
+            Relay Not Enagaged
+          {% elif rest == 29 %}
+            Bad Wind Graph
           {% else %}
           Reason Code: {{states('sensor.classic_rest_reason')|int}}
           {% endif %}
@@ -272,6 +309,54 @@ sensor: # actual register numbers are +1
         value_template: >-
           {{ ((state('sensor.classic_fet_temp_c')|int) *9 /5) + 32 }}
         unit_of_measurement: F
+
+      classic_mode:
+        friendly_name: Mode
+        value_template: >-
+          {% set mode = states('sensor.classic_charge_stage')|int %}
+          {% if mode == 0 %}
+            Resting
+          {% elif mode == 3 %} 
+            Absorb
+          {% elif mode == 4 %}
+            Bulk
+          {% elif mode == 5 %}
+            Float
+          {% elif mode == 6 %}
+            Float MPPT
+          {% elif mode == 7 %}
+            EQ
+          {% elif mode == 10 %}
+            Hyper VOC
+          {% elif mode == 18 %}
+            EQ MPPT
+          {% else %}
+            Unknown
+          {% endif %}
+          
+      classic_mode_time:
+        friendly_name: Time
+        value_template: >-
+          {% set mode = states('sensor.classic_charge_stage')|int %}
+          {% if mode == 0 %} # we are resting
+            {{ sensor.classic_reason_for_rest }}
+          {% elif mode == 3 %} 
+            {{ sensor.classic_absorb_time }}
+          {% elif mode == 4 %}
+            ''
+          {% elif mode == 5 %}
+            {{ sensor.classic_float_time_today }}
+          {% elif mode == 6 %}
+            {{ sensor.classic_float_time_today }}
+          {% elif mode == 7 %}
+            {{ sensor.classic_equalize_time }}
+          {% elif mode == 10 %}
+            ''
+          {% elif mode == 18 %}
+            {{ sensor.classic_equalize_time }}
+          {% else %}
+            ''
+          {% endif %}
 # Entity Groups
 group:
   classic_stats:
