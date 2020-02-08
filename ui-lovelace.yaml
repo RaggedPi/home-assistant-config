@@ -1,3 +1,9 @@
+################################################################
+## Ragged Jack Farm                                           ##
+## Package: Lovelace UI                                       ##
+## Author: David Durost <david.durost@gmail.com>              ##
+## Url: http://ragedjackfarm.net                              ##
+################################################################
 resources:
   - type: js
     url: /community_plugin/tracking-number-card/tracking-number-card.js

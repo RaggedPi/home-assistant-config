@@ -1,0 +1,262 @@
+################################################################
+## Ragged Jack Farm                                           ##
+## Package: Presence Detection                                ##
+## Author: David Durost <david.durost@gmail.com>              ##
+## Url: http://ragedjackfarm.net                              ##
+################################################################
+homeassistant:
+  customize:
+    package.node_anchors:
+      customize: &customize
+        package: 'presence_detection'    
+#############
+# Owntracks #
+#############
+owntracks:
+
+###################
+# Device Trackers #
+###################
+device_tracker:
+  #############
+  # Owntracks #
+  #############
+  - platform: owntracks
+    max_gps_accuracy: 200
+
+  ########
+  # MQTT #
+  ########
+  - platform: mqtt
+    devices:
+      sm-n960u: /location/david
+      Galaxy-S9: /location/cat
+
+  ########
+  # NMAP #
+  ########
+  - platform: nmap_tracker
+    hosts: 
+      - 192.168.42.0/24  
+    home_interval: 10
+
+  ##############
+  # Goole Maps #
+  ##############
+  - platform: google_maps
+    username: !secret google_acct_david
+  
+  ########
+  # Ping #
+  ########
+  - platform: ping
+    hosts:
+      david_ping: 192.168.2.6
+      cat_ping: 192.168.42.133
+
+##########
+# People #
+##########
+person:
+  #########
+  # David #
+  #########
+  - name: David
+    id: david_durost
+    user_id: 1d6561aa60264300b734f222c8fdc270
+    friendly_name: David
+    device_trackers:
+      - device_tracker.david_ping
+  #############
+  # Catherine #
+  #############
+  - name: Cat
+    id: catherine_durost
+    device_trackers:
+      - device_tracker.cat_ping
+  #########
+  # Haven #
+  #########
+  - name: Haven
+    id: haven_audet
+    friendly_name: Haven
+  ########
+  # Nova #
+  ########
+  - name: Nova
+    id: nova_durost
+    friendly_name: Nova
+
+##########
+# Groups #
+##########
+group:
+  ##########
+  # Adults #
+  ##########
+  adults_home:
+    name: Adults at home
+    entities:
+      - person.david
+      - person.cat
+  ############
+  # Children #
+  ############
+  children_home:
+    name: Children at home
+    entities:
+      - person.haven
+      - person.nova
+  ############
+  # Everyone #
+  ############
+  anyone_home:
+    name: anyone at home
+    entities:
+      - person.david
+      - person.cat
+      - person.haven
+      - person.nova
+
+###############
+# Automations #
+###############
+automation:
+  ############
+  # Occupied #
+  ############
+  - alias: House occupied
+    trigger: 
+      platform: state
+      entity_id: group.anyone_home
+      to: 'home'
+    condition:
+      condition: state
+      entity_id: input_boolean.guest_mode
+      state: 'off'
+    action:
+      - service: climate.set_preset_mode
+        data_template:
+          entity_id: climate.house
+          preset_mode: none
+
+  ##############
+  # Unoccupied #
+  ##############
+  - alias: House unoccupied
+    trigger: 
+      platform: state
+      entity_id: group.anyone_home
+      from: 'home'
+    condition:
+      condition: state
+      entity_id: input_boolean.guest_mode
+      state: 'off'
+    action:
+      - service: climate.set_preset_mode
+        data_template:
+          entity_id: climate.house
+          preset_mode: eco
+      - service: homeassistant.turn_on
+        entity_id:
+          - script.everyone_away
+
+  #########
+  # David #
+  #########
+  - alias: David away
+    trigger: 
+      platform: state
+      entity_id: person.david
+      from: 'home'
+    condition:
+      condition: state
+      entity_id: input_boolean.guest_mode
+      state: 'off'
+    action:
+      - service: homeassistant.turn_on
+        entity_id:
+          - script.david_away
+
+  #############
+  # Catherine #
+  #############
+  - alias: Cat away
+    trigger: 
+      platform: state
+      entity_id: person.cat
+      from: 'home'
+    condition:
+      condition: state
+      entity_id: input_boolean.guest_mode
+      state: 'off'
+    action:
+      - service: homeassistant.turn_on
+        entity_id:
+          - script.cat_away
+
+###########
+# Scripts #
+###########
+script:
+  #########
+  # David #
+  #########
+  david_away:
+    alias: David away
+    sequence:
+      - service: homeassistant.turn_off
+        entity_id:
+          - light.master_david
+  
+  #############
+  # Catherine #
+  #############
+  cat_away:
+    alias: Fraser away
+    sequence:
+      - service: homeassistant.turn_off
+        entity_id:
+          - light.master_cat
+  
+  ############
+  # Everyone #
+  ############
+  everyone_away:
+    alias: everyone_away
+    sequence:
+      - service: homeassistant.turn_off
+        entity_id:
+          - script.david_away
+          - script.cat_away
+          - group.great_room_lights
+
+############
+# Recorder #
+############
+recorder:
+  include:
+    entities:
+      - person.david
+      - person.cat
+      - person.haven
+      - person.nova
+      - group.adults_home
+      - group.children_home
+      - group.anyone_home
+      - input_boolean.guest_mode
+
+###########
+# History #
+###########
+history:
+  include:
+    entities:
+      - person.david
+      - person.cat
+      - person.haven
+      - person.nova
+      - group.adults_home
+      - group.children_home
+      - group.anyone_home
+      - input_boolean.guest_mode
