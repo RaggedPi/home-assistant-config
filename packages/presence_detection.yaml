@@ -8,7 +8,17 @@ homeassistant:
   customize:
     package.node_anchors:
       customize: &customize
-        package: 'presence_detection'    
+        package: 'presence_detection' 
+
+    person.david_durost:
+      friendly_name: David
+    person.catherine_durost:
+      friendly_name: Cat
+    person.haven_audet:
+      friendly_name: Haven
+    person.nova_durost:
+      friendly_name: Nova
+
 #############
 # Owntracks #
 #############
@@ -64,9 +74,9 @@ person:
   - name: David
     id: david_durost
     user_id: 1d6561aa60264300b734f222c8fdc270
-    friendly_name: David
     device_trackers:
       - device_tracker.david_ping
+
   #############
   # Catherine #
   #############
@@ -74,18 +84,18 @@ person:
     id: catherine_durost
     device_trackers:
       - device_tracker.cat_ping
+
   #########
   # Haven #
   #########
   - name: Haven
     id: haven_audet
-    friendly_name: Haven
+
   ########
   # Nova #
   ########
   - name: Nova
     id: nova_durost
-    friendly_name: Nova
 
 ##########
 # Groups #

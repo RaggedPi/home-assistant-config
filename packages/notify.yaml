@@ -1,0 +1,54 @@
+################################################################
+## Ragged Jack Farm                                           ##
+## Notifications                                              ##
+## Author: David Durost <david.durost@gmail.com>              ##
+## Url: http://ragedjackfarm.net                              ##
+################################################################
+
+notify:
+  #########
+  # HTML5 #
+  #########
+  - platform: html5
+    name: html5
+    vapid_pub_key: !secret html5_pub_key
+    vapid_prv_key: !secret html5_prv_key
+    vapid_email: david.durost@gmail.com
+
+  ##########
+  # Adults #
+  ##########
+  - name: adults
+    platform: group
+    services:
+    #  - service: david_phone_service
+    #  - service: cat_phone_service
+      - service: html5
+
+  #########
+  # David #
+  #########
+  - name: david
+    platform: group
+    services:
+    #  - service: david_phone_service
+      - service: html5
+
+  #######
+  # Cat #
+  #######
+  - name: cat
+    platform: group
+    services:
+    #  - service: cat_phone_service
+      - service: html5
+
+  ###########
+  # Twitter #
+  ###########
+  - name: twitter
+    platform: twitter
+    consumer_key: !secret twitter_key
+    consumer_secret: !secret twitter_api_secret
+    access_token: !secret twitter_access_token
+    access_token_secret: !secret twitter_access_secret

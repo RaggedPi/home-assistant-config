@@ -73,7 +73,7 @@ modbus:
 
 sensor: # actual register numbers are +1
   - platform: modbus
-    scan_interval: 10
+    scan_interval: 5
     registers: # actual register numbers are +1
       # PCB Revision
       - name: classic_pcb
