@@ -1,0 +1,89 @@
+################################################################
+## Ragged Jack Farm                                           ##
+## Package: Amazon FireTv 4k                                  ##
+## Author: David Durost <david.durost@gmail.com>              ##
+## Url: http://ragedjackfarm.net                              ##
+################################################################
+
+###########
+# Sensors #
+###########
+sensor:
+  ###################################
+  # Raspberry Pi System Information #
+  ###################################
+  - platform: systemmonitor
+    resources:
+      - type: disk_free
+        arg: /
+      - type: disk_use_percent
+        arg: /
+      - type: swap_use_percent
+      - type: memory_free
+      - type: memory_use_percent
+      - type: processor_use
+      - type: load_1m
+      - type: load_5m
+      - type: load_15m
+
+##############
+# Automation #
+##############
+automation:
+  ##################
+  # Low Disk Space #
+  ##################
+  - alias: HAPi Low Disk Space Alert
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.disk_use_percent
+        above: 90
+    action:
+      - service: notify.david
+        data: 
+          title: "HAPi Low Resource Alert"
+          message: "Low Disk Space > 90% Used"
+  ##############
+  # Low Memory #
+  ##############
+  - alias: HAPi Low Memory Alert
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.memory_use_percent
+        above: 90
+    action:
+      - service: notify.david
+        data: 
+          title: "HAPi Low Resource Alert"
+          message: "Low Memory > 90% Used"
+  #############
+  # High Load #
+  #############
+  - alias: HAPi High Load Alert
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.load_5m
+        above: 2.8 # 4 Cores in RPi3 x 0.7 per core, for relatively high sustained load = 
+    action:
+      - service: notify.david
+        data: 
+          title: "HAPi Low Resource Alert"
+          message: "System Load 5m Load Average > 2.8"
+
+############
+# Recorder #
+############
+recorder:
+  include:
+    entities:
+      - sensor.disk_use_percent
+      - sensor.memory_use_percent
+
+###########
+# History #
+###########
+history:
+  include:
+    entities:
+      - sensor.disk_use_percent
+      - sensor.memory_use_percent
