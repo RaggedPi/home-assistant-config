@@ -19,10 +19,19 @@ homeassistant:
     person.nova_durost:
       friendly_name: Nova
 
-#############
-# Owntracks #
-#############
+######################
+# Owntracks Platform #
+######################
 owntracks:
+
+#################
+# MQTT Platform #
+#################
+mqtt:
+  broker: !secret mqtt_broker
+  port: !secret mqtt_port
+  username: !secret mqtt_username
+  password: !secret mqtt_password
 
 ###################
 # Device Trackers #
@@ -39,27 +48,29 @@ device_tracker:
   ########
   - platform: mqtt
     devices:
-      sm-n960u: /location/david
-      Galaxy-S9: /location/cat
+      smn960u: !secret owntracks_david
+      smn775n: !secret owntracks_catherine
 
   ########
   # NMAP #
   ########
   - platform: nmap_tracker
     hosts: 
-      - 192.168.42.0/24  
+      - 192.168.42.6
+      - 192.168.42.133  
     home_interval: 10
 
   ##############
   # Goole Maps #
   ##############
-  - platform: google_maps
-    username: !secret google_acct_david
+#  - platform: google_maps
+#    username: !secret google_acct_david
   
   ########
   # Ping #
   ########
   - platform: ping
+    scan_interval: 30
     hosts:
       david_ping: 192.168.2.6
       cat_ping: 192.168.42.133
@@ -71,30 +82,32 @@ person:
   #########
   # David #
   #########
-  - name: David
+  - name: david
     id: david_durost
     user_id: 1d6561aa60264300b734f222c8fdc270
     device_trackers:
       - device_tracker.david_ping
+      - device_tracker.smn960u
 
   #############
   # Catherine #
   #############
-  - name: Cat
+  - name: cat
     id: catherine_durost
     device_trackers:
       - device_tracker.cat_ping
+      - device_tracker.smn775n
 
   #########
   # Haven #
   #########
-  - name: Haven
+  - name: haven
     id: haven_audet
 
   ########
   # Nova #
   ########
-  - name: Nova
+  - name: nova
     id: nova_durost
 
 ##########
@@ -223,7 +236,7 @@ script:
   # Catherine #
   #############
   cat_away:
-    alias: Fraser away
+    alias: Cat away
     sequence:
       - service: homeassistant.turn_off
         entity_id:

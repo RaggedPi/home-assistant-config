@@ -31,9 +31,5 @@ system_health:
 history:
 hacs:
   token: !secret hacs_token
-camera:
-  - platform: nwsradar
-    station: VWX
-    style: Standard
 lovelace: 
   mode: yaml

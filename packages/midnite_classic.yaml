@@ -73,7 +73,7 @@ modbus:
 
 sensor: # actual register numbers are +1
   - platform: modbus
-    scan_interval: 5
+    scan_interval: 3600
     registers: # actual register numbers are +1
       # PCB Revision
       - name: classic_pcb
@@ -361,7 +361,6 @@ sensor: # actual register numbers are +1
 group:
   classic_stats:
     name: 'Midnite Classic'
-    view: true
     entities:
       - sensor.classic_absord_time
       - sensor.classic_battery_current
@@ -390,7 +389,6 @@ group:
       - sensor.classic_total_energy
   classic_volts:
     name: 'Midnite Classic Voltages'
-    view: true
     entities:
       - sensor.classic_last_voc
       - sensor.classic_pv_voltage
@@ -398,7 +396,6 @@ group:
       - sensor.classic_nom_battery_voltage
   classic_currents:
     name: 'Midnite Classic Currents'
-    view: true
     entities:
       - sensor.classic_battery_capacity
       - sensor.classic_battery_current
@@ -406,7 +403,6 @@ group:
       - sensor.classic_total_ah_daily
   classic_powers:
     name: 'Midnite Classic Power'
-    view: true
     entities:
       - sensor.classic_power
       - sensor.classic_pv_power

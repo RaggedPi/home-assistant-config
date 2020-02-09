@@ -92,39 +92,47 @@ views:
           ###################
           # Device Tracking #
           ###################
-          - type: glance
-            entities:
-              - device_tracker.david
-              - device_tracker.cat
-          - type: entity-filter
-            entities:
-              - device_tracker.david
-              - device_tracker.cat
-            state_filter:
-              - 'home'
-            card:
-              type: glance
-              title: People at Home
+          - entity: person.nova
+            type: custom:multiple-entity-row
+            name: People
+            name_state: Nova
+            secondary_info: last-changed
+            primary:
+              entity: person.david_durost
+            secondary:
+              entity: person.catherine
+            tertiary:
+              entity: person.haven
+          
+          # - type: entity-filter
+          #   entities:
+          #     - person.david
+          #     - person.cat
+          #   state_filter:
+          #     - 'home'
+          #   card:
+          #     type: glance
+          #     title: People at Home
               
-          - type: entity-filter
-            entities:
-              - device_tracker.david
-              - device_tracker.cat
-            state_filter:
-              - 'work'
-            card:
-              type: glance
-              title: People at Work              
+          # - type: entity-filter
+          #   entities:
+          #     - person.david
+          #     - person.cat
+          #   state_filter:
+          #     - 'work'
+          #   card:
+          #     type: glance
+          #     title: People at Work              
 
-          - type: entity-filter
-            entities:
-              - device_tracker.david
-              - device_tracker.cat
-            state_filter:
-              - 'not_home'
-            card:
-              type: glance
-              title: People enjoying the life
+          # - type: entity-filter
+          #   entities:
+          #     - person.david
+          #     - person.cat
+          #   state_filter:
+          #     - 'not_home'
+          #   card:
+          #     type: glance
+          #     title: People enjoying the life
       ####################
       # Weather Forecast #
       #################### 
