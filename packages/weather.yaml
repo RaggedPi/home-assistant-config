@@ -9,6 +9,11 @@ homeassistant:
       package.node_anchors:
         customize: &customize
           package: 'darksky'
+
+# weather:
+#  - platform: darksky
+#    api_sky: !secret darksky_key
+
 sensor:
   - platform: darksky
     name: pv
@@ -41,11 +46,6 @@ sensor:
       - wind_speed
       - wind_bearing
 
-  - platform: darksky
-    name: weather_station
-    api_key: !secret darksky_key
-    daily_forecast: [0-7]
-    hourly_forecast: [0-5]
 
 
   ####################
