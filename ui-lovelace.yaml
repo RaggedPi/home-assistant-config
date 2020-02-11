@@ -21,6 +21,21 @@ resources:
     url: /community_plugin/lovelace-multiple-entity-row/multiple-entity-row.js?v=2.2.1
   - type: module
     url: /community_plugin/sun-card/sun-card.js
+  - type: module
+    url: /community_plugin/lovelace-card-mod/card-mod.js
+  - type: module
+    url: /community_plugin/lovelace-animated-background.js
+
+animated_background:
+  default_url: /local/background-animations/sunny.html
+  entity: "sensor.storm_center"
+  state_url:
+      'sunny': /local/background-animations/sunny.html
+      'partlycloudy': /local/background-animations/cloudy.html
+      'cloudy': /local/background-animations/cloudy.html
+      'mostlycloudy': /local/background-animations/mostlycloudy.html
+      'clear-night': /local/background-animations/night.html
+      'fog': /local/background-animations/fog.html
 
 title: Ragged Jack Mtn
 views:
@@ -98,11 +113,14 @@ views:
             name_state: Nova
             secondary_info: last-changed
             primary:
-              entity: person.david_durost
+              entity: person.david
+              name: David
             secondary:
-              entity: person.catherine
+              entity: person.cat
+              name: Catherine
             tertiary:
               entity: person.haven
+              name: Haven
           
           # - type: entity-filter
           #   entities:
@@ -133,16 +151,83 @@ views:
           #   card:
           #     type: glance
           #     title: People enjoying the life
-      ####################
-      # Weather Forecast #
-      #################### 
-      - type: weather-forecast
-        entity: weather.home
-      #################  
-      # Weather radar #
-      #################
+
+      ###########
+      # Weather #
+      ###########
+      - type: vertical-stack
+        cards:      
+          ####################
+          # Weather Forecast #
+          ####################
+          - type: weather-forecast
+            entity: weather.home
+
+          ################
+          # Storm Center #
+          ################
+
+          ###############
+          # Storm Alert #
+          ###############
+          # - type: conditional
+          #   conditions:
+          #     - entity: sensor.storm_center_alerts
+          #       state_not: 0
+          #   card:
+          #     type: glance
+          #     title: Storm Alert
+          #     entities:
+          #       - sensor.storm_center_alerts
+
+          #####################
+          # Storm Information #
+          #####################
+          - entity: sensor.storm_center_wind_bearing
+            type: custom:multiple-entity-row
+            name: Storm Information
+            name_state: Wind Bearing
+            secondary_info: last-changed
+            primary:
+              entity: sensor.storm_center_nearest_storm_distance
+              name: Nearest Storm
+            secondary:
+              entity: sensor.storm_center_nearest_storm_bearing
+              name: Storm Bearing
+            tertiary:
+              entity: sensor.storm_center_wind_speed
+              name: Wind Speed
+          - entity: sensor.storm_center_temperature
+            type: custom:multiple-entity-row
+            name: Temperatures
+            name_state: Current Temperature
+            secondary_info: last-changed
+            primary:
+              entity: sensor.storm_center_apparent_temperature
+              name: Feels Like
+          - entity: sensor.storm_center_total_precip
+            type: custom:multiple-entity-row
+            name: Precipitation
+            name_state: Total
+            primary:
+              entity: sensor.storm_center_precip
+              name: Type
+            secondary:
+              entity: sensor.storm_center_intensity_of_precip
+              name: Intensity
+
+          #################  
+          # Weather radar #
+          #################
+          - type: picture-entity
+            entity: camera.gyx
+
+      ###############################
+      # International Space Station #
+      ###############################
       - type: picture-entity
-        entity: camera.gyx
+        entity: camera.iss
+
   #####################
   # Power Center View #
   #####################

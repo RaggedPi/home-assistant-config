@@ -24,3 +24,53 @@ sensor:
     monitored_conditions:
       - cloud_cover
       - visibility
+
+  - platform: darksky
+    name: storm_center
+    api_key: !secret darksky_key
+    scan_interval: '01:00:00'
+    monitored_conditions:
+      - nearest_storm_distance
+      - nearest_storm_bearing
+      - alerts
+      - precip_type
+      - precip_intensity
+      - precip_accumulation
+      - temperature
+      - apparent_temperature
+      - wind_speed
+      - wind_bearing
+
+  - platform: darksky
+    name: weather_station
+    api_key: !secret darksky_key
+    daily_forecast: [0-7]
+    hourly_forecast: [0-5]
+
+
+  ####################
+  # Template Sensors #
+  ####################
+  # Workarounds for sensors not being defined if no nearby storm or precip
+  # - platform: template
+  #   name: storm_center_storm_nearby
+  #   value_template: >-
+  #     {% set near = states('sensor.storm_center_nearby_storm_distance') %}
+  #     {{ near if (near != 'unknown' or near != 0) else 'None'}}
+
+  # - platform: template
+  #   name: storm_center_storm_nearby_direction
+  #   value_template: >-
+  #     {% set near = states('sensor.storm_center_nearby_storm_bearing') %}
+  #     {{ near if (near != 'unknown' or near != 0) else 'None'}} 
+
+  # - platform: template
+  #   name: storm_center_precip_display
+  #   value_template: {{ states('sensor.storm_center_precip') if states('sensor.storm_center_receiving_precip') == true else 'None' }}
+  # - platform: template
+  #   name: storm_center_total_precip
+  #   value_template: {{ states('sensor.storm_center_precip_accumulation')|float(2) if states('sensor.storm_center_receiving_precip') else 0.00}}
+  # - platform: template
+  #   name: storm_center_intensity_of_precip
+  #   value_template: {{ states('sensor.storm_center_precip_intensity')|float(2) if states('sensor.storm_center_receiving_precip') else 0.00}}
+

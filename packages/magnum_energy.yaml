@@ -446,7 +446,7 @@ group:
     view: true
     entities:
       - sensor.magnum_ags_revision
-      - sensor.magnum_ags_running
+      - binary_sensor.magnum_ags_running
       - sensor.magnum_ags_status
       - sensor.magnum_ags_status_text
       - sensor.magnum_ags_temp

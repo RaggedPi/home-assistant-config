@@ -40,24 +40,24 @@ device_tracker:
   #############
   # Owntracks #
   #############
-  - platform: owntracks
-    max_gps_accuracy: 200
+  # - platform: owntracks
+  #   max_gps_accuracy: 200
 
   ########
   # MQTT #
   ########
-  - platform: mqtt
-    devices:
-      smn960u: !secret owntracks_david
-      smn775n: !secret owntracks_catherine
+  # - platform: mqtt
+  #   devices:
+  #     smn960u: !secret owntracks_david
+  #     smn775n: !secret owntracks_catherine
 
   ########
   # NMAP #
   ########
   - platform: nmap_tracker
     hosts: 
-      - 192.168.42.6
-      - 192.168.42.133  
+      - david_nmap: 192.168.42.6
+      - catherine_nmap: 192.168.42.133  
     home_interval: 10
 
   ##############
@@ -73,7 +73,15 @@ device_tracker:
     scan_interval: 30
     hosts:
       david_ping: 192.168.2.6
-      cat_ping: 192.168.42.133
+      catherine_ping: 192.168.42.133
+##############
+# Guest Mode #
+##############
+input_boolean:
+  guest_mode:
+    name: Guest Mode
+    initial: off
+    icon: far:user-clock
 
 ##########
 # People #
@@ -87,28 +95,33 @@ person:
     user_id: 1d6561aa60264300b734f222c8fdc270
     device_trackers:
       - device_tracker.david_ping
-      - device_tracker.smn960u
+    #  - device_tracker.smn960u
+    #  - device_tracker.david_nmap
 
   #############
   # Catherine #
   #############
   - name: cat
     id: catherine_durost
+    user_id: d3779f3079844141a2ab057b9320633b
     device_trackers:
-      - device_tracker.cat_ping
-      - device_tracker.smn775n
+      # - device_tracker.catherine_ping
+      # - device_tracker.smn775n
+      # - device_tracker.catherine_nmap
 
   #########
   # Haven #
   #########
   - name: haven
     id: haven_audet
+    user_id: d2b40abeaa214ce596b23958f0e0ac04
 
   ########
   # Nova #
   ########
   - name: nova
     id: nova_durost
+    user_id: 5ec59da310d44d32ae0658a4e9c8d254
 
 ##########
 # Groups #
@@ -283,3 +296,57 @@ history:
       - group.children_home
       - group.anyone_home
       - input_boolean.guest_mode
+
+###########
+# Sensors #
+###########
+binary_sensor:
+  #########
+  # David #
+  #########
+  - platform: bayesian
+    prior: 0.6
+    name: 'Bayesian Presence David'
+    probability_threshold: 0.82
+    observations:
+      - entity_id: 'device_tracker.david_ping'
+        prob_given_true: 0.9
+        prob_given_false: 0.1
+        platform: 'state'
+        to_state: 'home'
+      # - entity_id: 'device_tracker.david_nmap'
+      #   prob_given_true: 0.9
+      #   prob_given_false: 0.2
+      #   platform: 'state'
+      #   to_state: 'home'
+      # - entity_id: 'device_tracker.david_gpslogger'
+      #   prob_given_true: 0.9
+      #   prob_given_false: 0.4
+      #   platform: 'state'
+      #   to_state: 'home'
+
+  #############
+  # Catherine #
+  #############
+  - platform: bayesian
+    prior: 0.6
+    name: 'Bayesian Presence catherine'
+    probability_threshold: 0.82
+    observations:
+      - entity_id: 'device_tracker.catherine_ping'
+        prob_given_true: 0.9
+        prob_given_false: 0.1
+        platform: 'state'
+        to_state: 'home'
+      # - entity_id: 'device_tracker.catherine_nmap'
+      #   prob_given_true: 0.9
+      #   prob_given_false: 0.2
+      #   platform: 'state'
+      #   to_state: 'home'
+      # - entity_id: 'device_tracker.catherine_gpslogger'
+      #   prob_given_true: 0.9
+      #   prob_given_false: 0.4
+      #   platform: 'state'
+      #   to_state: 'home'
+  
+
