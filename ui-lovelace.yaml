@@ -15,16 +15,14 @@ resources:
     url: /community_plugin/vertical-stack-in-card/vertical-stack-in-card.js
   - type: module
     url: /community_plugin/weather-card/weather-card.js
-  - type: js
+  - type: module
     url: /community_plugin/dual-gauge-card/dual-gauge-card.js
   - type: module
-    url: /community_plugin/lovelace-multiple-entity-row/multiple-entity-row.js?v=2.2.1
+    url: /community_plugin/lovelace-multiple-entity-row/multiple-entity-row.js?v=3.0.0
   - type: module
     url: /community_plugin/sun-card/sun-card.js
   - type: module
-    url: /community_plugin/lovelace-card-mod/card-mod.js
-  - type: module
-    url: /community_plugin/lovelace-animated-background.js
+    url: /local/lovelace-animated-background/dist/lovelace-animated-background.js
 
 animated_background:
   default_url: /local/background-animations/sunny.html
@@ -39,9 +37,9 @@ animated_background:
 
 title: Ragged Jack Mtn
 views:
-  #############
-  # Home View #
-  #############
+  ################################################################
+  ## Home View ###################################################
+  ################################################################
   - title: Home
     icon: 'mdi:castle'
     path: default_view
@@ -84,24 +82,26 @@ views:
               max: 100
               min: 70
               unit: '%'
+            footer:
+              type: buttons
+              entites:
+                - switch.magnum_eq_toggle
 
           - type: section
           #################
           # System Status #
           #################
-          - entity: sensor.magnum_inverter_mode
+          - entity: sensor.magnum_inverter_aacout
             type: custom:multiple-entity-row
             name: System Status
-            name_state: Mode
+            state_header: Amps Out
             secondary_info: last-changed
-            primary:
-              entity: sensor.magnum_inverter_aacout
-              name: Amps Out
-            secondary:
-              entity: sensor.magnum_inverter_vacout
-              name: VAC Out
-            tertiary:
-              entity: sensor.magnum_fault
+            entities:
+              - entity: sensor.magnum_inverter_mode
+                name: Charging Stage
+              - entity: sensor.magnum_fault
+              - entity: sensor.magnum_inverter_vacout
+                name: VAC Out
 
           - type: section
           ###################
@@ -110,17 +110,15 @@ views:
           - entity: person.nova
             type: custom:multiple-entity-row
             name: People
-            name_state: Nova
+            state_header: Nova
             secondary_info: last-changed
-            primary:
-              entity: person.david
-              name: David
-            secondary:
-              entity: person.cat
-              name: Catherine
-            tertiary:
-              entity: person.haven
-              name: Haven
+            entities:
+              - entity: person.david
+                name: David
+              - entity: person.cat
+                name: Catherine
+              - entity: person.haven
+                name: Haven
           
           # - type: entity-filter
           #   entities:
@@ -162,7 +160,6 @@ views:
           ####################
           - type: weather-forecast
             entity: weather.home
-
           ################
           # Storm Center #
           ################
@@ -186,35 +183,41 @@ views:
           - entity: sensor.storm_center_wind_bearing
             type: custom:multiple-entity-row
             name: Storm Information
-            name_state: Wind Bearing
+            state_header: Wind Bearing
             secondary_info: last-changed
-            primary:
-              entity: sensor.storm_center_nearest_storm_distance
-              name: Nearest Storm
-            secondary:
-              entity: sensor.storm_center_nearest_storm_bearing
-              name: Storm Bearing
-            tertiary:
-              entity: sensor.storm_center_wind_speed
-              name: Wind Speed
+            entities:
+              - entity: sensor.storm_center_nearest_storm_distance
+                name: Nearest Storm
+              - entity: sensor.storm_center_nearest_storm_bearing
+                name: Storm Bearing
+              - entity: sensor.storm_center_wind_speed
+                name: Wind Speed
+          ################
+          # Temperatures #
+          ################
           - entity: sensor.storm_center_temperature
             type: custom:multiple-entity-row
             name: Temperatures
-            name_state: Current Temperature
+            state_header: Current Temperature
             secondary_info: last-changed
-            primary:
-              entity: sensor.storm_center_apparent_temperature
-              name: Feels Like
-          - entity: sensor.storm_center_total_precip
+            entities:
+              - entity: sensor.storm_center_apparent_temperature
+                name: 'Feels Like'
+          #################
+          # Precipitation #
+          #################
+          - entity: binary_sensor.storm_center_is_precipitating
             type: custom:multiple-entity-row
             name: Precipitation
-            name_state: Total
-            primary:
-              entity: sensor.storm_center_precip
-              name: Type
-            secondary:
-              entity: sensor.storm_center_intensity_of_precip
-              name: Intensity
+            state_header: Precipitation
+            secondary_info: last-changed
+            entities:
+              - entity: sensor.storm_center_precip
+                name: Type
+              - entity: sensor.storm_center_intensity_of_precip
+                name: Intensity
+              - entity: sensor.storm_center_total_precip
+                name: Total
 
           #################  
           # Weather radar #
@@ -225,17 +228,20 @@ views:
       ###############################
       # International Space Station #
       ###############################
-      - type: picture-entity
-        entity: camera.iss
+      # - type: picture-entity
+      #   entity: camera.iss
 
-  #####################
-  # Power Center View #
-  #####################
+  ################################################################
+  ## Power Center View ###########################################
+  ################################################################
   - title: Power Center
     icon: 'mdi:power-socket-us'
     path: inverter_stats
     badges: []
     cards:
+      ###############
+      # Power Gauge #
+      ###############
       - type: entities
         entities:
           ################
@@ -281,16 +287,14 @@ views:
           - entity: sensor.magnum_inverter_mode
             type: custom:multiple-entity-row
             name: System Status
-            name_state: Mode
+            state_header: 'Mode'
             secondary_info: last-changed
-            primary:
-              entity: sensor.magnum_inverter_aacout
-              name: Amps Out
-            secondary:
-              entity: sensor.magnum_inverter_vacout
-              name: VAC Out
-            tertiary:
-              entity: sensor.magnum_fault
+            entities:
+              - entity: sensor.magnum_inverter_aacout
+                name: 'Amps Out'
+              - entity: sensor.magnum_inverter_vacout
+                name: 'VAC Out'
+              - entity: sensor.magnum_fault
       ################
       # Power States #
       ################
@@ -304,17 +308,15 @@ views:
           - entity: sensor.magnum_inverter_vacout
             type: custom:multiple-entity-row
             name: AC
-            name_state: VAC Out
+            state_header: VAC Out
             secondary_info: last-changed
-            primary:
-              entity: sensor.magnum_inverter_aacin
-              name: Amps In
-            secondary:
-              entity: sensor.magnum_inverter_aacout
-              name: Amps out
-            tertiary:
-              entity: sensor.magnum_inverter_vacin
-              name: VAC In
+            entities:
+              - entity: sensor.magnum_inverter_aacin
+                name: Amps In
+              - entity: sensor.magnum_inverter_aacout
+                name: Amps out
+              - entity: sensor.magnum_inverter_vacin
+                name: VAC In
 
           - type: section
           ############
@@ -323,15 +325,13 @@ views:
           - entity: sensor.magnum_bmk_adc
             type: custom:multiple-entity-row
             name: DC
-            name_state: VDC Out
+            state_header: VDC Out
             secondary_info: last-changed
-            primary:
-              entity: sensor.magnum_bmk_vmin
-            secondary:
-              entity: sensor.magnum_bmk_vmax
-            tertiary:
-              entity: sensor.magnum_bmk_vdc
-              name: Current Voltage
+            entities:
+              - entity: sensor.magnum_bmk_vmin
+              - entity: sensor.magnum_bmk_vmax
+              - entity: sensor.magnum_bmk_vdc
+                name: Current Voltage
       - type: entities
         title: Stats
         show_header_toggle: false
@@ -343,13 +343,12 @@ views:
             type: custom:multiple-entity-row
             name: Temperatures
             secondary_info: last-changed
-            name_state: Transformer
-            primary: 
-              entity: sensor.magnum_inverter_bat
-              name: Battery
-            secondary:
-              entity: sensor.magnum_inverter_fet
-              name: FET
+            state_header: Transformer
+            entities: 
+              - entity: sensor.magnum_inverter_bat
+                name: Battery
+              - entity: sensor.magnum_inverter_fet
+                name: FET
 
           - type: section
           ######################
@@ -359,16 +358,14 @@ views:
             type: custom:multiple-entity-row
             name: Revisions
             secondary_info: Firmware
-            name_state: Remote
-            primary:
-              entity: sensor.magnum_inverter_revision
-              name: Inverter
-            secondary:
-              entity: sensor.magnum_bmk_revision
-              name: BMK
-            tertiary:
-              entity: sensor.magnum_ags_revision
-              name: AGS
+            state_header: Remote
+            entities:
+              - entity: sensor.magnum_inverter_revision
+                name: Inverter
+              - entity: sensor.magnum_bmk_revision
+                name: BMK
+              - entity: sensor.magnum_ags_revision
+                name: AGS
 
           - type: section
           ################
@@ -377,12 +374,12 @@ views:
           - entity: sensor.magnum_bmk_amph
             type: custom:multiple-entity-row
             name: 'Misc'
-            name_state: AmpHours
-            primary:
-              entity: sensor.magnum_inverter_model
-              name: Inverter Model
-            secondary:
-              entity: sensor.magnum_inverter_frequency
+            state_header: AmpHours
+            entities:
+              - entity: sensor.magnum_inverter_model
+                name: Inverter Model
+              - entity: sensor.magnum_inverter_frequency
+
       #######
       # AGS #
       #######
@@ -394,187 +391,260 @@ views:
             type: custom:multiple-entity-row
             name: Generac
             secondary_info: last-changed
-            name_state: Run
+            state_header: Run
             toggle: true
-            primary: 
-              entity: binary_sensor.magnum_ags_running
-              name: Generator running
-            secondary:
-              entity: sensor.magnum_ags_runtime 
-              name: Runtime      
-            tertiary:
-              entity: sensor.magnum_ags_status_text
-              name: Status
-  ##################
-  # PV System View #
-  ##################
-  - title: Solar
+            entities:
+              - entity: binary_sensor.magnum_ags_running
+                name: Generator running
+              - entity: sensor.magnum_ags_runtime 
+                name: Runtime      
+              - entity: sensor.magnum_ags_status_text
+                name: Status
+  
+  ################################################################
+  ## PV System View ##############################################
+  ################################################################
+  - title: PV System
     icon: 'mdi:solar-power'
     path: solar
     badges: []
     cards:
-      ######################
-      # Current Conditions #
-      ######################
+      ##############################
+      # Weather Conditions Section #
+      ##############################
       - type: entities
-        title: Weather Conditions
-        show_header_toggle: false
         entities:
-          #######
-          # Sun #
-          #######
-          - type: "custom:sun-card"
-            name: ''
+        #######
+        # Sun #
+        #######
+        - type: "custom:sun-card"
+          name: ''
 
-          - type: section
-          ######################
-          # Today's Conditions #
-          ######################
-          - entity: sensor.pv_cloud_coverage_0d
-            type: custom:multiple-entity-row
-            name: Today
-            name_state: Cloud Coverage
-            secondary_info: last-changed
-            primary:
-              entity: sensor.pv_visibility_0d
+        - type: section
+        ######################
+        # Today's Conditions #
+        ######################
+        - type: custom:multiple-entity-row
+          entity: sensor.pv_cloud_coverage_0d
+          name: Today
+          state_header: Cloud Coverage
+          secondary_info: last-changed
+          entities:
+            - entity: sensor.pv_visibility_0d
               name: Visibility
 
-          - type: section
-          #########################
-          # Tomorrow's Conditions #
-          #########################
-          - entity: sensor.pv_cloud_coverage_1d
-            type: custom:multiple-entity-row
-            name: Tomorrow
-            name_state: Cloud Coverage
-            secondary_info: last-changed
-            primary:
-              entity: sensor.pv_visibility_1d
+        - type: section
+        #########################
+        # Tomorrow's Conditions #
+        #########################
+        - type: custom:multiple-entity-row
+          entity: sensor.pv_cloud_coverage_1d
+          name: Tomorrow
+          state_header: Cloud Coverage
+          secondary_info: last-changed
+          entities:
+            - entity: sensor.pv_visibility_1d
               name: Visibility
-      ##########
-      # Status #
-      ##########
-      - type: entities
-        title: Status
-        show_header_toggle: false
-        entities:
-          #############
-          # Mode data #
-          #############
-          - entity: sensor.classic_mode_time
-            type: custom:multiple-entity-row
-            primary:
-              entity: sensor.classic_mode
 
-      #################
-      # Classic Stats #
-      ##################
+      #####################
+      # PV Status Section #
+      #####################
       - type: entities
-        title: Midnite Classic
+        entities:
+        ############
+        # PV Gauge #
+        ############
+        - type: custom:dual-gauge-card
+          title: PV Power
+          inner:
+            colors:
+              - color: var(--label-badge-red)
+                value: 63
+              - color: var(--label-badge-green)
+                value: 48.1
+              - color: var(--label-badge-yellow)
+                value: 43
+              - color: var(--label-badge-blue)
+                value: 0
+            entity: sensor.classic_pv_voltage
+            label: PV 
+            max: 120
+            min: 10
+            unit: V
+          outer:
+            colors:
+              - color: var(--label-badge-red)
+                value: 43
+              - color: var(--label-badge-green)
+                value: 48
+              - color: var(--label-badge-yellow)
+                value: 47.3
+              - color: var(--label-badge-blue)
+                value: 0
+            entity: sensor.magnum_bmk_vdc # use classic battery reading in future
+            label: Bat
+            max: 62.5
+            min: 40
+            unit: V
+
+        - type: section
+        #############
+        # Mode data #
+        #############
+        - type: custom:multiple-entity-row
+          entity: sensor.classic_mode_time
+          name: Charge Controller
+          name_state: Time
+          secondary_info: last-changed
+          entities:
+            - entity: sensor.classic_mode
+
+      #########################
+      # Classic Stats Section #
+      #########################
+      - type: entities
+        title: System Statistics
         show_header_toggle: false
         entities:
-          ############
-          # Firmware #
-          ############
-          - entity: sensor.classic_model
-            type: custom:multiple-entity-row
-            name: Today
-            name_state: Model
-            secondary_info: last-changed
-            primary:
-              entity: sensor.classic_pcb
+        ############
+        # PV Array #
+        ############
+        - type: custom:multiple-entity-row
+          entity: sensor.classic_pv_power
+          name: PV Array
+          state_header: Power
+          secondary_info: last-changed
+          entities:
+            - entity: sensor.classic_pv_current
+              name: Current
+            - entity: sensor.classic_pv_voltage
+              name: Voltage
+        
+        - type: section
+        ################
+        # Temperatures #
+        ################
+        - type: custom:multiple-entity-row
+          entity: sensor.classic_battery_temp_c
+          name: Temperatures
+          state_header: Battery
+          secondary_info: last-changed
+          entities:
+            - entity: sensor.classic_fet_temp_c
+              name: FET
+            - entity: sensor.classic_pcb_temp_c
+              name: PCB
+
+        - type: section
+        ################
+        # Battery Bank #
+        ################
+        - type: custom:multiple-entity-row
+          entity: sensor.classic_battery_capacity
+          name: 'Battery Bank'
+          state_header: Capacity
+          secondary_info: last-changed
+          entities:
+            - entity: sensor.classic_battery_current
+              name: Current
+            - entity: sensor.classic_battery_voltage
+              name: Voltage
+            - entity: sensor.classic_nom_battery_voltage
+              name: Nominal Voltage
+        
+        - type: section
+        ############
+        # Firmware #
+        ############
+        - type: custom:multiple-entity-row
+          entity: sensor.classic_model
+          name: Midnite Classic
+          state_header: Model
+          secondary_info: last-changed
+          entities:
+            - entity: sensor.classic_pcb
               name: Firmware Revision
-            secondary:
-              entity: sensor.classic_revision_date
+            - entity: sensor.classic_revision_date
               name: Revision Date
 
-          - type: section
-          ################
-          # Temperatures #
-          ################
-          - entity: sensor.classic_battery_temp_f
-            type: custom:multiple-entity-row
-            name: Temperatures
-            name_state: Battery
-            secondary_info: last-changed
-            primary:
-              entity: sensor.classic_fet_temp
-              name: FET
-            secondary:
-              entity: sensor.classic_pcb_temp
-              name: PCB
-      ################
-      # Battery Bank #
-      ################
+  ################################################################
+  ## Generator Management View ###################################
+  ################################################################
+  - title: Generator Management
+    icon: 'fas:charging-station'
+    path: generator_mgmt
+    badges: []
+    cards: 
       - type: entities
-        title: Battery Bank
+        title: Generator Status
         show_header_toggle: false
         entities:
-          ######################
-          # Today's Conditions #
-          ######################
-          - entity: sensor.classic_battery_capacity
-            type: custom:multiple-entity-row
-            name: ''
-            name_state: Capacity
-            secondary_info: last-changed
-            primary:
-              entity: sensor.classic_battery_current
-              name: Current
-            secondary:
-              entity: sensor.classic_battery_voltage
-              name: Voltage
-            tertiary:
-              entity: sensor.classic_nom_battery_voltage
-              name: Nominal Voltage
-      ############
-      # PV Array #
-      ############
-      - type: entities
-        title: PV Array
-        show_header_toggle: false
-        entities:
-          ######################
-          # Today's Conditions #
-          ######################
-          - entity: sensor.classic_pv_power
-            type: custom:multiple-entity-row
-            name: ''
-            name_state: Power
-            secondary_info: last-changed
-            primary:
-              entity: sensor.classic_pv_current
-              name: Current
-            secondary:
-              entity: sensor.classic_pv_voltage
-              name: Voltage
-      ######################
-      # Remaining entities #
-      ######################
-      - type: entities
-        title: Misc
-        entities:
-        - sensor.classic_absorb_time
-        - sensor.classic_charge_stage
-        - sensor.classic_charge_state
-        - sensor.classic_pv_power
-        - sensor.classic_total_ah_daily
-        - sensor.classic_energy_today
-        - sensor.classic_equalize_time
-        - sensor.classic_float_time_today
-        - sensor.classic_last_voc
-        - sensor.classic_mppt_mode
-        - sensor.classic_power
-        - sensor.classic_pv_current
-        - sensor.classic_pv_voltage
-        - sensor.classic_reason_for_rest
-        - sensor.classic_rest_reason
-        - sensor.classic_soc
-        - sensor.classic_total_energy
+        #############
+        # Run Stats #
+        #############
+        - type: custom:multiple-entity-row
+          entity: sensor.generac_status
+          name: Generator Status
+          state_header: 'Status'
+          secondary_info: last-changed
+          entities:
+            - entity: sensor.generac_battery_voltage
+              name: Battery Volts
+            - entity: sensor.generac_rpm
+              name: 'RPM'
+            - entity: sensor.generac_frequency
+              name: Frequency
 
-  #######################
-  # Media Control  View #
-  ####################### 
+        - type: section
+        ###################
+        # Generator Stats #
+        ###################
+        - type: custom:multiple-entity-row
+          entity: sensor.generac_output_power
+          name: Generator Energy
+          secondary_info: last-changed
+          state_header: 'Output Power'
+          entities:
+            - entity: sensor.generac_output_current
+              name: Output Current
+            - entity: sensor.generac_output_voltage
+              name: Output Voltage
+
+        - type: section
+        ########################
+        # Evolution Controller #
+        ########################
+        - type: custom:multiple-entity-row
+          entity: sensor.generac_uptime
+          name: Controller
+          state_header: 'Uptime'
+          secondary_info: last-changed
+          entities:
+            - entity: sensor.generac_cpu_temp
+              name: 'CPU Temperature'
+            - entity: sensor.generac_last_action
+              name: 'Last Action'
+            - entity: sensor.generac_exercise_time
+              name: 'Exercise Time'
+        
+        - type: section
+        ########
+        # Logs #
+        ########
+        - type: custom:multiple-entity-row
+          entity: sensor.generac_log_last_service
+          name: 'Logs'
+          secondary_info: last-changed
+          state_header: 'Last Service'
+          entities:
+            - entity: sensor.generac_model
+              name: 'Model'
+            - entity: sensor.generac_log_last_alarm
+              name: 'Last Alarm'
+
+  ################################################################
+  ## Media Control View ##########################################
+  ################################################################ 
   - title: Media Control
     icon: 'mdi:remote'
     path: media-control

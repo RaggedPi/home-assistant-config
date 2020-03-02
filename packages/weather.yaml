@@ -46,7 +46,14 @@ sensor:
       - wind_speed
       - wind_bearing
 
-
+binary_sensor: 
+  - platform: template
+    sensors:
+      storm_center_is_precipitating:
+        friendly_name: Is Precipitating
+        value_template: >
+          {% set precip = (true if states('sensor.storm_center_precip_type')|default(0) > 0)  %}
+          {{ precip }}           
 
   ####################
   # Template Sensors #
@@ -73,4 +80,3 @@ sensor:
   # - platform: template
   #   name: storm_center_intensity_of_precip
   #   value_template: {{ states('sensor.storm_center_precip_intensity')|float(2) if states('sensor.storm_center_receiving_precip') else 0.00}}
-

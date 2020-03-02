@@ -48,7 +48,14 @@ notify:
   ###########
   - name: twitter
     platform: twitter
-    consumer_key: !secret twitter_key
+    consumer_key: !secret twitter_api_key
     consumer_secret: !secret twitter_api_secret
     access_token: !secret twitter_access_token
     access_token_secret: !secret twitter_access_secret
+    
+######################
+# Facebook Messenger #
+######################
+  - name: fb_msgr
+    platform: facebook
+    page_access_token: !secret fb_page_access_token

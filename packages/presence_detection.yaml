@@ -72,8 +72,8 @@ device_tracker:
   - platform: ping
     scan_interval: 30
     hosts:
-      david_ping: 192.168.2.6
-      catherine_ping: 192.168.42.133
+      david_ping: !secret david_phone_ip
+      catherine_ping: !secret catherine_phone_ip
 ##############
 # Guest Mode #
 ##############
@@ -105,7 +105,7 @@ person:
     id: catherine_durost
     user_id: d3779f3079844141a2ab057b9320633b
     device_trackers:
-      # - device_tracker.catherine_ping
+      - device_tracker.catherine_ping
       # - device_tracker.smn775n
       # - device_tracker.catherine_nmap
 
@@ -161,75 +161,70 @@ automation:
   ############
   # Occupied #
   ############
-  - alias: House occupied
-    trigger: 
-      platform: state
-      entity_id: group.anyone_home
-      to: 'home'
-    condition:
-      condition: state
-      entity_id: input_boolean.guest_mode
-      state: 'off'
-    action:
-      - service: climate.set_preset_mode
-        data_template:
-          entity_id: climate.house
-          preset_mode: none
+#  - alias: House occupied
+#    trigger: 
+#      - platform: state
+#        entity_id: group.anyone_home
+#        to: 'home'
+#    condition:
+#      - condition: state
+#        entity_id: input_boolean.guest_mode
+#        state: 'off'
+#    action:
+#      - service: notify.david
+#        data:
+#          message: 'house occupied.'
 
   ##############
   # Unoccupied #
   ##############
-  - alias: House unoccupied
-    trigger: 
-      platform: state
-      entity_id: group.anyone_home
-      from: 'home'
-    condition:
-      condition: state
-      entity_id: input_boolean.guest_mode
-      state: 'off'
-    action:
-      - service: climate.set_preset_mode
-        data_template:
-          entity_id: climate.house
-          preset_mode: eco
-      - service: homeassistant.turn_on
-        entity_id:
-          - script.everyone_away
+#  - alias: House unoccupied
+#    trigger: 
+#      - platform: state
+#        entity_id: group.anyone_home
+#        from: 'home'
+#    condition:
+#      - condition: state
+#        entity_id: input_boolean.guest_mode
+#        state: 'off'
+#    action:
+#      - service: notify.david
+#        data:
+#          message: 'house unoccupied. '
 
   #########
   # David #
   #########
-  - alias: David away
-    trigger: 
-      platform: state
-      entity_id: person.david
-      from: 'home'
-    condition:
-      condition: state
-      entity_id: input_boolean.guest_mode
-      state: 'off'
-    action:
-      - service: homeassistant.turn_on
-        entity_id:
-          - script.david_away
+#  - alias: David away
+#    trigger: 
+#      - platform: state
+#        entity_id: person.david
+#        from: 'home'
+#    condition:
+#      - condition: state
+#        entity_id: input_boolean.guest_mode
+#        state: 'off'
+#    action:
+#      - service: homeassistant.turn_on
+#        entity_id:
+#          - script.david_away
 
   #############
   # Catherine #
   #############
-  - alias: Cat away
-    trigger: 
-      platform: state
-      entity_id: person.cat
-      from: 'home'
-    condition:
-      condition: state
-      entity_id: input_boolean.guest_mode
-      state: 'off'
-    action:
-      - service: homeassistant.turn_on
-        entity_id:
-          - script.cat_away
+#  - alias: Cat away
+#    trigger: 
+#      - platform: state
+#        entity_id: person.cat
+#        from: 'home'
+#    condition:
+#      - condition: state
+#        entity_id: input_boolean.guest_mode
+#        state: 'off'
+#    action:
+#      - service: homeassistant.turn_on
+#        entity_id:
+#          - script.cat_away
 
 ###########
 # Scripts #

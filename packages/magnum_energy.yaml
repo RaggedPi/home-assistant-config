@@ -278,9 +278,23 @@ sensor:
   - platform: mqtt
     name: magnum_ags_runtime
     state_topic: "magnum/ags"
-    value_template: "{{ value_json.data.runtime| float(1) }}"
+    value_template: "{{ value_json.data.runtime }}"
     json_attributes_topic: "magnum/ags"
-    json_attributes_template: "{{ value_json.data.runtiume | tojson }}"
+    json_attributes_template: "{{ value_json.data.runtime | tojson }}"
+    unit_of_measurement: hours
+  - platform: mqtt
+    name: magnum_ags_last_soc
+    state_topic: "magnum/ags"
+    value_template: "{{ value_json.data.last_full_soc }}"
+    json_attributes_topic: "magnum/ags"
+    json_attributes_template: "{{ value_json.data.last_full_soc | tojson }}"
+    unit_of_measurement: days
+  - platform: mqtt
+    name: magnum_ags_gen_run_total
+    state_topic: "magnum/ags"
+    value_template: "{{ value_json.data.gen_total_run | float(1) }}"
+    json_attributes_topic: "magnum/ags"
+    json_attributes_template: "{{ value_json.data.gen_total_run | tojson }}"
     unit_of_measurement: Hrs
   - platform: mqtt
     name: magnum_ags_vdc
@@ -295,7 +309,7 @@ sensor:
     name: magnum_remote_revision
     state_topic: "magnum/remote"
     value_template: "{{ value_json.data.revision }}"
-    json_attributes_topic: "magnum/ags"
+    json_attributes_topic: "magnum/remote"
     json_attributes_template: "{{ value_json.data.revision | tojson }}"
 
     # action
@@ -391,16 +405,16 @@ binary_sensor:
   - platform: mqtt
     name: magnum_ags_running
     state_topic: magnum/ags
-    value_template: "{{ value_json.data.running }}"
+    value_template: "{{ value_json.data.running | default(false, true) }}"
     json_attributes_topic: "magnum/ags"
-    json_attributes_template: "{{ value_json.data.running | tojson }}"
+    json_attributes_template: "{{ value_json.data.running | default(false, true) | tojson }}"
 
   - platform: template
     sensors:
       magnum_aux_ac_input:
         friendly_name: Aux. AC Input
-        value_template: >-
-          {{ states('sensor.magnum_ags_status')|int == 4 }}
+        value_template: >
+          {{ true if states('sensor.magnum_ags_status')|int == 4 }}
 
 switch:
   - platform: mqtt
@@ -408,7 +422,11 @@ switch:
     command_topic: "magnum/ags/manualRun/set"
     state_topic: "magnum/ags/manualRun"
     availability_topic: "magnum/ags/manualRun/available"
-
+  - platform: mqtt
+    name: magnum_eq_toggle
+    command_topic: "magnum/inverter/eq/toggle"
+    state_topic: "magnum/inverter/eq/toggle"
+    availability_topic: "magnum/inverter/eq/toggle/available"
 group:
   inverter_stats:
     name: Inverter Stats

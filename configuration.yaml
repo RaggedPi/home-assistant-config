@@ -33,3 +33,4 @@ hacs:
   token: !secret hacs_token
 lovelace: 
   mode: yaml
+mobile_app:

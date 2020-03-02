@@ -62,6 +62,7 @@ homeassistant:
   customize_glob:
     "sensor.classic_*":
       icon: mdi:solar-power
+      slave: 10
     "sensor.classic_rev_*":
       hidden: true
 
@@ -70,10 +71,11 @@ modbus:
   host: !secret midniteClassic_ip
   port: !secret midniteClassic_port
   type: tcp
+  timeout: 50
 
 sensor: # actual register numbers are +1
   - platform: modbus
-    scan_interval: 3600
+    scan_interval: 60
     registers: # actual register numbers are +1
       # PCB Revision
       - name: classic_pcb
@@ -237,6 +239,7 @@ sensor: # actual register numbers are +1
       # Reason For Rest
       classic_reason_for_rest:
         friendly_name: 'Rest Reason'
+        entity_id: sensor.classic_rest_reason
         value_template: >-
           {% set rest = states('sensor.classic_rest_reason')|int %}
           {% if rest == 1 %}
@@ -306,8 +309,7 @@ sensor: # actual register numbers are +1
 
       classic_fet_temp:
         friendly_name: FET Temperature
-        value_template: >-
-          {{ ((state('sensor.classic_fet_temp_c')|int) *9 /5) + 32 }}
+        value_template: "{{ ((state('sensor.classic_fet_temp_c')|int) *9 /5) + 32 }}"
         unit_of_measurement: F
 
       classic_mode:
