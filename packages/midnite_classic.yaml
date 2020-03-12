@@ -67,13 +67,24 @@ homeassistant:
       hidden: true
 
 modbus:
-  name: !secret midniteClassic_name
-  host: !secret midniteClassic_ip
-  port: !secret midniteClassic_port
-  type: tcp
-  timeout: 50
+  # TCP
+  - type: tcp
+    name: !secret midniteClassic_tcp_name # midniteClassic_name
+    host: !secret midniteClassic_tcp_host
+    port: !secret midniteClassic_tcp_port
+    timeout: 50
+  # Serial
+  - type: serial
+    name: midniteClassic_name # midniteClassic_rtu_name
+    method: ascii # rtu
+    port: !secret midniteClassic_rtu_port
+    baudrate: !secret midniteClassic_rtu_baudrate
+    stopbits: !secret midniteClassic_rtu_stopbits
+    bytesize: !secret midniteClassic_rtu_bytesize
+    parity: !secret midniteClassic_rtu_parity
+  
 
-sensor: # actual register numbers are +1
+sensor: # actual register numbers are +1 vs addresses
   - platform: modbus
     scan_interval: 60
     registers: # actual register numbers are +1

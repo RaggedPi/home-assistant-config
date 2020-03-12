@@ -74,14 +74,6 @@ device_tracker:
     hosts:
       david_ping: !secret david_phone_ip
       catherine_ping: !secret catherine_phone_ip
-##############
-# Guest Mode #
-##############
-input_boolean:
-  guest_mode:
-    name: Guest Mode
-    initial: off
-    icon: far:user-clock
 
 ##########
 # People #

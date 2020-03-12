@@ -66,7 +66,15 @@ homeassistant:
   customize_glob:
     "sensor.magnum_*":
       icon: mdi:power-socket-us
-      
+
+mqtt:
+  birth_message:
+    topic: 'magnum/status'
+    payload: 'online'
+  will_message:
+    topic: 'magnum/status'
+    payload: 'offline'
+
 sensor:
   # Inverter
   - platform: mqtt
@@ -409,12 +417,10 @@ binary_sensor:
     json_attributes_topic: "magnum/ags"
     json_attributes_template: "{{ value_json.data.running | default(false, true) | tojson }}"
 
-  - platform: template
-    sensors:
-      magnum_aux_ac_input:
-        friendly_name: Aux. AC Input
-        value_template: >
-          {{ true if states('sensor.magnum_ags_status')|int == 4 }}
+input_boolean:
+  magnum_aux_ac_input:
+    name: Aux AC Input
+    initial: false
 
 switch:
   - platform: mqtt
@@ -430,7 +436,6 @@ switch:
 group:
   inverter_stats:
     name: Inverter Stats
-    view: true
     entities:
       - sensor.magnum_inverter_AACin
       - sensor.magnum_inverter_AACout
@@ -448,7 +453,6 @@ group:
       - sensor.magnum_inverter_vdc
   bmk_stats:
     name: BMK stats
-    view: true
     entities:
       - sensor.magnum_bmk_adc 
       - sensor.magnum_bmk_amph
@@ -461,7 +465,6 @@ group:
       - sensor.magnum_bmk_vmin
   ags_stats:
     name: AGS stats
-    view: true
     entities:
       - sensor.magnum_ags_revision
       - binary_sensor.magnum_ags_running
@@ -469,3 +472,25 @@ group:
       - sensor.magnum_ags_status_text
       - sensor.magnum_ags_temp
       - sensor.magnum_ags_vdc
+
+automation:
+  # PowerPi MQTT pymagnum Connect Notification
+  - alias: 'Power Pi MQTT pymagnum connection'
+    trigger: 
+      - platform: mqtt
+        topic: magnum/status
+        payload: 'online'
+    action:
+      service: notify.david
+      data:
+        message: "[RaggedJack.io] PowerPi MQTT pymagnum connected."
+  # PowerPi MQTT pymagnum Disconnect Notification
+  - alias: 'Power Pi MQTT pymagnum connection'
+    trigger: 
+      - platform: mqtt
+        topic: magnum/status
+        payload: 'offline'
+    action:
+      service: notify.david
+      data:
+        message: "[RaggedJack.io] PowerPi MQTT pymagnum disconnected."

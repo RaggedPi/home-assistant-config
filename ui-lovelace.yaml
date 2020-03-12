@@ -102,7 +102,11 @@ views:
               - entity: sensor.magnum_fault
               - entity: sensor.magnum_inverter_vacout
                 name: VAC Out
-
+            footer:
+              type: buttons
+              entities:
+                - entity: input_boolean.school_mode
+                - entity: input_boolean.guest_mode
           - type: section
           ###################
           # Device Tracking #
@@ -206,18 +210,21 @@ views:
           #################
           # Precipitation #
           #################
-          - entity: binary_sensor.storm_center_is_precipitating
-            type: custom:multiple-entity-row
-            name: Precipitation
-            state_header: Precipitation
-            secondary_info: last-changed
-            entities:
-              - entity: sensor.storm_center_precip
-                name: Type
-              - entity: sensor.storm_center_intensity_of_precip
-                name: Intensity
-              - entity: sensor.storm_center_total_precip
-                name: Total
+          - type: conditional
+            conditions:
+              - entity: binary_sensor.storm_center_is_precipitating
+                state: 'on'
+            card:
+              entity: sensor.storm_center_precip
+              type: custom:multiple-entity-row
+              name: Precipitation
+              state_header: Type
+              secondary_info: last-changed
+              entities:
+                - entity: sensor.storm_center_intensity_of_precip
+                  name: Intensity
+                - entity: sensor.storm_center_total_precip
+                  name: Total
 
           #################  
           # Weather radar #
@@ -295,6 +302,17 @@ views:
               - entity: sensor.magnum_inverter_vacout
                 name: 'VAC Out'
               - entity: sensor.magnum_fault
+      #################
+      # History Graph #
+      #################
+      - type: sensor
+        name: 'Power Center'
+        entity: sensor.magnum_bmk_soc
+        unit: '%'
+        graph: line
+        hours_to_show: 240
+
+  
       ################
       # Power States #
       ################

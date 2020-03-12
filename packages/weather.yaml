@@ -46,14 +46,27 @@ sensor:
       - wind_speed
       - wind_bearing
 
-binary_sensor: 
-  - platform: template
-    sensors:
-      storm_center_is_precipitating:
-        friendly_name: Is Precipitating
-        value_template: >
-          {% set precip = (true if states('sensor.storm_center_precip_type')|default(0) > 0)  %}
-          {{ precip }}           
+# binary_sensor: 
+#   - platform: template
+#     sensors:
+#       storm_center_is_precipitating:
+#         friendly_name: Is Precipitating
+#         value_template: >
+#           {% set precip = (true if states('sensor.storm_center_precip_type')|default(0) > 0)  %}
+#          {{ precip }}           
+input_boolean:
+  storm_center_is_precipitating:
+    name: Is Precipitating
+    initial: false
+# automation:
+#   - alias: Is it precipitating
+#     trigger:
+#       - platform: state
+#         entity_id: sensor.storm_center_precip
+#         from: 'off'
+#     condition:
+#       - condition: state
+#         entity_id: input_boolean.storm_center_is_precipitating
 
   ####################
   # Template Sensors #

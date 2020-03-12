@@ -42,7 +42,7 @@ automation:
       - service: notify.david
         data: 
           title: "HAPi Low Resource Alert"
-          message: "Low Disk Space > 90% Used"
+          message: "[RaggedPi] Low Disk Space > 90% Used"
   ##############
   # Low Memory #
   ##############
@@ -55,7 +55,7 @@ automation:
       - service: notify.david
         data: 
           title: "HAPi Low Resource Alert"
-          message: "Low Memory > 90% Used"
+          message: "[RaggedPi] Low Memory > 90% Used"
   #############
   # High Load #
   #############
@@ -68,7 +68,7 @@ automation:
       - service: notify.david
         data: 
           title: "HAPi Low Resource Alert"
-          message: "System Load 5m Load Average > 2.8"
+          message: "[RaggedPi] System Load 5m Load Average > 2.8"
 
 ############
 # Recorder #

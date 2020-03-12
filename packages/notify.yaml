@@ -32,7 +32,9 @@ notify:
     platform: group
     services:
     #  - service: david_phone_service
-      - service: html5
+    #  - service: html5
+    #  - service: twitter_dm
+      - service: slack_hass_io
 
   #######
   # Cat #
@@ -46,12 +48,13 @@ notify:
   ###########
   # Twitter #
   ###########
-  - name: twitter
+  - name: twitter_dm
     platform: twitter
     consumer_key: !secret twitter_api_key
     consumer_secret: !secret twitter_api_secret
     access_token: !secret twitter_access_token
     access_token_secret: !secret twitter_access_secret
+    username: ner0tic
     
 ######################
 # Facebook Messenger #
@@ -59,3 +62,11 @@ notify:
   - name: fb_msgr
     platform: facebook
     page_access_token: !secret fb_page_access_token
+
+#########
+# Slack #
+#########
+  - name: slack_hass_io
+    platform: slack
+    api_key: !secret bot_oauth_access_token
+    default_channel: '#hass_io'
