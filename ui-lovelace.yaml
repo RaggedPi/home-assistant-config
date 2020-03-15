@@ -5,10 +5,8 @@
 ## Url: http://ragedjackfarm.net                              ##
 ################################################################
 resources:
-  - type: js
-    url: /community_plugin/tracking-number-card/tracking-number-card.js
   - type: module
-    url: /community_plugin/power-wheel-card/power-wheel-card.js
+    url: /local/flex-horseshoe-card/flex-horseshoe-card.js
   - type: module
     url: /community_plugin/group-card/group-card.js
   - type: js
@@ -23,6 +21,12 @@ resources:
     url: /community_plugin/sun-card/sun-card.js
   - type: module
     url: /local/lovelace-animated-background/dist/lovelace-animated-background.js
+  - type: module
+    url: /community_plugin/button-card/button-card.js
+  - type: module
+    url: /community_plugin/bar-card/bar-card.js
+  - type: module
+    url: /local/tracker-card/tracker-card.js?track=true
 
 animated_background:
   default_url: /local/background-animations/sunny.html
@@ -210,10 +214,11 @@ views:
           #################
           # Precipitation #
           #################
+          # Snow
           - type: conditional
             conditions:
-              - entity: binary_sensor.storm_center_is_precipitating
-                state: 'on'
+              - entity: binary_sensor.storm_center_precip
+                state: 'snow'
             card:
               entity: sensor.storm_center_precip
               type: custom:multiple-entity-row
@@ -221,11 +226,26 @@ views:
               state_header: Type
               secondary_info: last-changed
               entities:
-                - entity: sensor.storm_center_intensity_of_precip
+                - entity: sensor.storm_center_precip_intensity
                   name: Intensity
-                - entity: sensor.storm_center_total_precip
+                - entity: sensor.storm_center_precip_accumulation
                   name: Total
-
+          # Rain/ Sleet
+          - type: conditional
+            conditions:
+              - entity: sensor.storm_center_precip
+                state_not: 'snow'
+              - entity: sensor.storm_center_precip
+                state_not: 'unknown'
+            card:
+              entity: sensor.storm_center_precip
+              type: custom:multiple-entity-row
+              name: Precipitation
+              state_header: Type
+              secondary_info: last-changed
+              entities:
+                - entity: sensor.storm_center_precip_intensity
+                  name: Intensity
           #################  
           # Weather radar #
           #################
@@ -302,17 +322,25 @@ views:
               - entity: sensor.magnum_inverter_vacout
                 name: 'VAC Out'
               - entity: sensor.magnum_fault
-      #################
-      # History Graph #
-      #################
-      - type: sensor
-        name: 'Power Center'
-        entity: sensor.magnum_bmk_soc
-        unit: '%'
-        graph: line
-        hours_to_show: 240
-
-  
+      - type: horizontal-stack
+        cards:
+          - type: "custom:button-card"
+            name: EQ
+            entity: switch.magnum_eq_toggle
+            color: rgb(28, 128, 199)
+          - type: "custom:button-card"
+            name: Charger
+            entity: switch.magnum_chg_toggle
+            color: rgb(28, 128, 199)
+          - type: "custom:button-card"
+            name: Inverter
+            entity: switch.magnum_inverter_toggle
+            color: rgb(28, 128, 199)
+          - type: "custom:button-card"
+            name: AGS
+            entity: switch.magnum_ags_manual
+            color: rgb(28, 128, 199)
+          
       ################
       # Power States #
       ################
@@ -378,6 +406,8 @@ views:
             secondary_info: Firmware
             state_header: Remote
             entities:
+              - entity: sensor.magnum_inverter_model
+                name: Inverter Model
               - entity: sensor.magnum_inverter_revision
                 name: Inverter
               - entity: sensor.magnum_bmk_revision
@@ -394,8 +424,6 @@ views:
             name: 'Misc'
             state_header: AmpHours
             entities:
-              - entity: sensor.magnum_inverter_model
-                name: Inverter Model
               - entity: sensor.magnum_inverter_frequency
 
       #######
@@ -472,50 +500,99 @@ views:
         ############
         # PV Gauge #
         ############
-        - type: custom:dual-gauge-card
-          title: PV Power
-          inner:
-            colors:
-              - color: var(--label-badge-red)
-                value: 63
-              - color: var(--label-badge-green)
-                value: 48.1
-              - color: var(--label-badge-yellow)
-                value: 43
-              - color: var(--label-badge-blue)
-                value: 0
-            entity: sensor.classic_pv_voltage
-            label: PV 
-            max: 120
-            min: 10
-            unit: V
-          outer:
-            colors:
-              - color: var(--label-badge-red)
-                value: 43
-              - color: var(--label-badge-green)
-                value: 48
-              - color: var(--label-badge-yellow)
-                value: 47.3
-              - color: var(--label-badge-blue)
-                value: 0
-            entity: sensor.magnum_bmk_vdc # use classic battery reading in future
-            label: Bat
-            max: 62.5
-            min: 40
-            unit: V
+        - type: 'custom:flex-horseshoe-card'
+          entities:
+            - entity: sensor.classic_pv_voltage
+              decimals: 1
+              unit: 'V'
+              name: PV Input
+            - entity: sensor.classic_power
+              decimals: 1
+              unit: 'W'
+            - entity: sensor.classic_pv_current
+              decimals: 1
+              unit: 'A'
+          show:
+            horseshoe_style: 'lineargradient'
+          layout:
+            hlines:
+              - id: 0
+                xpos: 50
+                ypos: 48
+                length: 40
+                styles:
+                  - stroke: var(--primary-text-color);
+                  - stroke-width: 2;
+                  - opacity: 0.5;
+              - id: 1
+                xpos: 50
+                ypos: 20
+                length: 40
+                styles:
+                  - stroke: var(--primary-text-color);
+                  - stroke-width: 2;
+                  - opacity: 0.5;
+            circles:
+              - xpos: 50
+                ypos: 61
+                radius: 5
+                styles:
+                  - fill: var(--primary-text-color);
+                  - opacity: 0.5;
+            states:
+              - id: 0
+                entity_index: 0
+                xpos: 50
+                ypos: 40
+                styles:
+                  - font-size: 3em;
+              - id: 1
+                entity_index: 1
+                xpos: 46
+                ypos: 64
+                styles:
+                  - text-anchor: end;
+                  - font-size: 1.6em;
+              - id: 2
+                entity_index: 2
+                xpos: 54
+                ypos: 64
+                styles:
+                  - text-anchor: start;
+                  - font-size: 1.6em;
+            names:
+              - id: 0
+                entity_index: 0
+                xpos: 50
+                ypos: 80
+            
+          horseshoe_scale:
+            min: 15
+            max: 110
+            ticksize: 1
+          color_stops:
+            16: '#FFF6E3'
+            17: '#FFE9B9'
+            18: '#FFDA8A'
+            19: '#FFCB5B'
+            20: '#FFBF37'
+            21: '#ffb414'
+            22: '#FFAD12'
+            23: '#FFA40E'
+            24: '#FF9C0B' 
+            25: '#FF8C06' 
 
         - type: section
         #############
         # Mode data #
         #############
-        - type: custom:multiple-entity-row
-          entity: sensor.classic_mode_time
+        - type: 'custom:multiple-entity-row'
+          entity: sensor.classic_mode
           name: Charge Controller
           name_state: Time
           secondary_info: last-changed
           entities:
-            - entity: sensor.classic_mode
+            - entity: sensor.classic_rest_reason_text
 
       #########################
       # Classic Stats Section #
@@ -528,7 +605,7 @@ views:
         # PV Array #
         ############
         - type: custom:multiple-entity-row
-          entity: sensor.classic_pv_power
+          entity: sensor.classic_power
           name: PV Array
           state_header: Power
           secondary_info: last-changed
@@ -543,14 +620,14 @@ views:
         # Temperatures #
         ################
         - type: custom:multiple-entity-row
-          entity: sensor.classic_battery_temp_c
+          entity: sensor.classic_battery_temp
           name: Temperatures
           state_header: Battery
           secondary_info: last-changed
           entities:
-            - entity: sensor.classic_fet_temp_c
+            - entity: sensor.classic_fet_temp
               name: FET
-            - entity: sensor.classic_pcb_temp_c
+            - entity: sensor.classic_pcb_temp
               name: PCB
 
         - type: section
@@ -558,13 +635,13 @@ views:
         # Battery Bank #
         ################
         - type: custom:multiple-entity-row
-          entity: sensor.classic_battery_capacity
+          entity: sensor.classic_battery_current
           name: 'Battery Bank'
-          state_header: Capacity
+          state_header: Current
           secondary_info: last-changed
           entities:
-            - entity: sensor.classic_battery_current
-              name: Current
+            - entity: sensor.classic_total_ah_daily
+              name: Amp Hours
             - entity: sensor.classic_battery_voltage
               name: Voltage
             - entity: sensor.classic_nom_battery_voltage
@@ -576,13 +653,13 @@ views:
         ############
         - type: custom:multiple-entity-row
           entity: sensor.classic_model
-          name: Midnite Classic
+          name: Classic
           state_header: Model
           secondary_info: last-changed
           entities:
-            - entity: sensor.classic_pcb
+            - entity: sensor.classic_appversion
               name: Firmware Revision
-            - entity: sensor.classic_revision_date
+            - entity: sensor.classic_build_date
               name: Revision Date
 
   ################################################################
@@ -673,3 +750,160 @@ views:
       ###########
       - entity: media_player.roku_2n008r420534
         type: media-control
+  ################################################################
+  ## System Monitor View #########################################
+  ################################################################
+  - title: System Monitor
+    icon: 'mdi:settings'
+    path: sys-monitor
+    badges: []
+    cards:
+      - type: vertical-stack
+        cards:
+
+          ##########
+          # System #
+          ##########
+          - type: entities
+            title: System
+            show_header_toggle: false
+            entities:
+              - entity: sensor.installed_version
+                name: Hassio Installed Version
+                icon: mdi:home-assistant
+              - entity: sensor.latest_available_version
+                name: Hassio Current Version
+                icon: mdi:home-assistant
+
+              - type: divider
+
+              - entity: sensor.last_boot_date_time
+                icon: mdi:calendar
+              - entity: sensor.rpi_uptime
+                icon: mdi:clock-start
+              - entity: sensor.ha_uptime
+                icon: mdi:home-assistant
+
+              - type: custom:bar-card
+                title: Processor Use
+                entity: sensor.processor_use
+                height: 30px
+                animation: 'off'
+                indicator: 'off'
+                severity:
+                  - value: 60
+                    color: green
+                  - value: 85 
+                    color: orange
+                  - value: 100
+                    color: red
+
+              - type: custom:bar-card
+                title: CPU Temp
+                entity: sensor.cpu_temp
+                animation: 'off'
+                indicator: 'off'
+                height: 30px
+                severity:
+                  - value: 60
+                    color: green
+                  - value: 70 
+                    color: orange
+                  - value: 100
+                    color: red
+
+              - type: custom:bar-card
+                title: Memory Use
+                entity: sensor.memory_use_percent
+                height: 30px
+                animation: 'off'
+                indicator: 'off'
+                severity:
+                  - value: 60
+                    color: green
+                  - value: 85 
+                    color: orange
+                  - value: 100
+                    color: red
+
+              - type: custom:bar-card
+                title: Disk Use
+                entity: sensor.disk_use_percent
+                height: 30px
+                animation: 'off'
+                indicator: 'off'
+                severity:
+                  - value: 60
+                    color: green
+                  - value: 85 
+                    color: orange
+                  - value: 100
+                    color: red
+
+              - type: divider
+
+              - entity: sensor.public_ip_address
+                icon: mdi:ip-network
+
+      #======================================
+      # Have I Been Pwned and Component Counts
+      #======================================
+      - type: vertical-stack
+        cards:
+
+          #=============================
+          # Component Counts
+          #=============================
+          - type: glance
+            title: Component Count
+            columns: 4
+            entities:
+              - entity: sensor.count_automations
+                name: Automations
+                icon: mdi:autorenew
+              - entity: sensor.count_scripts
+                name: Scripts
+                icon: mdi:script-text-outline
+              - entity: sensor.count_zones
+                name: Zones
+                icon: mdi:map-marker-radius
+              - entity: sensor.count_device_trackers
+                name: Device Trackers
+                icon: mdi:map-marker
+              - entity: sensor.count_switches
+                name: Switches
+                icon: mdi:light-switch
+              - entity: sensor.count_sensors
+                name: Sensors
+                icon: mdi:resistor
+              - entity: sensor.count_binary_sensors
+                name: Binary Sensors
+                icon: mdi:unfold-more-horizontal
+              - entity: sensor.count_input_booleans
+                name: Input Booleans
+                icon: mdi:toggle-switch
+              - entity: sensor.count_input_numbers
+                name: Input Numbers
+                icon: mdi:numeric
+              - entity: sensor.count_input_texts
+                name: Input Texts
+                icon: mdi:alphabetical
+              - entity: sensor.count_input_selects
+                name: Input Select
+                icon: mdi:view-list
+              - entity: sensor.count_input_datetimes
+                name: Input Date Times
+                icon: mdi:calendar-clock
+          
+
+          #=============================
+          # Custom Component Updates
+          #=============================
+      - type: vertical-stack
+        cards:
+
+          - type: custom:tracker-card
+            title:
+            trackers:
+              - sensor.custom_card_tracker
+              - sensor.custom_component_tracker

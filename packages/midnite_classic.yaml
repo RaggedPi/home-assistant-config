@@ -1,14 +1,11 @@
 ################################################################
 ## Ragged Jack Farm                                           ##
-## Package: Midnite Classic Test                              ##
+## Package: MidniteClassic                                    ##
 ## Author: David Durost <david.durost@gmail.com>              ##
 ## Url: http://ragedjackfarm.net                              ##
 ################################################################
 homeassistant:
   customize:
-    package.node_anchors:
-      customize: &customize
-        package: 'classic'
     sensor.classic_model:
       friendly_name: 'Model'
     sensor.classic_last_voc:
@@ -59,200 +56,202 @@ homeassistant:
       friendly_name: "Daily Total Ah"
     sensor.classic_battery_capacity:
       friendly_name: 'Battery Capacity'
+    package.node_anchors:
+        customize: &customize
+          package: 'midnite_classic'
   customize_glob:
     "sensor.classic_*":
       icon: mdi:solar-power
-      slave: 10
     "sensor.classic_rev_*":
       hidden: true
 
-modbus:
-  # TCP
-  - type: tcp
-    name: !secret midniteClassic_tcp_name # midniteClassic_name
-    host: !secret midniteClassic_tcp_host
-    port: !secret midniteClassic_tcp_port
-    timeout: 50
-  # Serial
-  - type: serial
-    name: midniteClassic_name # midniteClassic_rtu_name
-    method: ascii # rtu
-    port: !secret midniteClassic_rtu_port
-    baudrate: !secret midniteClassic_rtu_baudrate
-    stopbits: !secret midniteClassic_rtu_stopbits
-    bytesize: !secret midniteClassic_rtu_bytesize
-    parity: !secret midniteClassic_rtu_parity
-  
-
-sensor: # actual register numbers are +1 vs addresses
-  - platform: modbus
-    scan_interval: 60
-    registers: # actual register numbers are +1
-      # PCB Revision
-      - name: classic_pcb
-        hub: !secret midniteClassic_name
-        register: 4100 #4101
-        data_type: custom
-        structure: ">Bx"
-      # Unit Model
-      - name: classic_model
-        hub: !secret midniteClassic_name
-        register: 4100
-        data_type: custom
-        structure: ">xB"
-      # Revision Date
-      - name: classic_rev_date_year
-        hub: !secret midniteClassic_name
-        register: 4101 #4102
-      - name: classic_rev_date_day
-        hub: !secret midniteClassic_name
-        register: 4102 #4103
-        data_type: custom
-        structure: ">xB"
-      - name: classic_rev_date_month
-        hub: !secret midniteClassic_name
-        register: 4102 #4103
-        data_type: custom
-        structure: ">Bx"
-      # Battery Voltage
-      - name: classic_battery_voltage
-        hub: !secret midniteClassic_name
-        register: 4114 #4115
-        scale: 0.10
-        unit_of_measurement: V
-      # Nominal battery voltage
-      - name: classic_nom_battery_voltage
-        hub: !secret midniteClassic_name
-        register: 4244 #4245
-        unit_of_measurement: V
-      # Total Daily Ah
-      - name: classic_total_ah_daily
-        hub: !secret midniteClassic_name
-        register: 4124 #4125
-        unit_of_measurement: Ah        
-      # State Of Charge
-      - name: classic_soc
-        hub: !secret midniteClassic_name
-        register: 4372 #4250 #4251
-        unit_of_measurement: '%'
-      # Resting Reason
-      - name: classic_rest_reason
-        hub: !secret midniteClassic_name
-        register: 4274 #4275
-      # PV voltage
-      - name: classic_pv_voltage
-        hub: !secret midniteClassic_name
-        register: 4115 #4116
-        unit_of_measurement: V
-        data_type: float
-        scale: 0.10
-      # Battery Current
-      - name: classic_battery_current
-        hub: !secret midniteClassic_name
-        register: 4271 #4116 #4117
-        unit_of_measurement: A
-        data_type: float
-        scale: 0.10
-      # Power
-      - name: classic_power
-        hub: !secret midniteClassic_name
-        register: 4118 #4119
-        unit_of_measurement: W
-        data_type: float
-      # Today's Energy
-      - name: classic_energy_today
-        hub: !secret midniteClassic_name
-        register: 4117 #4118
-        unit_of_measurement: kWh
-        data_type: float 
-        scale: 0.10
-      # Charge State/ Stage
-      - name: classic_charge_stage
-        hub: !secret midniteClassic_name
-        register: 4119 #4120
-        data_type: custom
-        structure: ">xB"
-      - name: classic_charge_state
-        hub: !secret midniteClassic_name
-        register: 4119 #4120
-        data_type: custom
-        structure: ">Bx"
-      # PV Current
-      - name: classic_pv_current
-        hub: !secret midniteClassic_name
-        register: 4120 #4121
-        scale: 0.10
-        data_type: float
-        unit_of_measurement: A
-      - name: classic_pv_power
-        hub: !secret midniteClassic_name
-        register: 4119 #4120
-        data_type: float
-        scale: 0.10
-        unit_of_measurement: W
-      # Total energy
-      - name: classic_total_energy
-        hub: !secret midniteClassic_name
-        register: 4125 #4126-4127
-        unit_of_measurement: kWh
-      # Battery temperature
-      - name: classic_battery_temp_c
-        hub: !secret midniteClassic_name
-        register: 4131 #4132
-        unit_of_measurement: C
-        scale: 0.10
-      # FET temperature
-      - name: classic_fet_temp_c
-        hub: !secret midniteClassic_name
-        register: 4132 #4133
-        unit_of_measurement: C
-        scale: 0.10
-      # PCB temperature
-      - name: classic_pcb_temp_c
-        hub: !secret midniteClassic_name
-        register: 4133 #4134
-        unit_of_measurement: C
-        scale: 0.10
-      # Float time today
-      - name: classic_float_time_today
-        hub: !secret midniteClassic_name
-        register: 4137 #4138
-        unit_of_measurement: s
-      # Absorb time
-      - name: classic_absorb_time
-        hub: !secret midniteClassic_name
-        register: 4138 #4139
-        unit_of_measurement: s
-      # Equalize time
-      - name: classic_equalize_time
-        hub: !secret midniteClassic_name
-        register: 4142 #4143
-        unit_of_measurement: s
-      # Last VOC
-      - name: classic_last_voc
-        hub: !secret midniteClassic_name
-        register: 4121 #4122
-        unit_of_measurement: V
-        data_type: float
-      # MPPT mode
-      - name: classic_mppt_mode
-        hub: !secret midniteClassic_name
-        register: 4163 #4164
-      # Battery capacity
-      - name: classic_battery_capacity
-        hub: !secret midniteClassic_name
-        register: 4380 #4381
-        unit_of_measurement: Ah
-  
+sensor:
+  #########
+  # Infos #
+  #########
+  # App Version
+  - name: classic_appversion
+    platform: mqtt
+    state_topic: "classic/stats/info"
+    value_template: "{{ value_json.appVersion }}"
+    json_attributes_topic: "classic/stats/info"
+    json_attributes_template: "{{ value_json.appVersion | tojson }}" 
+  # Unit Model
+  - name: classic_model
+    platform: mqtt
+    state_topic: "classic/stats/info"
+    value_template: "{{ value_json.model }}"
+    json_attributes_topic: "classic/stats/info"
+    json_attributes_template: "{{ value_json.model | tojson }}" 
+  # Revision Date
+  - name: classic_build_date
+    platform: mqtt
+    state_topic: "classic/stats/info"
+    value_template: "{{ value_json.buildDate }}"
+    json_attributes_topic: "classic/stats/info"
+    json_attributes_template: "{{ value_json.buildDate | tojson }}" 
+  # Nominal battery voltage
+  - name: classic_nom_battery_voltage
+    platform: mqtt
+    state_topic: "classic/stats/info"
+    value_template: "{{ value_json.nominalBatteryVoltage }}"
+    json_attributes_topic: "classic/stats/info"
+    json_attributes_template: "{{ value_json.nominalBatteryVoltage | tojson }}" 
+    unit_of_measurement: V
+  # Last VOC
+  - name: classic_last_voc
+    platform: mqtt
+    state_topic: "classic/stats/info"
+    value_template: "{{ value_json.lastVOC }}"
+    json_attributes_topic: "classic/stats/info"
+    json_attributes_template: "{{ value_json.lastVOC | tojson }}" 
+    unit_of_measurement: V
+  # MPPT mode
+  - name: classic_mppt_mode
+    platform: mqtt
+    state_topic: "classic/stats/info"
+    value_template: "{{ value_json.mpptMode }}"
+    json_attributes_topic: "classic/stats/info"
+    json_attributes_template: "{{ value_json.mpptMode | tojson }}" 
+  ############
+  # Readings #
+  ############
+  # Battery Voltage
+  - name: classic_battery_voltage
+    platform: mqtt
+    state_topic: "classic/stats/readings"
+    value_template: "{{ value_json.BatVoltage }}"
+    json_attributes_topic: "classic/stats/readings"
+    json_attributes_template: "{{ value_json.BatVoltage | tojson }}" 
+    unit_of_measurement: V
+    # Total Daily Ah
+  - name: classic_total_ah_daily
+    platform: mqtt
+    state_topic: "classic/stats/readings"
+    value_template: "{{ value_json.TotalAmpHours }}"
+    json_attributes_topic: "classic/stats/readings"
+    json_attributes_template: "{{ value_json.TotalAmpHours | tojson }}" 
+    unit_of_measurement: Ah
+  # State Of Charge
+  - name: classic_soc
+    platform: mqtt
+    state_topic: "classic/stats/readings"
+    value_template: "{{ value_json.SOC }}"
+    json_attributes_topic: "classic/stats/readings"
+    json_attributes_template: "{{ value_json.SOC | tojson }}" 
+    unit_of_measurement: '%'
+  # Resting Reason
+  - name: classic_reason_for_resting
+    platform: mqtt
+    state_topic: "classic/stats/readings"
+    value_template: "{{ value_json.ReasonForResting }}"
+    json_attributes_topic: "classic/stats/readings"
+    json_attributes_template: "{{ value_json.ReasonForResting | tojson }}" 
+  # PV voltage
+  - name: classic_pv_voltage
+    platform: mqtt
+    state_topic: "classic/stats/readings"
+    value_template: "{{ value_json.PVVoltage }}"
+    json_attributes_topic: "classic/stats/readings"
+    json_attributes_template: "{{ value_json.PVVoltage | tojson }}" 
+    unit_of_measurement: V
+  # Battery Current
+  - name: classic_battery_current
+    platform: mqtt
+    state_topic: "classic/stats/readings"
+    value_template: "{{ value_json.BatCurrent }}"
+    json_attributes_topic: "classic/stats/readings"
+    json_attributes_template: "{{ value_json.BatCurrent | tojson }}" 
+    unit_of_measurement: A
+  # Power
+  - name: classic_power
+    platform: mqtt
+    state_topic: "classic/stats/readings"
+    value_template: "{{ value_json.Power }}"
+    json_attributes_topic: "classic/stats/readings"
+    json_attributes_template: "{{ value_json.Power | tojson }}" 
+    unit_of_measurement: W
+  # Total Energy
+  - name: classic_total_energy
+    platform: mqtt
+    state_topic: "classic/stats/readings"
+    value_template: "{{ value_json.TotalEnergy }}"
+    json_attributes_topic: "classic/stats/readings"
+    json_attributes_template: "{{ value_json.TotalEnergy | tojson }}" 
+    unit_of_measurement: J
+  # Charge State
+  - name: classic_charge_state
+    platform: mqtt
+    state_topic: "classic/stats/readings"
+    value_template: "{{ value_json.ChargeState }}"
+    json_attributes_topic: "classic/stats/readings"
+    json_attributes_template: "{{ value_json.ChargeState | tojson }}" 
+  # PV Current
+  - name: classic_pv_current
+    platform: mqtt
+    state_topic: "classic/stats/readings"
+    value_template: "{{ value_json.PVCurrent }}"
+    json_attributes_topic: "classic/stats/readings"
+    json_attributes_template: "{{ value_json.PVCurrent | tojson }}" 
+    unit_of_measurement: A
+    # Battery temperature
+  - name: classic_battery_temp_c
+    platform: mqtt
+    state_topic: "classic/stats/readings"
+    value_template: "{{ value_json.BatTemperature }}"
+    json_attributes_topic: "classic/stats/readings"
+    json_attributes_template: "{{ value_json.BatTemperature | tojson }}" 
+    unit_of_measurement: C
+  # FET temperature
+  - name: classic_fet_temp_c
+    platform: mqtt
+    state_topic: "classic/stats/readings"
+    value_template: "{{ value_json.FETTemperature }}"
+    json_attributes_topic: "classic/stats/readings"
+    json_attributes_template: "{{ value_json.FETTemperature | tojson }}" 
+    unit_of_measurement: C
+  # PCB temperature
+  - name: classic_pcb_temp_c
+    platform: mqtt
+    state_topic: "classic/stats/readings"
+    value_template: "{{ value_json.PCBTemperature }}"
+    json_attributes_topic: "classic/stats/readings"
+    json_attributes_template: "{{ value_json.PCBTemperature | tojson }}" 
+    unit_of_measurement: C
+  # Float time today
+  - name: classic_float_time_today
+    platform: mqtt
+    state_topic: "classic/stats/readings"
+    value_template: "{{ value_json.FloatTimeTodaySeconds }}"
+    json_attributes_topic: "classic/stats/readings"
+    json_attributes_template: "{{ value_json.FloatTimeTodaySeconds | tojson }}" 
+    unit_of_measurement: S
+  # Absorb time
+  - name: classic_absorb_time
+    platform: mqtt
+    state_topic: "classic/stats/readings"
+    value_template: "{{ value_json.AbsorbTime }}"
+    json_attributes_topic: "classic/stats/readings"
+    json_attributes_template: "{{ value_json.AbsorbTime | tojson }}" 
+    unit_of_measurement: S
+  # Equalize time
+  - name: classic_equalize_time
+    platform: mqtt
+    state_topic: "classic/stats/readings"
+    value_template: "{{ value_json.EqualizeTime }}"
+    json_attributes_topic: "classic/stats/readings"
+    json_attributes_template: "{{ value_json.EqualizeTime | tojson }}" 
+    unit_of_measurement: S
+    
   # Template Sensors
   - platform: template
     sensors:
       # Reason For Rest
-      classic_reason_for_rest:
+      classic_rest_reason_text:
         friendly_name: 'Rest Reason'
         entity_id: sensor.classic_rest_reason
         value_template: >-
-          {% set rest = states('sensor.classic_rest_reason')|int %}
+          {% set rest = states('sensor.classic_reason_for_resting')|int %}
           {% if rest == 1 %}
             Anti-Click
           {% elif rest == 2 %}
@@ -296,20 +295,13 @@ sensor: # actual register numbers are +1 vs addresses
           {% elif rest == 29 %}
             Bad Wind Graph
           {% else %}
-          Reason Code: {{states('sensor.classic_rest_reason')|int}}
+          Reason Code: {{rest}}
           {% endif %}
-      
-      # Revision Date (Formatted)
-      classic_revision_date:
-        friendly_name: 'PCB Revision Date'
-        value_template: >-
-          {{ states('sensor.classic_rev_date_month') }}/{{ states('sensor.classic_rev_date_day') }}/{{ states('sensor.classic_rev_date_year') }}
       
       # Temperature Conversions
       classic_battery_temp:
         friendly_name: 'Battery Temperature'
-        value_template: >-
-          {{ ((state('sensor.classic_battery_temp_c')|int) *9 /5) + 32 }}
+        value_template: "{{ ((state('sensor.classic_battery_temp_c')|float(2) * 9) /5) + 32 }}"
         unit_of_measurement: F
 
       classic_pcb_temp:
@@ -326,7 +318,7 @@ sensor: # actual register numbers are +1 vs addresses
       classic_mode:
         friendly_name: Mode
         value_template: >-
-          {% set mode = states('sensor.classic_charge_stage')|int %}
+          {% set mode = states('sensor.classic_charge_state')|int %}
           {% if mode == 0 %}
             Resting
           {% elif mode == 3 %} 
@@ -350,7 +342,7 @@ sensor: # actual register numbers are +1 vs addresses
       classic_mode_time:
         friendly_name: Time
         value_template: >-
-          {% set mode = states('sensor.classic_charge_stage')|int %}
+          {% set mode = states('sensor.classic_charge_state')|int %}
           {% if mode == 0 %} # we are resting
             {{ sensor.classic_reason_for_rest }}
           {% elif mode == 3 %} 
@@ -370,54 +362,54 @@ sensor: # actual register numbers are +1 vs addresses
           {% else %}
             ''
           {% endif %}
-# Entity Groups
-group:
-  classic_stats:
-    name: 'Midnite Classic'
-    entities:
-      - sensor.classic_absord_time
-      - sensor.classic_battery_current
-      - sensor.classic_battery_temp
-      - sensor.classic_battery_capacity
-      - sensor.classic_charge_stage
-      - sensor.classic_charge_state
-      - sensor.classic_device_id
-      - sensor.classic_pv_voltage
-      - sensor.classic_battery_voltae
-      - sensor.classic_energy_today
-      - sensor.classic_equalize_time
-      - sensor.classic_fet_temp
-      - sensor.classic_float_time_today
-      - sensor.classic_mac_address
-      - sensor.classic_model
-      - sensor.classic_pcb
-      - sensor.classic_pcb_temp
-      - sensor.classic_power
-      - sensor.classic_pv_current
-      - sensor.classic_reason_for_rest
-      - sensor.classic_rest_reason
-      - sensor.classic_revision_date
-      - sensor.classic_soc
-      - sensor.classic_total_ah_daily
-      - sensor.classic_total_energy
-  classic_volts:
-    name: 'Midnite Classic Voltages'
-    entities:
-      - sensor.classic_last_voc
-      - sensor.classic_pv_voltage
-      - sensor.classic_battery_voltage
-      - sensor.classic_nom_battery_voltage
-  classic_currents:
-    name: 'Midnite Classic Currents'
-    entities:
-      - sensor.classic_battery_capacity
-      - sensor.classic_battery_current
-      - sensor.classic_pv_current
-      - sensor.classic_total_ah_daily
-  classic_powers:
-    name: 'Midnite Classic Power'
-    entities:
-      - sensor.classic_power
-      - sensor.classic_pv_power
-      - sensor.classic_energy_today
-      - sensor.classic_total_energy
+# # Entity Groups
+# group:
+#   classic_stats:
+#     name: 'Midnite Classic'
+#     entities:
+#       - sensor.classic_absord_time
+#       - sensor.classic_battery_current
+#       - sensor.classic_battery_temp
+#       - sensor.classic_battery_capacity
+#       - sensor.classic_charge_stage
+#       - sensor.classic_charge_state
+#       - sensor.classic_device_id
+#       - sensor.classic_pv_voltage
+#       - sensor.classic_battery_voltae
+#       - sensor.classic_energy_today
+#       - sensor.classic_equalize_time
+#       - sensor.classic_fet_temp
+#       - sensor.classic_float_time_today
+#       - sensor.classic_mac_address
+#       - sensor.classic_model
+#       - sensor.classic_pcb
+#       - sensor.classic_pcb_temp
+#       - sensor.classic_power
+#       - sensor.classic_pv_current
+#       - sensor.classic_reason_for_rest
+#       - sensor.classic_rest_reason
+#       - sensor.classic_revision_date
+#       - sensor.classic_soc
+#       - sensor.classic_total_ah_daily
+#       - sensor.classic_total_energy
+#   classic_volts:
+#     name: 'Midnite Classic Voltages'
+#     entities:
+#       - sensor.classic_last_voc
+#       - sensor.classic_pv_voltage
+#       - sensor.classic_battery_voltage
+#       - sensor.classic_nom_battery_voltage
+#   classic_currents:
+#     name: 'Midnite Classic Currents'
+#     entities:
+#       - sensor.classic_battery_capacity
+#       - sensor.classic_battery_current
+#       - sensor.classic_pv_current
+#       - sensor.classic_total_ah_daily
+#   classic_powers:
+#     name: 'Midnite Classic Power'
+#     entities:
+#       - sensor.classic_power
+#       - sensor.classic_pv_power
+#       - sensor.classic_energy_today
+#       - sensor.classic_total_energy

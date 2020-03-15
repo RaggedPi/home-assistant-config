@@ -411,15 +411,39 @@ sensor:
         
 binary_sensor:
   - platform: mqtt
-    name: magnum_ags_running
+    name: magnum_ags_running # manual gen start
     state_topic: magnum/ags
     value_template: "{{ value_json.data.running | default(false, true) }}"
+    payload_on: true
+    payload_off: false
     json_attributes_topic: "magnum/ags"
     json_attributes_template: "{{ value_json.data.running | default(false, true) | tojson }}"
+  - platform: mqtt
+    name: magnum_inverter_led # inverter
+    state_topic: magnum/inverter
+    payload_on: 1
+    payload_off: 0
+    value_template: "{{ value_json.data.invled | default(1, true) }}"
+    json_attributes_topic: "magnum/inverter"
+    json_attributes_template: "{{ value_json.data.invled | default(1, true) | tojson }}"
+  - platform: mqtt
+    name: magnum_charger_led # charger
+    payload_on: 1
+    payload_off: 0
+    state_topic: magnum/inverter
+    value_template: "{{ value_json.data.chgled | default(0, true) }}"
+    json_attributes_topic: "magnum/inverter"
+    json_attributes_template: "{{ value_json.data.chgled | default(0, true) | tojson }}"
 
 input_boolean:
   magnum_aux_ac_input:
     name: Aux AC Input
+    initial: false
+  magnum_in_float:
+    name: In Float
+    initial: false
+  magnum_in_eq:
+    name: In EQ
     initial: false
 
 switch:
@@ -433,45 +457,16 @@ switch:
     command_topic: "magnum/inverter/eq/toggle"
     state_topic: "magnum/inverter/eq/toggle"
     availability_topic: "magnum/inverter/eq/toggle/available"
-group:
-  inverter_stats:
-    name: Inverter Stats
-    entities:
-      - sensor.magnum_inverter_AACin
-      - sensor.magnum_inverter_AACout
-      - sensor.magnum_inverter_adc
-      - sensor.magnum_inverter_bat
-      - sensor.magnum_inverter_fault
-      - sensor.magnum_inverter_fet
-      - sensor.magnum_inverter_frequency
-      - sensor.magnum_inverter_mode
-      - sensor.magnum_inverter_model
-      - sensor.magnum_inverter_revision
-      - sensor.magnum_inverter_tfmr
-      - sensor.magnum_inverter_VACin
-      - sensor.magnum_inverter_VACout
-      - sensor.magnum_inverter_vdc
-  bmk_stats:
-    name: BMK stats
-    entities:
-      - sensor.magnum_bmk_adc 
-      - sensor.magnum_bmk_amph
-      - sensor.magnum_bmk_fault
-      - sensor.magnum_bmk_fault_text
-      - sensor.magnum_bmk_revision
-      - sensor.magnum_bmk_soc
-      - sensor.magnum_bmk_vdc
-      - sensor.magnum_bmk_vmax
-      - sensor.magnum_bmk_vmin
-  ags_stats:
-    name: AGS stats
-    entities:
-      - sensor.magnum_ags_revision
-      - binary_sensor.magnum_ags_running
-      - sensor.magnum_ags_status
-      - sensor.magnum_ags_status_text
-      - sensor.magnum_ags_temp
-      - sensor.magnum_ags_vdc
+  - platform: mqtt
+    name: magnum_chg_toggle
+    command_topic: "magnum/inverter/chg/toggle"
+    state_topic: "magnum/inverter/chg/toggle"
+    availability_topic: "magnum/inverter/chg/toggle/available"
+  - platform: mqtt
+    name: magnum_inverter_toggle
+    command_topic: "magnum/inverter/toggle"
+    state_topic: "magnum/inverter/toggle"
+    availability_topic: "magnum/inverter/toggle/available"
 
 automation:
   # PowerPi MQTT pymagnum Connect Notification
@@ -494,3 +489,75 @@ automation:
       service: notify.david
       data:
         message: "[RaggedJack.io] PowerPi MQTT pymagnum disconnected."
+#########################  
+# Toggle input booleans #
+#########################
+  # Float
+  - alias: Float on
+    trigger:
+      - platform: state
+        entity_id: sensor.magnum_inverter_mode
+        to: Float
+        for: "00:00:30"
+    action:
+      service: input_boolean.turn_on
+      entity_id: input_boolean.magnum_in_float
+  - alias: Float off
+    trigger:
+      - platform: state
+        entity_id: sensor.magnum_inverter_mode
+        from: Float
+    action:
+      service: input_boolean.turn_off
+      entity_id: input_boolean.magnum_in_float
+  # Inverter
+  - alias: Inverter on
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.magnum_inverter_led
+        to: 'On'
+    action:
+      service: switch.turn_on
+      entity_id: switch.magnum_inverter_toggle
+  - alias: Inverter off
+    trigger:
+      - platform: state
+        entity_id: switch.magnum_inverter_toggle
+        to: 'Off'
+    action:
+      service: switch.turn_off
+      entity_id: switch.magnum_inverter_toggle
+  # Charger
+  - alias: Charger on
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.magnum_charger_led
+        to: 'On'
+    action:
+      service: switch.turn_on
+      entity_id: switch.magnum_charger_toggle
+  - alias: Charger off
+    trigger:
+      - platform: state
+        entity_id: switch.magnum_chg_toggle
+        from: 'Off'
+    action:
+      service: switch.turn_off
+      entity_id: switch.magnum_chg_toggle
+  # Equalize
+  - alias: Equalize on
+    trigger:
+      - platform: state
+        entity_id: sensor.magnum_inverter_mode
+        to: Equalizing
+    action:
+      service: input_boolean.turn_on
+      entity_id: input_boolean.magnum_in_eq
+  - alias: Equalize off
+    trigger:
+      - platform: state
+        entity_id: switch.magnum_chg_toggle
+        from: 'Off'
+    action:
+      service: input_boolean.turn_off
+      entity_id: input_boolean.magnum_in_eq

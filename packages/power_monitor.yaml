@@ -1,0 +1,63 @@
+################################################################
+## Ragged Jack Farm                                           ##
+## Package: Power Monitor                                     ##
+## Author: David Durost <david.durost@gmail.com>              ##
+## Url: http://ragedjackfarm.net                              ##
+################################################################
+homeassistant:
+  customize:
+      package.node_anchors:
+        customize: &customize
+          package: 'power_monitor'
+automation:
+  - alias: 'System Status - Periodic'
+    trigger:
+      - platform: time_pattern 
+        minutes: '/20'
+    action:
+      - service: notify.david
+        data:
+          message: "[RaggedPi] SOC: {{ states('sensor.magnum_bmk_soc') }}% | Volts: {{ states('sensor.magnum_bmk_vdc') }} | AC out: {{ states('sensor.magnum_inverter_aacout') }} amps | PV Input: {{states('sensor.classic_pv_voltage')}} volts | Gen Status: XXX"
+
+  # Turn Off Aux. Generator Notification
+  - alias: 'System nearly full'
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.magnum_bmk_soc
+        above: 98
+        below: 100
+        for:
+          minutes: 3
+    action:
+      - service: notify.david
+        data:
+          message: "[RaggedPi] System nearing full."
+      - condition: and
+        conditions:      
+          - condition: template
+            value_template: "{{ states('sensor.magnum_inverter_aacin')|int > 0 }}"
+      - service: notify.david
+        data:
+          message: "[ner0tic] Disengage the aux generator."
+  # Turn On Aux. Generator Notification
+  - alias: 'System low'
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.magnum_bmk_soc
+        below: 90
+        above: 80
+        for:
+          minutes: 3
+    action:
+      - service: notify.david
+        data:
+          message: "[RaggedPi] System getting low."
+      - condition: and
+        conditions:
+          - condition: template
+            value_template: "{{ states('sensor.magnum_inverter_aacin')|int > 0 }}"
+      - service: notify.david
+        data:
+          message: "Engage the aux generator."
+
+
