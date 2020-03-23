@@ -9,16 +9,46 @@ homeassistant:
       package.node_anchors:
         customize: &customize
           package: 'power_monitor'
+
+################################################################
+# Automation                                                   #
+################################################################
 automation:
   - alias: 'System Status - Periodic'
     trigger:
       - platform: time_pattern 
-        minutes: '/20'
+        minutes: '/10'
     action:
       - service: notify.david
+        data: 
+          message: >-
+            {% set mode = states('sensor.magnum_inverter_mode_text') %}
+            {% set soc = states('sensor.magnum_bmk_soc') %}
+            {% set vdc = states('sensor.magnum_bmk_vdc') %}
+            {% set acout = states('sensor.magnum_inverter_aacout') %}
+            [RaggedPi] [{{mode}}][SOC: {{soc}}%][{{vdc}}V][AC load: {{acout}}A]
+      - condition: and
+        conditions:
+          - condition: numeric_state
+            entity_id: sun.sun
+            value_template: "{{ state_attr('sun.sun', 'elevation') }}"
+            above: 1.5
+      - service: notify.david
+        data: 
+          message: >-
+            {% set mode = states('sensor.classic_mode') %}
+            {% set vdc = states('sensor.classic_avg_pv_voltage') %}
+            {% set energy = states('sensor.classic_avg_energy_today') %}
+            [{{mode}}][PV Input: {{vdc}}V][Total Input: {{energy}}KW]
+      - condition: and
+        conditions:
+          - condition: state
+            entity_id: input_boolean.magnum_aux_ac_input
+            state: 'On'
+      - service: notify.david
         data:
-          message: "[RaggedPi] SOC: {{ states('sensor.magnum_bmk_soc') }}% | Volts: {{ states('sensor.magnum_bmk_vdc') }} | AC out: {{ states('sensor.magnum_inverter_aacout') }} amps | PV Input: {{states('sensor.classic_pv_voltage')}} volts | Gen Status: XXX"
-
+          message: >
+            [Aux Generator: ON][{{ states('timer.magnum_charge_time') }}s]
   # Turn Off Aux. Generator Notification
   - alias: 'System nearly full'
     trigger:
@@ -38,7 +68,8 @@ automation:
             value_template: "{{ states('sensor.magnum_inverter_aacin')|int > 0 }}"
       - service: notify.david
         data:
-          message: "[ner0tic] Disengage the aux generator."
+          message: "[RaggedPi] Disengage the aux generator."
+  
   # Turn On Aux. Generator Notification
   - alias: 'System low'
     trigger:

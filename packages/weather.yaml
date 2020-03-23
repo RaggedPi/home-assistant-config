@@ -10,11 +10,11 @@ homeassistant:
         customize: &customize
           package: 'darksky'
 
-# weather:
-#  - platform: darksky
-#    api_sky: !secret darksky_key
-
 sensor:
+################################################################
+# DarkSky                                                      #
+################################################################
+  # PV related forecasts
   - platform: darksky
     name: pv
     api_key: !secret darksky_key
@@ -30,6 +30,7 @@ sensor:
       - cloud_cover
       - visibility
 
+  # Storm related forecasts
   - platform: darksky
     name: storm_center
     api_key: !secret darksky_key
@@ -46,50 +47,35 @@ sensor:
       - wind_speed
       - wind_bearing
 
-# binary_sensor: 
-#   - platform: template
-#     sensors:
-#       storm_center_is_precipitating:
-#         friendly_name: Is Precipitating
-#         value_template: >
-#           {% set precip = (true if states('sensor.storm_center_precip_type')|default(0) > 0)  %}
-#          {{ precip }}           
+################################################################
+# Template Sensors                                             #
+################################################################
+  - platform: template
+    sensors:
+      # Wind Direction degrees to compass points
+      storm_center_wind_direction:
+        friendly_name: Wind Direction
+        value_template: >
+          {% set deg = states('sensor.storm_center_wind_bearing')|float(0) %}
+          {% set abr = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'] %}
+          {%- set i = ((deg/22.5)| round(0))| int %}
+          {%- set i = 0 if i == 16 else i %}
+          {{ abr[i] }}
+
+      # Storm Direction degrees to compass points
+      storm_center_storm_direction:
+        friendly_name: Wind Direction
+        value_template: >
+          {% set deg = states('sensor.storm_center_nearest_storm_bearing')|float(0) %}
+          {% set abr = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'] %}
+          {%- set i = ((deg/22.5)| round(0))| int %}
+          {%- set i = 0 if i == 16 else i %}
+          {{ abr[i] }}
+################################################################
+# Input Booleans                                               #
+################################################################
 input_boolean:
+  # Is precipitating
   storm_center_is_precipitating:
     name: Is Precipitating
     initial: false
-# automation:
-#   - alias: Is it precipitating
-#     trigger:
-#       - platform: state
-#         entity_id: sensor.storm_center_precip
-#         from: 'off'
-#     condition:
-#       - condition: state
-#         entity_id: input_boolean.storm_center_is_precipitating
-
-  ####################
-  # Template Sensors #
-  ####################
-  # Workarounds for sensors not being defined if no nearby storm or precip
-  # - platform: template
-  #   name: storm_center_storm_nearby
-  #   value_template: >-
-  #     {% set near = states('sensor.storm_center_nearby_storm_distance') %}
-  #     {{ near if (near != 'unknown' or near != 0) else 'None'}}
-
-  # - platform: template
-  #   name: storm_center_storm_nearby_direction
-  #   value_template: >-
-  #     {% set near = states('sensor.storm_center_nearby_storm_bearing') %}
-  #     {{ near if (near != 'unknown' or near != 0) else 'None'}} 
-
-  # - platform: template
-  #   name: storm_center_precip_display
-  #   value_template: {{ states('sensor.storm_center_precip') if states('sensor.storm_center_receiving_precip') == true else 'None' }}
-  # - platform: template
-  #   name: storm_center_total_precip
-  #   value_template: {{ states('sensor.storm_center_precip_accumulation')|float(2) if states('sensor.storm_center_receiving_precip') else 0.00}}
-  # - platform: template
-  #   name: storm_center_intensity_of_precip
-  #   value_template: {{ states('sensor.storm_center_precip_intensity')|float(2) if states('sensor.storm_center_receiving_precip') else 0.00}}

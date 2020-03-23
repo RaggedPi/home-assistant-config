@@ -20,7 +20,7 @@ frontend:
 updater:
   include_used_components: true
 logger:
-http:
+#http:
 logbook: 
 map: 
 sun: 
@@ -29,6 +29,22 @@ conversation:
 discovery:
 system_health:
 history:
+  include:
+    domains:
+      - sensor
+  exclude:
+    entities: 
+      - sensor.date
+      - sensor.time
+      - sensor.dark_sky_summary
+      - sensor.dark_sky_daily_summary
+      - sensor.dark_sky_hourly_summary
+      - sensor.dark_sky_minutely_summary
+      - sensor.dark_sky_daily_high_temperature
+      - sensor.dark_sky_daily_low_temperature
+      - sensor.dark_sky_precip_probability
+      - sensor.dark_sky_nearest_storm_bearing
+      - sensor.dark_sky_nearest_storm_distance
 hacs:
   token: !secret hacs_token
 lovelace: 
