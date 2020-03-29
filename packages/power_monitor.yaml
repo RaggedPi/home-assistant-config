@@ -14,6 +14,7 @@ homeassistant:
 # Automation                                                   #
 ################################################################
 automation:
+  # Periodic System Status Notification
   - alias: 'System Status - Periodic'
     trigger:
       - platform: time_pattern 
@@ -23,6 +24,7 @@ automation:
         data: 
           message: >-
             {% set mode = states('sensor.magnum_inverter_mode_text') %}
+            {% set mode = "{}: {}".format(mode, states('sensor.magnum_inverter_mode')) if mode == 'Resting' else mode %}
             {% set soc = states('sensor.magnum_bmk_soc') %}
             {% set vdc = states('sensor.magnum_bmk_vdc') %}
             {% set acout = states('sensor.magnum_inverter_aacout') %}
@@ -37,9 +39,11 @@ automation:
         data: 
           message: >-
             {% set mode = states('sensor.classic_mode') %}
+            {% set mode = "{}: {}".format(mode, states('sensor.magnum_inverter_mode')) if mode == 'Resting' else mode %}
             {% set vdc = states('sensor.classic_avg_pv_voltage') %}
+            {% set adc = states('sensor.classic_avg_pv_current') %}
             {% set energy = states('sensor.classic_avg_energy_today') %}
-            [{{mode}}][PV Input: {{vdc}}V][Total Input: {{energy}}KW]
+            [{{mode}}][PV Input: {{vdc}}V][{{adc}}Adc[Total Input: {{energy}}KW]
       - condition: and
         conditions:
           - condition: state
@@ -49,6 +53,7 @@ automation:
         data:
           message: >
             [Aux Generator: ON][{{ states('timer.magnum_charge_time') }}s]
+
   # Turn Off Aux. Generator Notification
   - alias: 'System nearly full'
     trigger:

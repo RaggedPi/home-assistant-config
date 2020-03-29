@@ -26,6 +26,7 @@ sensor:
       - type: last_boot
   - platform: dnsip
     ipv6: true
+
   # CPU Temp
   - platform: command_line
     name: CPU Temp
@@ -33,21 +34,26 @@ sensor:
     command: "cat /sys/devices/virtual/thermal/cooling_device0" # while in VM testing
     unit_of_measurement: "°C"
     value_template: '{{ value | multiply(0.001) | round(0) }}' 
+
   # Uptime
   - platform: uptime
+
   # Rpi_Power
   - platform: rpi_power
     text_state: True
+
   # Hass.io Version
   - platform: version
     name: Installed Version
     source: local
+
   # Latest Available HA Version
   - platform: version
     name: Latest Available Version
     beta: false
     image: raspberrypi4
     source: hassio
+
   # Templates
   - platform: template
     sensors:
@@ -71,6 +77,7 @@ sensor:
 
             {{ [ phrase(weeks, 'week'), phrase(days, 'day'), phrase(hours, 'hr'), phrase(minutes, 'min') ] | select('!=','') | list | join(', ') }}
           {% endif %}
+
       # Raspberry Pi last boot date and time
       last_boot_date_time:
         friendly_name: Last Boot
@@ -88,6 +95,7 @@ sensor:
           {% endif %}
 
           {{ as_timestamp(states('sensor.last_boot')) | timestamp_custom('%H:%M on %a') }} {{ date }} {{ as_timestamp(states('sensor.last_boot')) | timestamp_custom('%b %Y') }}
+      
       # Raspberry Pi Up Time
       rpi_uptime:
         friendly_name: RPi Uptime
@@ -117,6 +125,7 @@ sensor:
           {% endif %}
           
           {{ text }}
+
       ####################
       # Component Counts #
       ####################
@@ -132,6 +141,7 @@ sensor:
               {% endif %}
             {%- endfor -%}
           {%- endfor -%}
+
     # Count Scripts
       count_scripts:
         entity_id: sensor.date
@@ -144,6 +154,7 @@ sensor:
               {% endif %}
             {%- endfor -%}
           {%- endfor -%}
+
     # Count Device Trackers
       count_device_trackers:
         entity_id: sensor.date
@@ -155,7 +166,8 @@ sensor:
                 {{loop.length}}
               {% endif %}
             {%- endfor -%}
-          {%- endfor -%}        
+          {%- endfor -%}
+
     # Count Binary Sensors
       count_binary_sensors:
         entity_id: sensor.date
@@ -168,6 +180,7 @@ sensor:
               {% endif %}
             {%- endfor -%}
           {%- endfor -%}
+
     # Count Sensors
       count_sensors:
         entity_id: sensor.date
@@ -180,6 +193,7 @@ sensor:
               {% endif %}
             {%- endfor -%}
           {%- endfor -%}
+
     # Count Switches
       count_switches:
         entity_id: sensor.date
@@ -192,6 +206,7 @@ sensor:
               {% endif %}
             {%- endfor -%}
           {%- endfor -%}
+
     # Count Zones
       count_zones:
         entity_id: sensor.date
@@ -204,6 +219,7 @@ sensor:
               {% endif %}
             {%- endfor -%}
           {%- endfor -%}
+
     # Input Booleans
       count_input_booleans:
         entity_id: sensor.date
@@ -216,6 +232,7 @@ sensor:
               {% endif %}
             {%- endfor -%}
           {%- endfor -%}
+
     # Input Numbers
       count_input_numbers:
         entity_id: sensor.date
@@ -228,6 +245,7 @@ sensor:
               {% endif %}
             {%- endfor -%}
           {%- endfor -%}
+
     # Input Texts
       count_input_texts:
         entity_id: sensor.date
@@ -240,6 +258,7 @@ sensor:
               {% endif %}
             {%- endfor -%}
           {%- endfor -%}
+
     # Input Selects
       count_input_selects:
         entity_id: sensor.date
@@ -252,6 +271,7 @@ sensor:
               {% endif %}
             {%- endfor -%}
           {%- endfor -%}
+
     # Input Date Times
       count_input_datetimes:
         entity_id: sensor.date
@@ -280,6 +300,7 @@ automation:
         data: 
           title: "HAPi Low Resource Alert"
           message: "[RaggedPi] Low Disk Space > 90% Used"
+
   # Low Memory
   - alias: HAPi Low Memory Alert
     trigger:
@@ -291,6 +312,7 @@ automation:
         data: 
           title: "HAPi Low Resource Alert"
           message: "[RaggedPi] Low Memory > 90% Used"
+
   # High Load
   - alias: HAPi High Load Alert
     trigger:
@@ -302,6 +324,7 @@ automation:
         data: 
           title: "HAPi Low Resource Alert"
           message: "[RaggedPi] System Load 5m Load Average > 2.8"
+
   # rpi Power
   - id: rpi_power_issue
     alias: Power Problem Notification

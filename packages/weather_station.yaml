@@ -1,0 +1,111 @@
+################################################################
+## Ragged Jack Farm                                           ##
+## Package: Weather Station                                   ##
+## Author: David Durost <david.durost@gmail.com>              ##
+## Url: http://ragedjackfarm.net                              ##
+################################################################
+homeassistant:
+  customize:
+      package.node_anchors:
+        customize: &customize
+          package: 'weather_station'
+
+sensor:
+  # DS3231 :: Time
+  - platform: mqtt
+    name: weather_station_ds3231_time
+    state_topic: "weather/ds3231/time"
+    value_template: "{{ value_json.data.ds3231.time }}"
+    json_attributes_topic: "weather/ds3231/time"
+    json_attributes_template: "{{ value_json.data.ds3231.time | tojson }}"
+  # DS3231 :: Temperature
+  - platform: mqtt
+    name: weather_station_ds3231_temperature
+    state_topic: "weather/ds3231/temperature"
+    value_template: "{{ value_json.data.ds3231.temperature }}"
+    json_attributes_topic: "weather/ds3231/temperature"
+    json_attributes_template: "{{ value_json.data.ds3231.temperature | tojson }}"
+  # BMP180 :: Temperature
+  - platform: mqtt
+    name: weather_station_bmp180_temperature
+    state_topic: "weather/bmp180/temperature"
+    value_template: "{{ value_json.data.bmp180.temperature }}"
+    json_attributes_topic: "weather/bmp180/temperature"
+    json_attributes_template: "{{ value_json.data.bmp180.temperature | tojson }}"
+  # BMP180 :: Pressure
+  - platform: mqtt
+    name: weather_station_bmp180_pressure
+    state_topic: "weather/bmp180/pressure"
+    value_template: "{{ value_json.data.bmp180.pressure }}"
+    json_attributes_topic: "weather/bmp180/pressure"
+    json_attributes_template: "{{ value_json.data.bmp180.pressure | tojson }}"
+  # BMP180 :: Sealevel Pressure
+  - platform: mqtt
+    name: weather_station_bmp180_sealevel_pressure
+    state_topic: "weather/bmp180/sealevel_pressure"
+    value_template: "{{ value_json.data.bmp180.sealevel_pressure }}"
+    json_attributes_topic: "weather/bmp180/sealevel_pressure"
+    json_attributes_template: "{{ value_json.data.bmp180.sealevel_pressure | tojson }}"
+  # HTU21DF :: Temperature
+  - platform: mqtt
+    name: weather_station_htu21df_temperature
+    state_topic: "weather/htu21df/temperature"
+    value_template: "{{ value_json.data.htu21df.temperature }}"
+    json_attributes_topic: "weather/htu21df/temperature"
+    json_attributes_template: "{{ value_json.data.htu21df.temperature | tojson }}"
+  # HTU21DF :: Humidity
+  - platform: mqtt
+    name: weather_station_htu21df_humidity
+    state_topic: "weather/htu21df/humidity"
+    value_template: "{{ value_json.data.htu21df.humidity }}"
+    json_attributes_topic: "weather/htu21df/humidity"
+    json_attributes_template: "{{ value_json.data.htu21df.humidity | tojson }}"    
+  # AS3935 :: Status
+  - platform: mqtt
+    name: weather_station_as3935_status
+    state_topic: "weather/as3935/status"
+    value_template: "{{ value_json.data.as3935.status }}"
+    json_attributes_topic: "weather/as3935/status"
+    json_attributes_template: "{{ value_json.data.as3935.status | tojson }}"
+  # AS3935 :: Lightning Count
+  - platform: mqtt
+    name: weather_station_as3935_count
+    state_topic: "weather/as3935/count"
+    value_template: "{{ value_json.data.as3935.count }}"
+    json_attributes_topic: "weather/as3935/count"
+    json_attributes_template: "{{ value_json.data.as3935.count | tojson }}"    
+  # Rain :: Total
+  - platform: mqtt
+    name: weather_station_rain_total
+    state_topic: "weather/rain/total"
+    value_template: "{{ value_json.data.rain.total }}"
+    json_attributes_topic: "weather/rain/total"
+    json_attributes_template: "{{ value_json.data.rain.total | tojson }}"    
+  # Wind :: Speed
+  - platform: mqtt
+    name: weather_station_wind_speed
+    state_topic: "weather/wind/speed"
+    value_template: "{{ value_json.data.wind.speed }}"
+    json_attributes_topic: "weather/wind/speed"
+    json_attributes_template: "{{ value_json.data.wind.speed | tojson }}"    
+  # Wind :: Gust
+  - platform: mqtt
+    name: weather_station_wind_gust
+    state_topic: "weather/wind/gust"
+    value_template: "{{ value_json.data.wind.gust }}"
+    json_attributes_topic: "weather/wind/gust"
+    json_attributes_template: "{{ value_json.data.wind.gust | tojson }}"        
+  # Wind :: Direction
+  - platform: mqtt
+    name: weather_station_wind_direction
+    state_topic: "weather/wind/direction"
+    value_template: "{{ value_json.data.wind.direction }}"
+    json_attributes_topic: "weather/wind/direction"
+    json_attributes_template: "{{ value_json.data.wind.direction | tojson }}"        
+  # Wind :: Direction Volts
+  - platform: mqtt
+    name: weather_station_wind_direction_volts
+    state_topic: "weather/wind/direction_volts"
+    value_template: "{{ value_json.data.wind.direction_volts }}"
+    json_attributes_topic: "weather/wind/direction_volts"
+    json_attributes_template: "{{ value_json.data.wind.direction_volts | tojson }}"        

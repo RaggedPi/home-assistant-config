@@ -101,7 +101,7 @@ views:
             state_header: Amps Out
             secondary_info: last-changed
             entities:
-              - entity: sensor.magnum_inverter_mode
+              - entity: sensor.magnum_inverter_mode_text
                 name: Charging Stage
               - entity: sensor.magnum_fault
               - entity: sensor.magnum_inverter_vacout
@@ -188,7 +188,7 @@ views:
           #####################
           # Storm Information #
           #####################
-          - entity: sensor.storm_center_wind_bearing
+          - entity: sensor.storm_center_wind_direction
             type: custom:multiple-entity-row
             name: Storm Information
             state_header: Wind Bearing
@@ -196,7 +196,7 @@ views:
             entities:
               - entity: sensor.storm_center_nearest_storm_distance
                 name: Nearest Storm
-              - entity: sensor.storm_center_nearest_storm_bearing
+              - entity: sensor.storm_center_storm_direction
                 name: Storm Bearing
               - entity: sensor.storm_center_wind_speed
                 name: Wind Speed
@@ -311,7 +311,7 @@ views:
           #################
           # System Status #
           #################
-          - entity: sensor.magnum_inverter_mode
+          - entity: sensor.magnum_inverter_mode_text
             type: custom:multiple-entity-row
             name: System Status
             state_header: 'Mode'
@@ -330,7 +330,7 @@ views:
             color: rgb(28, 128, 199)
           - type: "custom:button-card"
             name: Charger
-            entity: switch.magnum_chg_toggle
+            entity: switch.magnum_charger_toggle
             color: rgb(28, 128, 199)
           - type: "custom:button-card"
             name: Inverter
@@ -502,16 +502,22 @@ views:
         ############
         - type: 'custom:flex-horseshoe-card'
           entities:
-            - entity: sensor.classic_pv_voltage
+            - entity: sensor.classic_avg_pv_voltage
               decimals: 1
               unit: 'V'
               name: PV Input
-            - entity: sensor.classic_power
+              tap_action:
+                action: more-info
+            - entity: sensor.classic_avg_power
               decimals: 1
               unit: 'W'
-            - entity: sensor.classic_pv_current
+              tap_action:
+                action: more-info
+            - entity: sensor.classic_avg_pv_current
               decimals: 1
               unit: 'A'
+              tap_action:
+                action: more-info
           show:
             horseshoe_style: 'lineargradient'
           layout:
@@ -586,14 +592,80 @@ views:
         #############
         # Mode data #
         #############
-        - type: 'custom:multiple-entity-row'
+        # EQ / EQ MPPT Mode
+        - type: conditional # only works with ands... arg
+          conditions:
+            - entity: input_boolean.classic_in_eq
+              state: "On"
+          card:
+            - type: 'custom:multiple-entity-row'
+              entity: sensor.classic_mode
+              name: Charge Controller
+              name_state: Time
+              secondary_info: last-changed
+              entities:
+                - entity: sensor.classic_equalize_time
+        
+        - type: custom:state-switch
           entity: sensor.classic_mode
-          name: Charge Controller
-          name_state: Time
-          secondary_info: last-changed
-          entities:
-            - entity: sensor.classic_rest_reason_text
-
+          default: Default
+          states:
+            Default:
+              type: conditional # only works with ands... arg
+              conditions:
+              - entity: input_boolean.classic_in_eq
+                state: "On"
+            card:
+              - type: 'custom:multiple-entity-row'
+                entity: sensor.classic_mode
+                name: Charge Controller
+                name_state: Time
+                secondary_info: last-changed
+                entities:
+                  - entity: sensor.classic_equalize_time              
+            Resting:
+              type: 'custom:multiple-entity-row'
+              entity: sensor.classic_mode
+              name: MPPT Controller
+              name_state: Reason
+              secondary_info: last-changed
+              entities:
+                - entity: sensor.classic_rest_reason_text
+            Absorb:
+              type: 'custom:multiple-entity-row'
+              entity: sensor.classic_mode
+              name: Charge Controller
+              name_state: Time
+              secondary_info: last-changed
+              entities:
+                - entity: sensor.classic_absorb_time
+            Float:
+              type: 'custom:multiple-entity-row'
+              entity: sensor.classic_mode
+              name: Charge Controller
+              name_state: Time
+              secondary_info: last-changed
+              entities:
+                - entity: sensor.classic_float_time_today
+        # Bulk / HyperVOC / Unknown
+        - type: conditional # only works with ands... arg
+          conditions:
+            - entity: input_boolean.classic_in_float
+              state: "Off"
+            - entity: input_boolean.classic_in_eq
+              state: "Off"
+            - entity: sensor.classic_charge_state
+              state_not: '3'
+            - entity: sensor.classic_charge_state 
+              state_not: '0'
+          card:
+            - type: 'custom:multiple-entity-row'
+              entity: sensor.classic_mode
+              name: Charge Controller
+              name_state: PV Voltage
+              secondary_info: last-changed
+              entities:
+                - entity: sensor.classic_pv_voltage
       #########################
       # Classic Stats Section #
       #########################

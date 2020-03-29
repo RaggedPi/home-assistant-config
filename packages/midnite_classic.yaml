@@ -72,333 +72,333 @@ sensor:
   # PCB Revision - 4101 MSB
   - name: classic_pcb_revision  
     platform: mqtt
-    state_topic: "classic/readings"
+    state_topic: "powerpi/classic"
     value_template: "{{ value_json.data.pcb_revision }}"
-    json_attributes_topic: "classic/readings"
+    json_attributes_topic: "powerpi/classic"
     json_attributes_template: "{{ value_json.data.pcb_revision | tojson }}" 
   # Unit Model - 4101 LSB
   - name: classic_model
     platform: mqtt
-    state_topic: "classic/readings"
+    state_topic: "powerpi/classic"
     value_template: "{{ value_json.data.unit_type }}"
-    json_attributes_topic: "classic/readings"
+    json_attributes_topic: "powerpi/classic"
     json_attributes_template: "{{ value_json.data.unit_type | tojson }}" 
   # Revision Year - 4102
   - name: classic_revision_year
     platform: mqtt
-    state_topic: "classic/readings"
+    state_topic: "powerpi/classic"
     value_template: "{{ value_json.data.build_year }}"
-    json_attributes_topic: "classic/readings"
+    json_attributes_topic: "powerpi/classic"
     json_attributes_template: "{{ value_json.data.build_year | tojson }}" 
   # Revision Month - 4103 MSB
   - name: classic_revision_month
     platform: mqtt
-    state_topic: "classic/readings"
+    state_topic: "powerpi/classic"
     value_template: "{{ value_json.data.build_month }}"
-    json_attributes_topic: "classic/readings"
+    json_attributes_topic: "powerpi/classic"
     json_attributes_template: "{{ value_json.data.build_month | tojson }}" 
   # Revision Day - 4103 LSB
   - name: classic_revision_day
     platform: mqtt
-    state_topic: "classic/readings"
+    state_topic: "powerpi/classic"
     value_template: "{{ value_json.data.build_day }}"
-    json_attributes_topic: "classic/readings"
+    json_attributes_topic: "powerpi/classic"
     json_attributes_template: "{{ value_json.data.build_day | tojson }}" 
   # Mac Address Part 1 - 4106 MSB
   - name: classic_mac_1
     platform: mqtt
-    state_topic: "classic/readings"
+    state_topic: "powerpi/classic"
     value_template: "{{ value_json.data.mac_1 }}"
-    json_attributes_topic: "classic/readings"
+    json_attributes_topic: "powerpi/classic"
     json_attributes_template: "{{ value_json.data.mac_1 | tojson }}" 
   # Mac Address Part 0 - 4106 LSB
   - name: classic_mac_0
     platform: mqtt
-    state_topic: "classic/readings"
+    state_topic: "powerpi/classic"
     value_template: "{{ value_json.data.mac_0 }}"
-    json_attributes_topic: "classic/readings"
+    json_attributes_topic: "powerpi/classic"
     json_attributes_template: "{{ value_json.data.mac_0 | tojson }}" 
   # Mac Address Part 3 - 4107 MSB
   - name: classic_mac_3
     platform: mqtt
-    state_topic: "classic/readings"
+    state_topic: "powerpi/classic"
     value_template: "{{ value_json.data.mac_3 }}"
-    json_attributes_topic: "classic/readings"
+    json_attributes_topic: "powerpi/classic"
     json_attributes_template: "{{ value_json.data.mac_3 | tojson }}" 
   # Mac Address Part 2 - 4107 LSB
   - name: classic_mac_2
     platform: mqtt
-    state_topic: "classic/readings"
+    state_topic: "powerpi/classic"
     value_template: "{{ value_json.data.mac_2 }}"
-    json_attributes_topic: "classic/readings"
+    json_attributes_topic: "powerpi/classic"
     json_attributes_template: "{{ value_json.data.mac_2 | tojson }}" 
   # Mac Address Part 5 - 4108 MSB
   - name: classic_mac_5
     platform: mqtt
-    state_topic: "classic/readings"
+    state_topic: "powerpi/classic"
     value_template: "{{ value_json.data.mac_5 }}"
-    json_attributes_topic: "classic/readings"
+    json_attributes_topic: "powerpi/classic"
     json_attributes_template: "{{ value_json.data.mac_5 | tojson }}" 
   # Mac Address Part 4 - 4108 LSB
   - name: classic_mac_4
     platform: mqtt
-    state_topic: "classic/readings"
+    state_topic: "powerpi/classic"
     value_template: "{{ value_json.data.mac_4 }}"
-    json_attributes_topic: "classic/readings"
+    json_attributes_topic: "powerpi/classic"
     json_attributes_template: "{{ value_json.data.mac_4 | tojson }}" 
   # Unit ID - 4111 32bit
   - name: classic_unit_id
     platform: mqtt
-    state_topic: "classic/readings"
+    state_topic: "powerpi/classic"
     value_template: "{{ value_json.data.unit_id }}"
-    json_attributes_topic: "classic/readings"
+    json_attributes_topic: "powerpi/classic"
     json_attributes_template: "{{ value_json.data.unit_id | tojson }}" 
   # Status Roll - 4113
   - name: classic_status_roll
     platform: mqtt
-    state_topic: "classic/readings"
+    state_topic: "powerpi/classic"
     value_template: "{{ value_json.data.status_roll }}"
-    json_attributes_topic: "classic/readings"
+    json_attributes_topic: "powerpi/classic"
     json_attributes_template: "{{ value_json.data.status_roll | tojson }}"     
   # Restart Timer - 4114
   - name: classic_restart_timer
     platform: mqtt
-    state_topic: "classic/readings"
+    state_topic: "powerpi/classic"
     value_template: "{{ value_json.data.restart_timer }}"
-    json_attributes_topic: "classic/readings"
+    json_attributes_topic: "powerpi/classic"
     json_attributes_template: "{{ value_json.data.restart_timer | tojson }}" 
   # Average Battery Voltage - 4115
   - name: classic_avg_battery_voltage
     platform: mqtt
-    state_topic: "classic/readings"
+    state_topic: "powerpi/classic"
     value_template: "{{ value_json.data.avg_battery_voltage }}"
-    json_attributes_topic: "classic/readings"
+    json_attributes_topic: "powerpi/classic"
     json_attributes_template: "{{ value_json.data.avg_battery_voltage | tojson }}" 
     unit_of_measurement: V
   # Average PV Voltage - 4116
   - name: classic_avg_pv_voltage
     platform: mqtt
-    state_topic: "classic/readings"
+    state_topic: "powerpi/classic"
     value_template: "{{ value_json.data.avg_pv_voltage }}"
-    json_attributes_topic: "classic/readings"
+    json_attributes_topic: "powerpi/classic"
     json_attributes_template: "{{ value_json.data.avg_pv_voltage | tojson }}" 
     unit_of_measurement: V
   # Average Battery Current - 4117
   - name: classic_avg_battery_current
     platform: mqtt
-    state_topic: "classic/readings"
+    state_topic: "powerpi/classic"
     value_template: "{{ value_json.data.avg_battery_current }}"
-    json_attributes_topic: "classic/readings"
+    json_attributes_topic: "powerpi/classic"
     json_attributes_template: "{{ value_json.data.avg_battery_current | tojson }}" 
     unit_of_measurement: A
   # Average Energy Today - 4118
   - name: classic_avg_energy_today
     platform: mqtt
-    state_topic: "classic/readings"
+    state_topic: "powerpi/classic"
     value_template: "{{ value_json.data.avg_energy_today }}"
-    json_attributes_topic: "classic/readings"
+    json_attributes_topic: "powerpi/classic"
     json_attributes_template: "{{ value_json.data.avg_energy_today | tojson }}" 
     unit_of_measurement: Kw
   # Average Power - 4119
   - name: classic_avg_power
     platform: mqtt
-    state_topic: "classic/readings"
+    state_topic: "powerpi/classic"
     value_template: "{{ value_json.data.avg_power }}"
-    json_attributes_topic: "classic/readings"
+    json_attributes_topic: "powerpi/classic"
     json_attributes_template: "{{ value_json.data.avg_power | tojson }}" 
     unit_of_measurement: W
   # Charge Stage - 4120 MSB
   - name: classic_charge_stage
     platform: mqtt
-    state_topic: "classic/readings"
+    state_topic: "powerpi/classic"
     value_template: "{{ value_json.data.charge_stage }}"
-    json_attributes_topic: "classic/readings"
+    json_attributes_topic: "powerpi/classic"
     json_attributes_template: "{{ value_json.data.charge_stage | tojson }}" 
   # Charge State - 4120 LSB
   - name: classic_charge_state
     platform: mqtt
-    state_topic: "classic/readings"
+    state_topic: "powerpi/classic"
     value_template: "{{ value_json.data.charge_state }}"
-    json_attributes_topic: "classic/readings"
+    json_attributes_topic: "powerpi/classic"
     json_attributes_template: "{{ value_json.data.charge_state | tojson }}" 
   # Average PV Current - 4121
   - name: classic_avg_pv_current
     platform: mqtt
-    state_topic: "classic/readings"
+    state_topic: "powerpi/classic"
     value_template: "{{ value_json.data.avg_pv_current }}"
-    json_attributes_topic: "classic/readings"
+    json_attributes_topic: "powerpi/classic"
     json_attributes_template: "{{ value_json.data.avg_pv_current | tojson }}" 
     unit_of_measurement: A
   # Last Voltage Measured - 4122  
   - name: classic_last_voc
     platform: mqtt
-    state_topic: "classic/readings"
+    state_topic: "powerpi/classic"
     value_template: "{{ value_json.data.last_voc }}"
-    json_attributes_topic: "classic/readings"
+    json_attributes_topic: "powerpi/classic"
     json_attributes_template: "{{ value_json.data.last_voc | tojson }}" 
     unit_of_measurement: V
   # Highest PV Voltage Seen - 4123
   - name: classic_highest_pv_voltage_seen
     platform: mqtt
-    state_topic: "classic/readings"
+    state_topic: "powerpi/classic"
     value_template: "{{ value_json.data.highest_pv_voltage_seen }}"
-    json_attributes_topic: "classic/readings"
+    json_attributes_topic: "powerpi/classic"
     json_attributes_template: "{{ value_json.data.highest_pv_voltage_seen | tojson }}" 
     unit_of_measurement: V
   # Amphours Today - 4125
   - name: classic_amphours_today
     platform: mqtt
-    state_topic: "classic/readings"
+    state_topic: "powerpi/classic"
     value_template: "{{ value_json.data.amphours_today }}"
-    json_attributes_topic: "classic/readings"
+    json_attributes_topic: "powerpi/classic"
     json_attributes_template: "{{ value_json.data.amphours_today | tojson }}" 
     unit_of_measurement: Ah
   # Lifetime Energy - 4126 32 bit
   - name: classic_lifetime_energy
     platform: mqtt
-    state_topic: "classic/readings"
+    state_topic: "powerpi/classic"
     value_template: "{{ value_json.data.lifetime_energy }}"
-    json_attributes_topic: "classic/readings"
+    json_attributes_topic: "powerpi/classic"
     json_attributes_template: "{{ value_json.data.lifetime_energy | tojson }}" 
     unit_of_measurement: Kw
   # Lifetime Amphours - 4128 32bit
   - name: classic_lifetime_amphours
     platform: mqtt
-    state_topic: "classic/readings"
+    state_topic: "powerpi/classic"
     value_template: "{{ value_json.data.lifetime_amphours }}"
-    json_attributes_topic: "classic/readings"
+    json_attributes_topic: "powerpi/classic"
     json_attributes_template: "{{ value_json.data.lifetime_amphours | tojson }}" 
     unit_of_measurement: Ah
   # Battery Temperature - 4132
   - name: classic_battery_temperature
     platform: mqtt
-    state_topic: "classic/readings"
+    state_topic: "powerpi/classic"
     value_template: "{{ value_json.data.battery_temperature }}"
-    json_attributes_topic: "classic/readings"
+    json_attributes_topic: "powerpi/classic"
     json_attributes_template: "{{ value_json.data.battery_temperature | tojson }}"
     unit_of_measurement: C
   # FET Temperature - 4133
   - name: classic_fet_temperature
     platform: mqtt
-    state_topic: "classic/readings"
+    state_topic: "powerpi/classic"
     value_template: "{{ value_json.data.fet_temperature }}"
-    json_attributes_topic: "classic/readings"
+    json_attributes_topic: "powerpi/classic"
     json_attributes_template: "{{ value_json.data.fet_temperature | tojson }}" 
     unit_of_measurement: C
   # PCB Temperature - 4134
   - name: classic_pcb_temperature
     platform: mqtt
-    state_topic: "classic/readings"
+    state_topic: "powerpi/classic"
     value_template: "{{ value_json.data.pcb_temperature }}"
-    json_attributes_topic: "classic/readings"
+    json_attributes_topic: "powerpi/classic"
     json_attributes_template: "{{ value_json.data.pcb_temperature | tojson }}" 
     unit_of_measurement: C
   # No Power Timer - 4135
   - name: classic_no_power_timer
     platform: mqtt
-    state_topic: "classic/readings"
+    state_topic: "powerpi/classic"
     value_template: "{{ value_json.data.no_power_timer }}"
-    json_attributes_topic: "classic/readings"
+    json_attributes_topic: "powerpi/classic"
     json_attributes_template: "{{ value_json.data.no_power_timer | tojson }}" 
     unit_of_measurement: ms
   # Float Time Today - 4138
   - name: classic_float_time_today
     platform: mqtt
-    state_topic: "classic/readings"
+    state_topic: "powerpi/classic"
     value_template: "{{ value_json.data.float_time_today }}"
-    json_attributes_topic: "classic/readings"
+    json_attributes_topic: "powerpi/classic"
     json_attributes_template: "{{ value_json.data.float_time_today | tojson }}" 
     unit_of_measurement: s
   # Absorb Time - 4139
   - name: classic_absorb_time
     platform: mqtt
-    state_topic: "classic/readings"
+    state_topic: "powerpi/classic"
     value_template: "{{ value_json.data.absorb_time }}"
-    json_attributes_topic: "classic/readings"
+    json_attributes_topic: "powerpi/classic"
     json_attributes_template: "{{ value_json.data.absorb_time | tojson }}" 
     unit_of_measurement: s
   # Reason For Reset - 4142
   - name: classic_reason_for_reset
     platform: mqtt
-    state_topic: "classic/readings"
+    state_topic: "powerpi/classic"
     value_template: "{{ value_json.data.reason_for_reset }}"
-    json_attributes_topic: "classic/readings"
+    json_attributes_topic: "powerpi/classic"
     json_attributes_template: "{{ value_json.data.reason_for_reset | tojson }}" 
   # EQ Time - 4143
   - name: classic_equalize_time
     platform: mqtt
-    state_topic: "classic/readings"
+    state_topic: "powerpi/classic"
     value_template: "{{ value_json.data.equalize_time }}"
-    json_attributes_topic: "classic/readings"
+    json_attributes_topic: "powerpi/classic"
     json_attributes_template: "{{ value_json.data.equalize_time | tojson }}" 
     unit_of_measurement: s
   # SOC - 4373
   - name: classic_soc
     platform: mqtt
-    state_topic: "classic/readings"
+    state_topic: "powerpi/classic"
     value_template: "{{ value_json.data.soc }}"
-    json_attributes_topic: "classic/readings"
+    json_attributes_topic: "powerpi/classic"
     json_attributes_template: "{{ value_json.data.soc | tojson }}" 
     unit_of_measurement: '%'
   # Remaining Amphours - 4377
   - name: classic_remaining_amphours
     platform: mqtt
-    state_topic: "classic/readings"
+    state_topic: "powerpi/classic"
     value_template: "{{ value_json.data.remaining_amphours }}"
-    json_attributes_topic: "classic/readings"
+    json_attributes_topic: "powerpi/classic"
     json_attributes_template: "{{ value_json.data.remaining_amphours | tojson }}" 
     unit_of_measurement: Ah
   # Total Amphours - 4381
   - name: classic_total_amphours
     platform: mqtt
-    state_topic: "classic/readings"
+    state_topic: "powerpi/classic"
     value_template: "{{ value_json.data.total_amphours }}"
-    json_attributes_topic: "classic/readings"
+    json_attributes_topic: "powerpi/classic"
     json_attributes_template: "{{ value_json.data.total_amphours | tojson }}" 
     unit_of_measurement: Ah
   # MPPT Mode - 4164
   - name: classic_mppt_mode
     platform: mqtt
-    state_topic: "classic/readings"
+    state_topic: "powerpi/classic"
     value_template: "{{ value_json.data.mppt_mode }}"
-    json_attributes_topic: "classic/readings"
+    json_attributes_topic: "powerpi/classic"
     json_attributes_template: "{{ value_json.data.mppt_mode | tojson }}" 
   # Temperature Regulated Battery Target Voltage - 4244
   - name: classic_temp_regulated_battery_target_voltage
     platform: mqtt
-    state_topic: "classic/readings"
+    state_topic: "powerpi/classic"
     value_template: "{{ value_json.data.temp_regulated_battery_target_voltage }}"
-    json_attributes_topic: "classic/readings"
+    json_attributes_topic: "powerpi/classic"
     json_attributes_template: "{{ value_json.data.temp_regulated_battery_target_voltage | tojson }}" 
     unit_of_measurement: V
   # Nominal battery voltage - 4245
   - name: classic_nom_battery_voltage
     platform: mqtt
-    state_topic: "classic/readings"
+    state_topic: "powerpi/classic"
     value_template: "{{ value_json.data.nominal_battery_voltage }}"
-    json_attributes_topic: "classic/readings"
+    json_attributes_topic: "powerpi/classic"
     json_attributes_template: "{{ value_json.data.nominal_battery_voltage | tojson }}" 
     unit_of_measurement: V
   # App Revision - 16387
   - name: classic_app_revision
     platform: mqtt
-    state_topic: "classic/readings"
+    state_topic: "powerpi/classic"
     value_template: "{{ value_json.data.app_revision }}"
-    json_attributes_topic: "classic/readings"
+    json_attributes_topic: "powerpi/classic"
     json_attributes_template: "{{ value_json.data.app_revision | tojson }}" 
   # Net Revision - 16387
   - name: classic_net_revision
     platform: mqtt
-    state_topic: "classic/readings"
+    state_topic: "powerpi/classic"
     value_template: "{{ value_json.data.net_revision }}"
-    json_attributes_topic: "classic/readings"
+    json_attributes_topic: "powerpi/classic"
     json_attributes_template: "{{ value_json.data.net_revision | tojson }}" 
   # Reason For Resting - 4275
   - name: classic_reason_for_resting
     platform: mqtt
-    state_topic: "classic/readings"
+    state_topic: "powerpi/classic"
     value_template: "{{ value_json.data.reason_for_resting }}"
-    json_attributes_topic: "classic/readings"
+    json_attributes_topic: "powerpi/classic"
     json_attributes_template: "{{ value_json.data.reason_for_resting | tojson }}" 
   
   ##############################################################  
@@ -445,17 +445,19 @@ sensor:
       
       # Temperature Conversions
       classic_battery_temp_f:
+        entity_id: sensor.classic_battery_temperature
         friendly_name: 'Battery Temperature'
         value_template: "{{ ((state('sensor.classic_battery_temperature')|float(2) * 9) /5) + 32 }}"
         unit_of_measurement: F
 
-      classic_pcb_temperature:
+      classic_pcb_temp_f:
         friendly_name: PCB Temperature
-        value_template: >-
-          {{ ((state('sensor.classic_pcb_temp_c')|int) *9 /5) + 32 }}
+        entity_id: sensor.classic_pcb_temperature
+        value_template: "{{ ((state('sensor.classic_pcb_temp_c')|int) *9 /5) + 32 }}"
         unit_of_measurement: F
 
-      classic_fet_temp:
+      classic_fet_temp_f:
+        entity_id: sensor.classic_fet_temperature
         friendly_name: FET Temperature
         value_template: "{{ ((state('sensor.classic_fet_temp_c')|int) *9 /5) + 32 }}"
         unit_of_measurement: F
@@ -465,14 +467,14 @@ sensor:
         value_template: >-
           {% set mode = states('sensor.classic_charge_stage')|int %}
           {% set map = {
-            '0': 'Resting',
-            '3': 'Absorb',
-            '4': 'Bulk MPPT',
-            '5': 'Float',
-            '6': 'Float MPPT',
-            '7': 'EQ',
-            '10': 'HyperVOC',
-            '18': 'EQ MPPT' } %}
+            0: 'Resting',
+            3: 'Absorb',
+            4: 'Bulk MPPT',
+            5: 'Float',
+            6: 'Float MPPT',
+            7: 'EQ',
+            10: 'HyperVOC',
+            18: 'EQ MPPT' } %}
           {{ map[mode] if mode in map else 'Unknown' }}
           
       classic_mode_time:
@@ -480,12 +482,12 @@ sensor:
         value_template: >-
           {% set mode = states('sensor.classic_charge_state')|int %}
           {% set map = {
-            '0': states('sensor.classic_reason_for_rest'),
-            '3': states('sensor.classic_absorb_time'),
-            '5': states('sensor.classic_float_time_today'),
-            '6': states('sensor.classic_float_time_today'),
-            '7': states('sensor.classic_equalize_time'),
-            '18': states('sensor.classic_equalize_time') } %}
+            0: states('sensor.classic_reason_for_rest'),
+            3: states('sensor.classic_absorb_time'),
+            5: states('sensor.classic_float_time_today'),
+            6: states('sensor.classic_float_time_today'),
+            7: states('sensor.classic_equalize_time'),
+            18: states('sensor.classic_equalize_time') } %}
           {{ map[mode] if mode in map else states('timer.charge_state_time') }}
           
 ##############################################################
@@ -495,7 +497,7 @@ input_select:
   # Charge Mode (Broad scope)
   classic_charge_mode:
     name: Charge Mode
-    initial: 'Unknown'
+    initial: Unknown
     options:
       - Unknown
       - Resting
@@ -506,7 +508,7 @@ input_select:
       - Float
   classic_reason_for_rest:
     name: Reason For Rest
-    initial: 'Unknown'
+    initial: Unknown
     options:
       - Unknown
 
@@ -547,14 +549,14 @@ automation:
           entity_id: input_select.classic_charge_mode
           option: >
             {% set map = {
-              '0': 'Resting',
-              '3': 'Absorb',
-              '4': 'Bulk',
-              '5': 'Float',
-              '6': 'Float',
-              '7': 'EQ',
-              '10': 'HyperVOC',
-              '18': 'EQ' } %}
+              0: 'Resting',
+              3: 'Absorb',
+              4: 'Bulk',
+              5: 'Float',
+              6: 'Float',
+              7: 'EQ',
+              10: 'HyperVOC',
+              18: 'EQ' } %}
             {% set mode = states('sensor.classic_charge_stage')|int %}
             {{ map[mode] if mode in map else 'Unknown'}}
             

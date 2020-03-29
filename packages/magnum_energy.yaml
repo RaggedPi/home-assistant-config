@@ -81,109 +81,109 @@ sensor:
   # Revision
   - platform: mqtt
     name: magnum_inverter_revision
-    state_topic: "magnum/inverter"
+    state_topic: "powerpi/inverter"
     value_template: "{{ value_json.data.revision }}"
-    json_attributes_topic: "magnum/inverter"
+    json_attributes_topic: "powerpi/inverter"
     json_attributes_template: "{{ value_json.data.revision | tojson }}" 
   # Mode
   - platform: mqtt
     name: magnum_inverter_mode
-    state_topic: "magnum/inverter"
+    state_topic: "powerpi/inverter"
     value_template: "{{ value_json.data.mode }}"      
-    json_attributes_topic: "magnum/inverter"
+    json_attributes_topic: "powerpi/inverter"
     json_attributes_template: "{{ value_json.data.mode | tojson }}" 
   # Fault
   - platform: mqtt
     name: magnum_inverter_fault
-    state_topic: "magnum/inverter"
+    state_topic: "powerpi/inverter"
     value_template: "{{ value_json.data.fault }}"
-    json_attributes_topic: "magnum/inverter"
+    json_attributes_topic: "powerpi/inverter"
     json_attributes_template: "{{ value_json.data.fault | tojson }}" 
   # DC Voltage
   - platform: mqtt
     name: magnum_inverter_vdc
-    state_topic: "magnum/inverter"
+    state_topic: "powerpi/inverter"
     value_template: "{{ value_json.data.vdc }}"
-    json_attributes_topic: "magnum/inverter"
+    json_attributes_topic: "powerpi/inverter"
     json_attributes_template: "{{ value_json.data.vdc | tojson }}"
     unit_of_measurement: V
   # DC Amps
   - platform: mqtt
     name: magnum_inverter_adc
-    state_topic: "magnum/inverter"
+    state_topic: "powerpi/inverter"
     value_template: "{{ value_json.data.adc }}"
-    json_attributes_topic: "magnum/inverter"
+    json_attributes_topic: "powerpi/inverter"
     json_attributes_template: "{{ value_json.data.adc | tojson }}" 
     unit_of_measurement: A
   # AC Output Voltage
   - platform: mqtt
     name: magnum_inverter_VACout
-    state_topic: "magnum/inverter"
+    state_topic: "powerpi/inverter"
     value_template: "{{ value_json.data.VACout }}"
-    json_attributes_topic: "magnum/inverter"
+    json_attributes_topic: "powerpi/inverter"
     json_attributes_template: "{{ value_json.data.VACout | tojson }}"
     unit_of_measurement: V
   # AC Input Voltage
   - platform: mqtt
     name: magnum_inverter_VACin
-    state_topic: "magnum/inverter"
+    state_topic: "powerpi/inverter"
     value_template: "{{ value_json.data.VACin }}"
-    json_attributes_topic: "magnum/inverter"
+    json_attributes_topic: "powerpi/inverter"
     json_attributes_template: "{{ value_json.data.VACin | tojson }}"
     unit_of_measurement: V
   # AC Input Amps
   - platform: mqtt
     name: magnum_inverter_AACin
-    state_topic: "magnum/inverter"
+    state_topic: "powerpi/inverter"
     value_template: "{{ value_json.data.AACin }}"
-    json_attributes_topic: "magnum/inverter"
+    json_attributes_topic: "powerpi/inverter"
     json_attributes_template: "{{ value_json.data.AACin | tojson }}" 
     unit_of_measurement: A
   # AC Output Amps
   - platform: mqtt
     name: magnum_inverter_AACout
-    state_topic: "magnum/inverter"
+    state_topic: "powerpi/inverter"
     value_template: "{{ value_json.data.AACout }}"
-    json_attributes_topic: "magnum/inverter"
+    json_attributes_topic: "powerpi/inverter"
     json_attributes_template: "{{ value_json.data.AACout | tojson }}" 
     unit_of_measurement: A
   # Battery Temperature
   - platform: mqtt
     name: magnum_inverter_bat
-    state_topic: "magnum/inverter"
+    state_topic: "powerpi/inverter"
     value_template: "{{ value_json.data.bat }}"
-    json_attributes_topic: "magnum/inverter"
+    json_attributes_topic: "powerpi/inverter"
     json_attributes_template: "{{ value_json.data.bat | tojson }}" 
     unit_of_measurement: C
   # Transformer Temperature
   - platform: mqtt
     name: magnum_inverter_tfmr
-    state_topic: "magnum/inverter"
+    state_topic: "powerpi/inverter"
     value_template: "{{ value_json.data.tfmr }}"
-    json_attributes_topic: "magnum/inverter"
+    json_attributes_topic: "powerpi/inverter"
     json_attributes_template: "{{ value_json.data.tfmr | tojson }}" 
     unit_of_measurement: C
   # FET Temperature
   - platform: mqtt
     name: magnum_inverter_fet
-    state_topic: "magnum/inverter"
+    state_topic: "powerpi/inverter"
     value_template: "{{ value_json.data.fet }}"
-    json_attributes_topic: "magnum/inverter"
+    json_attributes_topic: "powerpi/inverter"
     json_attributes_template: "{{ value_json.data.fet | tojson }}" 
     unit_of_measurement: C
   # Model
   - platform: mqtt
     name: magnum_inverter_model
-    state_topic: "magnum/inverter"
+    state_topic: "powerpi/inverter"
     value_template: "{{ value_json.data.model_text }}"
-    json_attributes_topic: "magnum/inverter"
+    json_attributes_topic: "powerpi/inverter"
     json_attributes_template: "{{ value_json.data.model_text | tojson }}" 
   # Frequency
   - platform: mqtt
     name: magnum_inverter_frequency
-    state_topic: "magnum/inverter"
+    state_topic: "powerpi/inverter"
     value_template: "{{ value_json.data.Hz }}"
-    json_attributes_topic: "magnum/inverter"
+    json_attributes_topic: "powerpi/inverter"
     json_attributes_template: "{{ value_json.data.Hz | tojson }}" 
     unit_of_measurement: Hz
 
@@ -191,133 +191,133 @@ sensor:
   # Revision
   - platform: mqtt
     name: magnum_bmk_revision
-    state_topic: "magnum/bmk"
+    state_topic: "powerpi/bmk"
     value_template: "{{ value_json.data.revision }}"
-    json_attributes_topic: "magnum/bmk"
+    json_attributes_topic: "powerpi/bmk"
     json_attributes_template: "{{ value_json.data.revision | tojson }}"
   # SOC
   - platform: mqtt
     name: magnum_bmk_soc
-    state_topic: "magnum/bmk"
+    state_topic: "powerpi/bmk"
     value_template: "{{ value_json.data.soc }}"
-    json_attributes_topic: "magnum/bmk"
+    json_attributes_topic: "powerpi/bmk"
     json_attributes_template: "{{ value_json.data.soc | tojson }}" 
     unit_of_measurement: '%'
   # DC Voltage
   - platform: mqtt
     name: magnum_bmk_vdc
-    state_topic: "magnum/bmk"
+    state_topic: "powerpi/bmk"
     value_template: "{{ value_json.data.vdc }}"
-    json_attributes_topic: "magnum/bmk"
+    json_attributes_topic: "powerpi/bmk"
     json_attributes_template: "{{ value_json.data.vdc | tojson }}" 
     unit_of_measurement: V
   # DC Amps
   - platform: mqtt
     name: magnum_bmk_adc
-    state_topic: "magnum/bmk"
+    state_topic: "powerpi/bmk"
     value_template: "{{ value_json.data.adc }}"
-    json_attributes_topic: "magnum/bmk"
+    json_attributes_topic: "powerpi/bmk"
     json_attributes_template: "{{ value_json.data.adc | tojson }}" 
     unit_of_measurement: V
   # Min Voltage
   - platform: mqtt
     name: magnum_bmk_vmin
-    state_topic: "magnum/bmk"
+    state_topic: "powerpi/bmk"
     value_template: "{{ value_json.data.vmin }}"
-    json_attributes_topic: "magnum/bmk"
+    json_attributes_topic: "powerpi/bmk"
     json_attributes_template: "{{ value_json.data.vmin | tojson }}" 
     unit_of_measurement: V
   # Max Voltage
   - platform: mqtt
     name: magnum_bmk_vmax
-    state_topic: "magnum/bmk"
+    state_topic: "powerpi/bmk"
     value_template: "{{ value_json.data.vmax }}"
-    json_attributes_topic: "magnum/bmk"
+    json_attributes_topic: "powerpi/bmk"
     json_attributes_template: "{{ value_json.data.vmax | tojson }}" 
     unit_of_measurement: V
   # Amphours
   - platform: mqtt
     name: magnum_bmk_amph
-    state_topic: "magnum/bmk"
+    state_topic: "powerpi/bmk"
     value_template: "{{ value_json.data.amph }}"
-    json_attributes_topic: "magnum/bmk"
+    json_attributes_topic: "powerpi/bmk"
     json_attributes_template: "{{ value_json.data.amph | tojson }}" 
     unit_of_measurement: Ah
   # Fault Text
   - platform: mqtt
     name: magnum_bmk_fault_text
-    state_topic: "magnum/bmk"
+    state_topic: "powerpi/bmk"
     value_template: "{{ value_json.data.Fault_Text }}"
-    json_attributes_topic: "magnum/bmk"
+    json_attributes_topic: "powerpi/bmk"
     json_attributes_template: "{{ value_json.data.Fault_Text | tojson }}"
   # Fault
   - platform: mqtt
     name: magnum_bmk_fault
-    state_topic: "magnum/bmk"
+    state_topic: "powerpi/bmk"
     value_template: "{{ value_json.data.Fault }}"
-    json_attributes_topic: "magnum/bmk"
+    json_attributes_topic: "powerpi/bmk"
     json_attributes_template: "{{ value_json.data.Fault | tojson }}"
 
   # AGS ########################################################
   # Revision
   - platform: mqtt
     name: magnum_ags_revision
-    state_topic: "magnum/ags"
+    state_topic: "powerpi/ags"
     value_template: "{{ value_json.data.revision }}"
-    json_attributes_topic: "magnum/ags"
+    json_attributes_topic: "powerpi/ags"
     json_attributes_template: "{{ value_json.data.revision | tojson }}"
   # Status
   - platform: mqtt
     name: magnum_ags_status
-    state_topic: "magnum/ags"
+    state_topic: "powerpi/ags"
     value_template: "{{ value_json.data.status }}"
-    json_attributes_topic: "magnum/ags"
+    json_attributes_topic: "powerpi/ags"
     json_attributes_template: "{{ value_json.data.status | tojson }}"
   # Status Text
   - platform: mqtt
     name: magnum_ags_status_text
-    state_topic: "magnum/ags"
+    state_topic: "powerpi/ags"
     value_template: "{{ value_json.data.status_text }}"
-    json_attributes_topic: "magnum/ags"
+    json_attributes_topic: "powerpi/ags"
     json_attributes_template: "{{ value_json.data.status_text | tojson }}"
   # Temperature
   - platform: mqtt
     name: magnum_ags_temp
-    state_topic: "magnum/ags"
+    state_topic: "powerpi/ags"
     value_template: "{{ value_json.data.temp }}"
-    json_attributes_topic: "magnum/ags"
+    json_attributes_topic: "powerpi/ags"
     json_attributes_template: "{{ value_json.data.temp | tojson }}"
     unit_of_measurement: C
   # Runtime
   - platform: mqtt
     name: magnum_ags_runtime
-    state_topic: "magnum/ags"
+    state_topic: "powerpi/ags"
     value_template: "{{ value_json.data.runtime }}"
-    json_attributes_topic: "magnum/ags"
+    json_attributes_topic: "powerpi/ags"
     json_attributes_template: "{{ value_json.data.runtime | tojson }}"
     unit_of_measurement: hours
   # Last SOC
   - platform: mqtt
     name: magnum_ags_last_soc
-    state_topic: "magnum/ags"
+    state_topic: "powerpi/ags"
     value_template: "{{ value_json.data.last_full_soc }}"
-    json_attributes_topic: "magnum/ags"
+    json_attributes_topic: "powerpi/ags"
     json_attributes_template: "{{ value_json.data.last_full_soc | tojson }}"
     unit_of_measurement: days
   # Gen Run Total
   - platform: mqtt
     name: magnum_ags_gen_run_total
-    state_topic: "magnum/ags"
+    state_topic: "powerpi/ags"
     value_template: "{{ value_json.data.gen_total_run | float(1) }}"
-    json_attributes_topic: "magnum/ags"
+    json_attributes_topic: "powerpi/ags"
     json_attributes_template: "{{ value_json.data.gen_total_run | tojson }}"
     unit_of_measurement: Hrs
   # VDC
   - platform: mqtt
     name: magnum_ags_vdc
-    state_topic: "magnum/ags"
+    state_topic: "powerpi/ags"
     value_template: "{{ value_json.data.vdc }}"
-    json_attributes_topic: "magnum/ags"
+    json_attributes_topic: "powerpi/ags"
     json_attributes_template: "{{ value_json.data.vdc | tojson }}"
     unit_of_measurement: V        
   
@@ -325,9 +325,9 @@ sensor:
   # Revision
   - platform: mqtt
     name: magnum_remote_revision
-    state_topic: "magnum/remote"
+    state_topic: "powerpi/remote"
     value_template: "{{ value_json.data.revision }}"
-    json_attributes_topic: "magnum/remote"
+    json_attributes_topic: "powerpi/remote"
     json_attributes_template: "{{ value_json.data.revision | tojson }}"
   
 ################################################################
@@ -341,17 +341,17 @@ sensor:
         value_template: >-
           {% set mode = states('sensor.magnum_inverter_mode')|int %}
           {% set mapper = {
-            '0': 'Charger In Standby',
-            '1': 'Equalizing',
-            '2': 'Float',
-            '4': 'Absorb',
-            '8': 'Bulk',
-            '9': 'Battery Save',
-            '16': 'Charging',
-            '32': 'Off',
-            '64': 'Inverting',
-            '80': 'Inverter In Standby',
-            '128': 'Searching' } %}
+            0: 'Charger In Standby',
+            1: 'Equalizing',
+            2: 'Float',
+            4: 'Absorb',
+            8: 'Bulk',
+            9: 'Battery Save',
+            16: 'Charging',
+            32: 'Off',
+            64: 'Inverting',
+            80: 'Inverter In Standby',
+            128: 'Searching' } %}
           {{ mapper[mode] if mode in mapper else "Unknown Code: {}".format(mode) }}
 
       # Fault Status Text
@@ -362,38 +362,38 @@ sensor:
           {% set b_fault = states('sensor.magnum_bmk_fault')|int %}
           {% set i_fault = states('sensor.magnum_inverter_fault')|int %}
           {% set i_map = {
-            '1': 'Stuck Relay',
-            '2': 'DC Overload',
-            '3': 'AC Overload',
-            '4': 'Dead Battery',
-            '5': 'Backfeed',
-            '8': 'Low Battery Cutout',
-            '9': 'High Battery Cutout',
-            '10': 'High AC Voltage Output',
-            '16': 'Bad FET Bridge',
-            '18': 'FET Overheat',
-            '19': 'FET Overload',
-            '22': 'Stack Mode Mismatch',
-            '23': 'Stack Sync Clock Detection Fail',
-            '24': 'Stack Clock Not In Phase',
-            '25': 'Stack AC Voltage Output Not Phased',
-            '32': 'Over Temp Shutdown',
-            '33': 'Transfer Relay Open (Chg Mode)',
-            '128': 'Bridge Fault (Chg Mode)',
-            '129': 'High Battery Temp',
-            '144': 'Transformer Temp Cutout',
-            '145': 'CB3 30Amp Breaker Fail' } %}
+            1: 'Stuck Relay',
+            2: 'DC Overload',
+            3: 'AC Overload',
+            4: 'Dead Battery',
+            5: 'Backfeed',
+            8: 'Low Battery Cutout',
+            9: 'High Battery Cutout',
+            10: 'High AC Voltage Output',
+            16: 'Bad FET Bridge',
+            18: 'FET Overheat',
+            19: 'FET Overload',
+            22: 'Stack Mode Mismatch',
+            23: 'Stack Sync Clock Detection Fail',
+            24: 'Stack Clock Not In Phase',
+            25: 'Stack AC Voltage Output Not Phased',
+            32: 'Over Temp Shutdown',
+            33: 'Transfer Relay Open (Chg Mode)',
+            128: 'Bridge Fault (Chg Mode)',
+            129: 'High Battery Temp',
+            144: 'Transformer Temp Cutout',
+            145: 'CB3 30Amp Breaker Fail' } %}
           {% set a_map = {
-            '9': 'AGS Test Start Fault',
-            '10': 'AGS Temp Start Fault',
-            '11': 'AGS Voltage Start Fault',
-            '15': 'AGS Time Start Fault',
-            '16': 'AGS SOC Start Fault',
-            '17': 'AGS Exercise Start Fault',
-            '21': 'AGS Amperage Start Fault',
-            '22': 'AGS Topoff Fault',
-            '24': 'AGS Max Run Fault',
-            '25': 'AGS Generator Run Fault' } %}
+            9: 'AGS Test Start Fault',
+            10: 'AGS Temp Start Fault',
+            11: 'AGS Voltage Start Fault',
+            15: 'AGS Time Start Fault',
+            16: 'AGS SOC Start Fault',
+            17: 'AGS Exercise Start Fault',
+            21: 'AGS Amperage Start Fault',
+            22: 'AGS Topoff Fault',
+            24: 'AGS Max Run Fault',
+            25: 'AGS Generator Run Fault' } %}
           {{ i_map[i_fault] if i_fault in i_map else (a_map[a_fault] if a_fault in a_map else ('BMK Fault' if b_fault==2 else 'None')) }}      
 
 ################################################################
@@ -407,7 +407,7 @@ binary_sensor:
     value_template: "{{ value_json.data.running | default(false, true) }}"
     payload_on: true
     payload_off: false
-    json_attributes_topic: "magnum/ags"
+    json_attributes_topic: "powerpi/ags"
     json_attributes_template: "{{ value_json.data.running | default(false, true) | tojson }}"
   # Inverter LED
   - platform: mqtt
@@ -416,7 +416,7 @@ binary_sensor:
     payload_on: 1
     payload_off: 0
     value_template: "{{ value_json.data.invled | default(1, true) }}"
-    json_attributes_topic: "magnum/inverter"
+    json_attributes_topic: "powerpi/inverter"
     json_attributes_template: "{{ value_json.data.invled | default(1, true) | tojson }}"
   # Charger LED
   - platform: mqtt
@@ -425,7 +425,7 @@ binary_sensor:
     payload_off: 0
     state_topic: magnum/inverter
     value_template: "{{ value_json.data.chgled | default(0, true) }}"
-    json_attributes_topic: "magnum/inverter"
+    json_attributes_topic: "powerpi/inverter"
     json_attributes_template: "{{ value_json.data.chgled | default(0, true) | tojson }}"
 
 ################################################################
@@ -452,28 +452,29 @@ switch:
   # AGS Manual Run Switch
   - platform: mqtt
     name: magnum_ags_manual
-    command_topic: "magnum/ags/manualRun/set"
-    state_topic: "magnum/ags/manualRun"
-    availability_topic: "magnum/ags/manualRun/available"
+    command_topic: "powerpi/ags/manualRun/set"
+    state_topic: "powerpi/ags/manualRun"
+    availability_topic: "powerpi/ags/manualRun/available"
   # Inverter EQ Switch
   - platform: mqtt
     name: magnum_eq_toggle
-    command_topic: "magnum/inverter/eq/toggle"
-    state_topic: "magnum/inverter/eq/toggle"
-    availability_topic: "magnum/inverter/eq/toggle/available"
+    command_topic: "powerpi/inverter/eq/toggle"
+    state_topic: "powerpi/inverter/eq/toggle"
+    availability_topic: "powerpi/inverter/eq/toggle/available"
   # Charger Switch
   - platform: mqtt
     name: magnum_charger_toggle
-    command_topic: "magnum/inverter/chg/toggle"
-    state_topic: "magnum/inverter/chg/toggle"
-    availability_topic: "magnum/inverter/chg/toggle/available"
+    command_topic: "powerpi/inverter/chg/toggle"
+    state_topic: "powerpi/inverter/chg/toggle"
+    availability_topic: "powerpi/inverter/chg/toggle/available"
   # Inverter Switch
   - platform: mqtt
     name: magnum_inverter_toggle
-    command_topic: "magnum/inverter/toggle"
-    state_topic: "magnum/inverter"
-    availability_topic: "magnum/inverter/toggle/available"
+    command_topic: "powerpi/inverter/toggle"
+    state_topic: "powerpi/inverter"
+    availability_topic: "powerpi/inverter/toggle/available"
     value_template: "{{states('binary_sensor.magnum_invled')}}"
+
 ################################################################
 # Timers                                                       #
 ################################################################
@@ -481,6 +482,7 @@ timer:
   # Charge State Timer
   magnum_charge_state_time:
     name: Charge State Time
+
 ################################################################
 # Automations                                                  #
 ################################################################
@@ -544,13 +546,13 @@ automation:
       - platform: numeric_state
         entity_id: sensor.magnum_inverter_aacin
         above: 0
-        for:
-          seconds: 30
+        for: "00:00:30"
+#          seconds: 30
       - platform: numeric_state
         entity_id: sensor.magnum_inverter_aacin
         below: 1
-        for:
-          second: 30
+        for: "00:00:30"
+#          second: 30
     action:
       - service: input_boolean.toggle
         entity_id: input_boolean.magnum_aux_ac_input
@@ -570,7 +572,7 @@ automation:
       - service: switch.turn_off
         entity_id: switch.magnum_ags_manual
       - service: switch.turn_off
-        entity_id: switch.magnum_chg_toggle
+        entity_id: switch.magnum_charger_toggle
       - service: switch.turn_off
         entity_id: switch.magnum_eq_toggle
       - service: switch.turn_off

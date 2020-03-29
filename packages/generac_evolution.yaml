@@ -1,0 +1,152 @@
+################################################################
+## Ragged Jack Farm                                           ##
+## Package: Generac Evolution (genmon)                        ##
+## Author: David Durost <david.durost@gmail.com>              ##
+## Url: http://ragedjackfarm.net                              ##
+################################################################
+homeassistant:
+  customize:
+    package.node_anchors:
+      customize: &customize
+        package: 'generac_evolution'
+    sensor.generac_status:
+      friendly_name: 'Generator Status'
+    sensor.generac_battery_voltage:
+      friendly_name: 'Generator Battery Voltage'
+    sensor.generac_rpm:
+      friendly_name: 'Generator RPM'
+    sensor.generac_frequency:
+      friendly_name: 'Generator Frequency'
+    sensor.generac_output_voltage:
+      friendly_name: 'Generator Output Voltage'
+    sensor.generac_output_current:
+      friendly_name: 'Generator Output Current'
+    sensor.generac_output_power:
+      friendly_name: 'Generator Output Power'
+    sensor.generac_log_last_alarm:
+      friendly_name: 'Generator Last Alarm'
+    sensor.generac_log_last_service:
+      friendly_name: 'Generator Last Service Log'
+    sensor.generac_last_action:
+      friendly_name: 'Generator Last Action'
+    sensor.generac_capacity:
+      friendly_name: 'Generator Capacity'
+    sensor.generac_exercise_time:
+      friendly_name: 'Generator Exercise Time'
+    sensor.generac_cpu_temp:
+      friendly_name: 'Generator CPU Temperature'
+    sensor.generac_uptime:
+      friendly_name: 'Generator Monitor Uptime'
+    sensor.generac_load:
+      friendly_name: 'Generator Monitor Load'
+  customize_glob:
+    "sensor.generac_*":
+      icon: fas:charging-station
+
+sensor:
+  # Generator model
+  - platform: mqtt
+    state_topic: 'Generac/Model'
+    name: generac_model
+
+  # Generator status
+  - platform: mqtt
+    state_topic: 'Generac/Outage/Status'
+    name: generac_status
+
+  # Generator battery voltage
+  - platform: mqtt
+    name: generac_battery_voltage
+    state_topic: 'Generac/Status/Engine/Battery Voltage'
+    unit_of_measurement: "V"
+    value_template: '{{ value | regex_replace(" V", "") | float }}'
+
+  # Generator rpm
+  - platform: mqtt
+    name:  generac_rpm
+    unit_of_measurement: "RPM"
+    state_topic: 'Generac/Status/Engine/RPM'
+    value_template: '{{ value | int }}'
+
+  # Generator frequency
+  - platform: mqtt
+    name: generac_frequency
+    unit_of_measurement: "HZ"
+    state_topic: 'Generac/Status/Engine/Frequency'
+    value_template: '{{ value | regex_replace(" Hz","") | float }}'
+
+  # Generator output voltage
+  - platform: mqtt
+    name: generac_output_voltage
+    unit_of_measurement: "VAC"
+    state_topic: 'Generac/Status/Engine/Output Voltage'
+    value_template: '{{ value | regex_replace(" V","") | float | round(1) }}'
+
+  # Generator output current
+  # current measurement is garbage on 22KW product...which i have
+  - platform: mqtt
+    name: generac_output_current
+    unit_of_measurement: "A"
+    state_topic: 'Generac/Status/Engine/Output Current'
+    value_template: '{{ value | regex_replace(" A","") | float | round(1) }}'
+
+  # Generator power
+  - platform: mqtt
+    name: generac_output_power
+    unit_of_measurement: "W"
+    state_topic: 'Generac/Status/Engine/Output Power (Single Phase)'
+    # normalized to watts from kilowatts
+    value_template: '{{ value | regex_replace(" kW","") | float * 1000 | round(0) }}'
+
+  # Last alarm
+  - platform: mqtt
+    name: generac_log_last_alarm
+    state_topic: 'Generac/Status/Last Log Entries/Logs/Alarm Log'
+    
+  # Last service
+  - platform: mqtt
+    name: generac_log_last_service
+    state_topic: 'Generac/Status/Last Log Entries/Logs/Service Log'
+
+  # Last action
+  - platform: mqtt
+    name: generac_last_action
+    state_topic: 'Generac/Status/Last Log Entries/Logs/Start Stop Log'
+
+  # Generator capacity
+  - platform: mqtt
+    name: generac_capacity
+    state_topic: 'Generac/Maintenance/Rated kW'
+    # normalize to watts
+    value_template: '{{ value | float * 1000 | round(1) }}'
+    unit_of_measurement: 'W'
+
+  # Exercise time
+  - platform: mqtt
+    name: generac_exercise_time
+    state_topic: 'Generac/Maintenance/Exercise/Exercise Time'
+
+  # Evolution controller cpu temp
+  - platform: mqtt
+    name: generac_cpu_temp
+    unit_of_measurement: "F"
+    state_topic: 'Generac/Monitor/Platform Stats/CPU Temperature'
+    value_template: '{{ value | regex_replace(" F","") | float | round(1) }}'
+
+  # Evolution controller uptime
+  - platform: mqtt
+    name: generac_uptime
+    # maybe parse this out into minutes/hours?
+    state_topic: 'Generac/Monitor/Platform Stats/System Uptime'
+
+  # Evolution controller load
+  - platform: mqtt
+    name: generac_load
+    unit_of_measurement: '%'
+    state_topic: 'Generac/Monitor/Platform Stats/CPU Utilization'
+    value_template: '{{ value | regex_replace(" *%","") | float | round(1) }}'
+
+
+################################################################
+# Automations                                                  #
+################################################################
