@@ -1,0 +1,167 @@
+
+################################################################
+## System Monitor ##############################################
+################################################################
+title: System Monitor
+icon: 'mdi:settings'
+path: sys-monitor
+badges: []
+cards:
+  - type: vertical-stack
+    cards:
+      ##########
+      # System #
+      ##########
+      - type: entities
+        title: System
+        show_header_toggle: false
+        entities:
+          # Hass.io Version
+          - entity: sensor.installed_version
+            name: Hassio Installed Version
+            icon: mdi:home-assistant
+          # Latest Hass.io Version
+          - entity: sensor.latest_available_version
+            name: Hassio Current Version
+            icon: mdi:home-assistant
+          ###
+          - type: divider
+          # Last Boot
+          - entity: sensor.last_boot_date_time
+            icon: mdi:calendar
+          # System Uptime
+          - entity: sensor.rpi_uptime
+            icon: mdi:clock-start
+          # Hass.io Uptime
+          - entity: sensor.ha_uptime
+            icon: mdi:home-assistant
+          # CPU Usage
+          - type: custom:bar-card
+            title: Processor Use
+            entity: sensor.processor_use
+            height: 30px
+            animation: 'off'
+            indicator: 'off'
+            severity:
+              - value: 60
+                color: green
+              - value: 85 
+                color: orange
+              - value: 100
+                color: red
+          # CPU Temp
+          - type: custom:bar-card
+            title: CPU Temp
+            entity: sensor.cpu_temp
+            animation: 'off'
+            indicator: 'off'
+            height: 30px
+            severity:
+              - value: 60
+                color: green
+              - value: 70 
+                color: orange
+              - value: 100
+                color: red
+          # Memory Usage
+          - type: custom:bar-card
+            title: Memory Use
+            entity: sensor.memory_use_percent
+            height: 30px
+            animation: 'off'
+            indicator: 'off'
+            severity:
+              - value: 60
+                color: green
+              - value: 85 
+                color: orange
+              - value: 100
+                color: red
+          # Disk Usage
+          - type: custom:bar-card
+            title: Disk Use
+            entity: sensor.disk_use_percent
+            height: 30px
+            animation: 'off'
+            indicator: 'off'
+            severity:
+              - value: 60
+                color: green
+              - value: 85 
+                color: orange
+              - value: 100
+                color: red
+          ###
+          - type: divider
+          # External IP
+          - entity: sensor.public_ip_address
+            icon: mdi:ip-network
+
+  ####################
+  # Component Counts #
+  ####################
+  - type: vertical-stack
+    cards:
+      - type: glance
+        title: Component Count
+        columns: 4
+        entities:
+          # Automations
+          - entity: sensor.count_automations
+            name: Automations
+            icon: mdi:autorenew
+          # Scripts
+          - entity: sensor.count_scripts
+            name: Scripts
+            icon: mdi:script-text-outline
+          # Zones
+          - entity: sensor.count_zones
+            name: Zones
+            icon: mdi:map-marker-radius
+          # Device Trackers
+          - entity: sensor.count_device_trackers
+            name: Device Trackers
+            icon: mdi:map-marker
+          # Switches
+          - entity: sensor.count_switches
+            name: Switches
+            icon: mdi:light-switch
+          # Sensors
+          - entity: sensor.count_sensors
+            name: Sensors
+            icon: mdi:resistor
+          # Binary Sensors
+          - entity: sensor.count_binary_sensors
+            name: Binary Sensors
+            icon: mdi:unfold-more-horizontal
+          # Input Booleans
+          - entity: sensor.count_input_booleans
+            name: Input Booleans
+            icon: mdi:toggle-switch
+          # Input Numbers
+          - entity: sensor.count_input_numbers
+            name: Input Numbers
+            icon: mdi:numeric
+          # Input Texts
+          - entity: sensor.count_input_texts
+            name: Input Texts
+            icon: mdi:alphabetical
+          # Input Selects
+          - entity: sensor.count_input_selects
+            name: Input Select
+            icon: mdi:view-list
+          # Input Datetimes
+          - entity: sensor.count_input_datetimes
+            name: Input Date Times
+            icon: mdi:calendar-clock
+
+      ############################
+      # Custom Component Updates #
+      ############################
+  - type: vertical-stack
+    cards:
+      - type: custom:tracker-card
+        title:
+        trackers:
+          - sensor.custom_card_tracker
+          - sensor.custom_component_tracker

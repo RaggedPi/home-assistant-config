@@ -1,0 +1,216 @@
+################################################################
+# Home #########################################################
+################################################################
+title: Home
+icon: 'mdi:castle'
+path: default_view
+badges: []
+cards:
+  - type: entities
+    entities:
+      ################
+      # Power Status #
+      ################
+      - type: 'custom:dual-gauge-card'
+        title: System Power
+        inner:
+          colors:
+            - color: var(--label-badge-red)
+              value: 43
+            - color: var(--label-badge-blue)
+              value: 48
+            - color: var(--label-badge-yellow)
+              value: 47.3
+            - color: var(--label-badge-blue)
+              value: 0
+          entity: sensor.magnum_bmk_vdc
+          label: Volts
+          max: 62.5
+          min: 40
+          unit: V
+        outer:
+          colors:
+            - color: var(--label-badge-red)
+              value: 80
+            - color: var(--label-badge-green)
+              value: 94
+            - color: var(--label-badge-yellow)
+              value: 90
+            - color: var(--label-badge-blue)
+              value: 0
+          entity: sensor.magnum_bmk_soc
+          label: SOC
+          max: 100
+          min: 70
+          unit: '%'
+        footer:
+          type: buttons
+          entites:
+            - switch.magnum_eq_toggle
+
+      - type: section
+      #################
+      # System Status #
+      #################
+      - entity: sensor.magnum_inverter_aacout
+        type: custom:multiple-entity-row
+        name: System Status
+        state_header: Amps Out
+        secondary_info: last-changed
+        entities:
+          - entity: sensor.magnum_inverter_mode_text
+            name: Charging Stage
+          - entity: sensor.magnum_fault
+          - entity: sensor.magnum_inverter_vacout
+            name: VAC Out
+        footer:
+          type: buttons
+          entities:
+            - entity: input_boolean.school_mode
+            - entity: input_boolean.guest_mode
+      - type: section
+      ###################
+      # Device Tracking #
+      ###################
+      - entity: person.nova
+        type: custom:multiple-entity-row
+        name: People
+        state_header: Nova
+        secondary_info: last-changed
+        entities:
+          - entity: person.david
+            name: David
+          - entity: person.cat
+            name: Catherine
+          - entity: person.haven
+            name: Haven
+      
+      # - type: entity-filter
+      #   entities:
+      #     - person.david
+      #     - person.cat
+      #   state_filter:
+      #     - 'home'
+      #   card:
+      #     type: glance
+      #     title: People at Home
+          
+      # - type: entity-filter
+      #   entities:
+      #     - person.david
+      #     - person.cat
+      #   state_filter:
+      #     - 'work'
+      #   card:
+      #     type: glance
+      #     title: People at Work              
+
+      # - type: entity-filter
+      #   entities:
+      #     - person.david
+      #     - person.cat
+      #   state_filter:
+      #     - 'not_home'
+      #   card:
+      #     type: glance
+      #     title: People enjoying the life
+
+  ###########
+  # Weather #
+  ###########
+  - type: vertical-stack
+    cards:      
+      ####################
+      # Weather Forecast #
+      ####################
+      - type: weather-forecast
+        entity: weather.home
+      ################
+      # Storm Center #
+      ################
+
+      ###############
+      # Storm Alert #
+      ###############
+      # - type: conditional
+      #   conditions:
+      #     - entity: sensor.storm_center_alerts
+      #       state_not: 0
+      #   card:
+      #     type: glance
+      #     title: Storm Alert
+      #     entities:
+      #       - sensor.storm_center_alerts
+
+      #####################
+      # Storm Information #
+      #####################
+      - entity: sensor.storm_center_wind_direction
+        type: custom:multiple-entity-row
+        name: Storm Information
+        state_header: Wind Bearing
+        secondary_info: last-changed
+        entities:
+          - entity: sensor.storm_center_nearest_storm_distance
+            name: Nearest Storm
+          - entity: sensor.storm_center_storm_direction
+            name: Storm Bearing
+          - entity: sensor.storm_center_wind_speed
+            name: Wind Speed
+      ################
+      # Temperatures #
+      ################
+      - entity: sensor.storm_center_temperature
+        type: custom:multiple-entity-row
+        name: Temperatures
+        state_header: Current Temperature
+        secondary_info: last-changed
+        entities:
+          - entity: sensor.storm_center_apparent_temperature
+            name: 'Feels Like'
+      #################
+      # Precipitation #
+      #################
+      # Snow
+      - type: conditional
+        conditions:
+          - entity: binary_sensor.storm_center_precip
+            state: 'snow'
+        card:
+          entity: sensor.storm_center_precip
+          type: custom:multiple-entity-row
+          name: Precipitation
+          state_header: Type
+          secondary_info: last-changed
+          entities:
+            - entity: sensor.storm_center_precip_intensity
+              name: Intensity
+            - entity: sensor.storm_center_precip_accumulation
+              name: Total
+      # Rain/ Sleet
+      - type: conditional
+        conditions:
+          - entity: sensor.storm_center_precip
+            state_not: 'snow'
+          - entity: sensor.storm_center_precip
+            state_not: 'unknown'
+        card:
+          entity: sensor.storm_center_precip
+          type: custom:multiple-entity-row
+          name: Precipitation
+          state_header: Type
+          secondary_info: last-changed
+          entities:
+            - entity: sensor.storm_center_precip_intensity
+              name: Intensity
+      #################  
+      # Weather radar #
+      #################
+      - type: picture-entity
+        entity: camera.gyx
+
+  ###############################
+  # International Space Station #
+  ###############################
+  # - type: picture-entity
+  #   entity: camera.iss

@@ -1,0 +1,179 @@
+################################################################
+# Power Center #################################################
+################################################################
+title: Power Center
+icon: 'mdi:power-socket-us'
+path: inverter_stats
+badges: []
+cards:
+  ###############
+  # Power Gauge #
+  ###############
+  - type: entities
+    entities:
+      ################
+      # Power Status #
+      ################
+      - type: 'custom:dual-gauge-card'
+        title: System Power
+        inner:
+          colors:
+            - color: var(--label-badge-red)
+              value: 43
+            - color: var(--label-badge-blue)
+              value: 48
+            - color: var(--label-badge-yellow)
+              value: 47.3
+            - color: var(--label-badge-blue)
+              value: 0
+          entity: sensor.magnum_bmk_vdc
+          label: Volts
+          max: 62.5
+          min: 40
+          unit: V
+        outer:
+          colors:
+            - color: var(--label-badge-red)
+              value: 80
+            - color: var(--label-badge-green)
+              value: 94
+            - color: var(--label-badge-yellow)
+              value: 90
+            - color: var(--label-badge-blue)
+              value: 0
+          entity: sensor.magnum_bmk_soc
+          label: SOC
+          max: 100
+          min: 70
+          unit: '%'
+
+      - type: section
+      #################
+      # System Status #
+      #################
+      - entity: sensor.magnum_inverter_mode_text
+        type: custom:multiple-entity-row
+        name: System Status
+        state_header: 'Mode'
+        secondary_info: last-changed
+        entities:
+          - entity: sensor.magnum_inverter_aacout
+            name: 'Amps Out'
+          - entity: sensor.magnum_inverter_vacout
+            name: 'VAC Out'
+          - entity: sensor.magnum_fault
+
+  - type: conditional
+    conditions:
+      - entity: sensor.magnum_inverter_mode
+        state: 2
+        card:
+          type: entity
+          entity_id: switch.magnum_eq_toggle
+          
+  ################
+  # Power States #
+  ################
+  - type: entities
+    title: Power
+    show_header_toggle: false
+    entities:
+      ############
+      # AC Power #
+      ############
+      - entity: sensor.magnum_inverter_vacout
+        type: custom:multiple-entity-row
+        name: AC
+        state_header: VAC Out
+        secondary_info: last-changed
+        entities:
+          - entity: sensor.magnum_inverter_aacin
+            name: Amps In
+          - entity: sensor.magnum_inverter_aacout
+            name: Amps out
+          - entity: sensor.magnum_inverter_vacin
+            name: VAC In
+
+      - type: section
+      ############
+      # DC Power #
+      ############
+      - entity: sensor.magnum_bmk_adc
+        type: custom:multiple-entity-row
+        name: DC
+        state_header: VDC Out
+        secondary_info: last-changed
+        entities:
+          - entity: sensor.magnum_bmk_vmin
+          - entity: sensor.magnum_bmk_vmax
+          - entity: sensor.magnum_bmk_vdc
+            name: Current Voltage
+
+  - type: entities
+    title: Stats
+    show_header_toggle: false
+    entities:
+      ################
+      # Temperatures #
+      ################
+      - entity: sensor.magnum_inverter_tfmr
+        type: custom:multiple-entity-row
+        name: Temperatures
+        secondary_info: last-changed
+        state_header: Transformer
+        entities: 
+          - entity: sensor.magnum_inverter_bat
+            name: Battery
+          - entity: sensor.magnum_inverter_fet
+            name: FET
+
+      - type: section
+      ######################
+      # Firmware Revisions #
+      ######################
+      - entity: sensor.magnum_remote_revision
+        type: custom:multiple-entity-row
+        name: Revisions
+        secondary_info: Firmware
+        state_header: Remote
+        entities:
+          - entity: sensor.magnum_inverter_model
+            name: Inverter Model
+          - entity: sensor.magnum_inverter_revision
+            name: Inverter
+          - entity: sensor.magnum_bmk_revision
+            name: BMK
+          - entity: sensor.magnum_ags_revision
+            name: AGS
+
+      - type: section
+      ################
+      # Misc Sensors #
+      ################
+      - entity: sensor.magnum_bmk_amph
+        type: custom:multiple-entity-row
+        name: 'Misc'
+        state_header: AmpHours
+        entities:
+          - entity: sensor.magnum_inverter_frequency
+
+  #######
+  # AGS #
+  #######
+  - type: entities
+    title: AGS
+    show_header_toggle: false
+    entities:
+      - entity: switch.magnum_ags_manual
+        type: custom:multiple-entity-row
+        name: Generac
+        secondary_info: last-changed
+        state_header: Run
+        toggle: true
+        entities:
+          - entity: binary_sensor.magnum_ags_running
+            name: Generator running
+          - entity: sensor.magnum_ags_runtime 
+            name: Runtime      
+          - entity: sensor.magnum_ags_status_text
+            name: Status

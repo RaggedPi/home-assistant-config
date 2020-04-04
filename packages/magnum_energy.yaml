@@ -433,17 +433,42 @@ binary_sensor:
 ################################################################
 input_boolean:
   # Aux AC Input
-  magnum_aux_ac_input:
+  magnum_inverter_ac_input:
     name: Aux AC Input
     initial: false
-  # In Float State
-  magnum_in_float:
-    name: In Float
-    initial: false
-  # In EQ State
-  magnum_in_eq:
-    name: In EQ
-    initial: false
+
+  # Generator Running
+  magnum_generator_active:
+    name: Generator Active
+    intial: off
+
+################################################################
+# Input Select                                                 #
+################################################################
+input_select:
+  # # AGS Mode
+  # magnum_ags_mode:
+  #   name: AGS Mode
+  #   options:
+  #     - "Off"
+  #     - Auto
+  #     - Manual
+  #   intial: Auto
+  
+# Inverter Mode
+  # magnum_inverter_mode:
+  #   name: Inverter Mode
+  #   options:
+  #     - Charging
+  #     - Inverting
+  #     - "Off"
+  #     - Equalizing
+  #     - Float
+  #     - Absorb
+  #     - Bulk
+  #     - Searching
+  #     - Standby
+  #   initial: Inverting
 
 ################################################################
 # Switches                                                     #
@@ -451,11 +476,35 @@ input_boolean:
 switch:
   # AGS Manual Run Switch
   - platform: mqtt
-    name: magnum_ags_manual
-    command_topic: "powerpi/ags/manualRun/set"
-    state_topic: "powerpi/ags/manualRun"
-    availability_topic: "powerpi/ags/manualRun/available"
+    name: magnum_ags_manual_run
+    command_topic: "powerpi/ags/run/manual/start"
+    state_topic: "powerpi/ags/run/manual"
+    availability_topic: "powerpi/ags/run/manual/available"
+  
+  # AGS Auto Run Switch
+  - platform: mqtt
+    name: magnum_ags_auto_mode
+    command_topic: "powerpi/ags/run/auto/start"
+    state_topic: "powerpi/ags/run/auto"
+    availability_topic: "powerpi/ags/run/auto/available"
+
   # Inverter EQ Switch
+  # - platform: template
+  #   switches:
+  #     magnum_inverter_eq_mode:
+  #     value_template: >-
+  #       {% set eq = true if is_state('sensor.magnum_inverter_mode_text', 'EQ') else is_state('sensor.magnum_inverter_mode_text', 'EQ MPPT') %}
+  #       {{ eq }}
+  #     turn_on:
+  #       service: input_select.select_option
+  #       data:
+  #         entity_id: input_Select.magnum_inverter_mode
+  #         option: Equalizing
+  #     turn_off:
+  #       service: input_select.select_option
+  #       data:
+  #         entity_id: input_select.magnum_inverter_mode
+  #         option: Inverting
   - platform: mqtt
     name: magnum_eq_toggle
     command_topic: "powerpi/inverter/eq/toggle"
@@ -487,93 +536,69 @@ timer:
 # Automations                                                  #
 ################################################################
 automation:
-  # Float Boolean Toggle
-  - alias: Float on
-    trigger:
-      - platform: state
-        entity_id: sensor.magnum_inverter_mode
-        to: '2' # float
-        for: "00:00:30"
-      - platform: state
-        entity_id: sensor.magnum_inverter_mode
-        from: '2' # float
-    action:
-      - service: input_boolean.turn_on
-        entity_id: input_boolean.magnum_in_float
-      - service: timer.start
-        entity_id: timer.magnum_charge_state_time
-  
-# Inverter Boolean Toggle
-  - alias: Inverter toggle
-    trigger:
-      - platform: state
-        entity_id: binary_sensor.magnum_inverter_led
-#        to: 'On'
-    action:
-      service: switch.toggle
-      entity_id: switch.magnum_inverter_toggle
-  
-  # Charger Boolean Toggle 
-  - alias: Charger toggle
-    trigger:
-      - platform: state
-        entity_id: binary_sensor.magnum_charger_led
-    action:
-      - service: switch.toggle
-        entity_id: switch.magnum_charger_toggle
-      - service: timer.start
-        entity_id: timer.magnum_charge_state_time
+  # AGS ########################################################
+  # Set AGS Mode (status)
+  # - alias: Set AGS Mode
+  #   trigger:
+  #     - platform: state
+  #       entity_id: input_select.magnum_ags_mode
+  #   action:
+  #     - service: mqtt.publish
+  #       data:
+  #         topic: "powerpi/ags/status/set"
+  #         entity_id: input_select.magnum_ags_mode
+  #     # Set boolean ON if in auto or manual mode
+  #     - condition: and
+  #       conditions:
+  #         - condition: state
+  #           entity_id: input_select.magnum_ags_mode
+  #           state_not: "Off"
+  #     - service: input_boolean.turn_on
+  #       data:
+  #         entity_id: input_boolean.magnum_generator_active
+  #     # Set boolean OFF if off mode
+  #     - condition: or
+  #       conditions:
+  #         - condition: state 
+  #           entity_id: input_select.magnum_ags_mode
+  #           state: "Off"
+  #     - service: input_boolean.turn_off
+  #       data:
+  #         entity_id: input_boolean.magnum_generator_active
 
-  # Equalize Boolean Toggle
-  - alias: Equalize Toggle
-    trigger:
-      - platform: state
-        entity_id: sensor.magnum_inverter_mode
-        to: '1' # equalizing
-        for: "00:00:30"
-      - platform: state
-        entity_id: sensor.magnum_inverter_mode
-        from: '1' # equalizing
-    action:
-      - service: input_boolean.toggle
-        entity_id: input_boolean.magnum_in_eq
-      - service: timer.start
-        entity_id: timer.magnum_charge_state_time
+  # Inverter ###################################################
 
-  # Aux AC Input
-  - alias: Aux Gen Boolean Toggle
-    trigger:
-      - platform: numeric_state
-        entity_id: sensor.magnum_inverter_aacin
-        above: 0
-        for: "00:00:30"
-#          seconds: 30
-      - platform: numeric_state
-        entity_id: sensor.magnum_inverter_aacin
-        below: 1
-        for: "00:00:30"
-#          second: 30
-    action:
-      - service: input_boolean.toggle
-        entity_id: input_boolean.magnum_aux_ac_input
+  # BMK ########################################################
 
-  # Default settings for switches
-  - alias: Set default switch settings upon HA start
-    trigger:
-      - platform: homeassistant
-        event: start
-    action:
-      - service: input_boolean.turn_off
-        entity_id: input_boolean.magnum_aux_ac_input
-      - service: input_boolean.turn_off
-        entity_id: input_boolean.magnum_in_eq
-      - service: input_boolean.turn_off
-        entity_id: input_boolean.magnum_in_float
-      - service: switch.turn_off
-        entity_id: switch.magnum_ags_manual
-      - service: switch.turn_off
-        entity_id: switch.magnum_charger_toggle
-      - service: switch.turn_off
-        entity_id: switch.magnum_eq_toggle
-      - service: switch.turn_off
-        entity_id: switch.magnum_inverter_toggle
+  # Remote #####################################################
+
+  # Globals ####################################################
+  # Default settings for switches, etc
+  # - alias: Set default switch settings upon HA start
+  #   trigger:
+  #     - platform: homeassistant
+  #       event: start
+  #   action:
+  #     - service: timer.start
+  #       entity_id: timer.magnum_charge_state_time
+  #     - service: input_boolean.turn_off
+  #       entity_id: input_boolean.magnum_inverter_ac_input
+  #     # - service: input_boolean.turn_off
+  #     #   entity_id: input_boolean.magnum_in_eq
+  #     # - service: input_boolean.turn_off
+  #     #   entity_id: input_boolean.magnum_in_float
+  #     - service: switch.turn_off
+  #       entity_id: switch.magnum_ags_manual
+  #     - service: switch.turn_off
+  #       entity_id: switch.magnum_charger_toggle
+  #     - service: switch.turn_off
+  #       entity_id: switch.magnum_eq_toggle
+  #     - service: switch.turn_off
+  #       entity_id: switch.magnum_inverter_toggle
+  #     - condition: and
+  #       conditions:
+  #         - condition: state
+  #           entity_id: binary_sensor.magnum_inverter_led
+  #           state: "on"
+  #     - service: switch.toggle
+  #       entity_id: switch.magnum_inverter_toggle

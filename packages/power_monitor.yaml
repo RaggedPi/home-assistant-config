@@ -39,20 +39,20 @@ automation:
         data: 
           message: >-
             {% set mode = states('sensor.classic_mode') %}
-            {% set mode = "{}: {}".format(mode, states('sensor.magnum_inverter_mode')) if mode == 'Resting' else mode %}
+            {% set mode = "{}: {}".format(mode, states('sensor.classic_reason_for_rest_text')) if mode == 'Resting' else mode %}
             {% set vdc = states('sensor.classic_avg_pv_voltage') %}
             {% set adc = states('sensor.classic_avg_pv_current') %}
             {% set energy = states('sensor.classic_avg_energy_today') %}
             [{{mode}}][PV Input: {{vdc}}V][{{adc}}Adc[Total Input: {{energy}}KW]
-      - condition: and
+      - condition: or
         conditions:
           - condition: state
-            entity_id: input_boolean.magnum_aux_ac_input
-            state: 'On'
+            entity_id: sensor.magnum_inverter_mode_text
+            state: Bulk
       - service: notify.david
         data:
           message: >
-            [Aux Generator: ON][{{ states('timer.magnum_charge_time') }}s]
+            [Aux Generator: ON][{{ states('timer.magnum_charge_state_time') }}s]
 
   # Turn Off Aux. Generator Notification
   - alias: 'System nearly full'

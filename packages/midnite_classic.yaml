@@ -416,32 +416,44 @@ sensor:
       # Reason For Rest (Readable)
       classic_reason_for_rest_text:
         friendly_name: 'Rest Reason'
-        entity_id: sensor.classic_rest_reason
+        entity_id: sensor.classic_reason_for_resting
         value_template: >-
           {% set mapper = 
-            { 'Anti-Click': 1,
-              'Insane Battery Measurement': 2,
-              'Negative Current': 3,
-              'PV Input Below Battery Voltage': 4,
-              'Battery Full Or No Draw': 5,
-              'FET Overheat': 6,
-              'Ground Fault': 7,
-              'Arc Fault': 8,
-              'Battery Backfeed To PV': 9,
-              'Battery Below 8V': 10,
-              'Low Light': [11, 14],
-              'Low Light Recheck (Drop)': [12, 15],
-              'Low Light Recheck (Rise)': 13,
-              'MPPT Off': 16,
-              'PV Input Too High': [17, 18, 19],
-              'Avg Battery Voltage Too High': 22,
-              'Battery Voltage Above Overshoot': 25,
-              'MPPT Mode Changed': 26,
-              'Bridge Center': 27,
-              'Relay Not Enagaged': 28,
-              'Bad Wind Graph': 29 } %}
-          {% set state = states('sensor.classic_reason_for_rest')|int %}
-          {{ map[state] if state in map else state}}
+            { 1: 'Anti-Click',
+              2: 'Insane Battery Measurement',
+              3: 'Negative Current',
+              4: 'PV Input Below Battery Voltage',
+              5: 'Battery Full Or No Draw',
+              6: 'FET Overheat',
+              7: 'Ground Fault',
+              8: 'Arc Fault',
+              9: 'Battery Backfeed To PV',
+              10: 'Battery Below 8V',
+              11: 'Low Light',
+              12: 'Low Light Recheck (Drop)',
+              13: 'Low Light Recheck (Rise)',
+              14: 'Low Light',
+              15: 'Low Light Recheck (Drop)',
+              16: 'MPPT Off',
+              17: 'PV Input Too High',
+              18: 'PV Input Too High',
+              19: 'PV Input Too High',
+              22: 'Avg Battery Voltage Too High',
+              25: 'Battery Voltage Above Overshoot',
+              26: 'MPPT Mode Changed',
+              27: 'Bridge Center',
+              28: 'Relay Not Enagaged',
+              29: 'Bad Wind Graph',
+              33: 'Code 33',
+              34: 'Code 34',
+              35: 'LOW LOW Battery',
+              36: 'Battery Temperature Above Threshold',
+              38: 'Other Charging Sources Active',
+              104: 'Watchdog Reset',
+              111: 'Normal Power Up Boot',
+              136: 'Battery Temperature Below Threshold' } %}
+          {% set state = states('sensor.classic_reason_for_resting')|int %}
+          {{ mapper[state] if state in mapper else state}}
       
       # Temperature Conversions
       classic_battery_temp_f:
@@ -462,6 +474,7 @@ sensor:
         value_template: "{{ ((state('sensor.classic_fet_temp_c')|int) *9 /5) + 32 }}"
         unit_of_measurement: F
 
+      # Mode
       classic_mode:
         friendly_name: Mode
         value_template: >-
@@ -488,8 +501,15 @@ sensor:
             6: states('sensor.classic_float_time_today'),
             7: states('sensor.classic_equalize_time'),
             18: states('sensor.classic_equalize_time') } %}
-          {{ map[mode] if mode in map else states('timer.charge_state_time') }}
+          {{ map[mode] if mode in map else states('timer.classic_charge_time') }}
           
+      classic_build_date:
+        friendly_name: Build Date
+        value_template: >-
+          {% set y = states('sensor.classic_revision_year')|int %}
+          {% set m = states('sensor.classic_revision_month')|int %}
+          {% set d = states('sensor.classic_revision_day')|int %}
+          {{m}}/{{d}}/{{y}}
 ##############################################################
 # Input Selects                                              #
 ##############################################################
@@ -543,7 +563,7 @@ automation:
         entity_id: sensor.classic_charge_state
     action:
       - service: timer.start
-        entity_id: timer.charge_state_time
+        entity_id: timer.classic_charge_time
       - service: input_select.select_option
         data:
           entity_id: input_select.classic_charge_mode
