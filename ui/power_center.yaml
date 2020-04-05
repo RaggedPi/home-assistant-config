@@ -62,14 +62,28 @@ cards:
           - entity: sensor.magnum_inverter_vacout
             name: 'VAC Out'
           - entity: sensor.magnum_fault
+      - type: section
+      ############
+      # Switches #
+      ############
+      - entity: switch.magnum_inverter_toggle
+        type: custom:multiple-entity-row
+        name: Control
+        state_header: Inverter
+        toggle: true
+        state_color: true
+        entities:
+          - entity: input_boolean.magnum_inverter_ac_input
+            name: AC Input
+            toggle: false
+          - entity: switch.magnum_charger_toggle
+            name: Charger
+            toggle: true
+          - entity: switch.magnum_eq_toggle
+            name: EQ
+            toggle: true
+        
 
-  - type: conditional
-    conditions:
-      - entity: sensor.magnum_inverter_mode
-        state: 2
-        card:
-          type: entity
-          entity_id: switch.magnum_eq_toggle
           
   ################
   # Power States #

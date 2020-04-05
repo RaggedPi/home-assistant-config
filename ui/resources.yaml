@@ -1,26 +1,26 @@
 - type: module
-  url: /hacsfiles/flex-horseshoe-card/flex-horseshoe-card.js
+  url: /local/flex-horseshoe-card/flex-horseshoe-card.js
 - type: module
-  url: /hacesfiles/group-card/group-card.js
+  url: /community_plugin/group-card/group-card.js
 - type: js
-  url: /hacesfiles/vertical-stack-in-card/vertical-stack-in-card.js
+  url: /community_plugin/vertical-stack-in-card/vertical-stack-in-card.js
 - type: module
-  url: /hacesfiles/weather-card/weather-card.js
+  url: /community_plugin/weather-card/weather-card.js
 - type: module
-  url: /hacesfiles/dual-gauge-card/dual-gauge-card.js
+  url: /community_plugin/dual-gauge-card/dual-gauge-card.js
 - type: module
-  url: /hacesfiles/lovelace-multiple-entity-row/multiple-entity-row.js?v=3.0.0
+  url: /community_plugin/lovelace-multiple-entity-row/multiple-entity-row.js?v=3.0.0
 - type: module
-  url: /hacesfiles/sun-card/sun-card.js
+  url: /community_plugin/sun-card/sun-card.js
 - type: module
   url: /local/lovelace-animated-background/dist/lovelace-animated-background.js
 - type: module
-  url: /hacesfiles/button-card/button-card.js
+  url: /community_plugin/button-card/button-card.js
 - type: module
-  url: /hacesfiles/bar-card/bar-card.js
+  url: /community_plugin/bar-card/bar-card.js
 - type: module
   url: /local/tracker-card/tracker-card.js?track=true
 - type: module
   url: /local/lovelace-state-switch/state-switch.js
 - type: module
-  url: /hacesfiles/lovelace-card-tools/card-tools.js
+  url: /community_plugin/lovelace-card-tools/card-tools.js
