@@ -14,19 +14,19 @@ homeassistant:
       friendly_name: 'Nominal Battery Voltage'
     sensor.classic_mppt_mode:
       friendly_name: 'MPPT Mode'
-    sensor.classic_battery_voltage:
+    sensor.classic_avg_battery_voltage:
       friendly_name: 'Battery Voltage'
-    sensor.classic_pv_voltage:
+    sensor.classic_avg_pv_voltage:
       friendly_name: 'PV Voltage'
-    sensor.classic_battery_current:
+    sensor.classic_avg_battery_current:
       friendly_name: 'Battery Current'
-    sensor.classic_power:
+    sensor.classic_avg_power:
       friendly_name: 'Power'
-    sensor.classic_energy_today:
+    sensor.classic_avg_energy_today:
       friendly_name: 'Energy Today'
     sensor.classic_charge_state:
       friendly_name: 'Charge State'
-    sensor.classic_pv_current:
+    sensor.classic_avg_pv_current:
       friendly_name: 'PV Current'
     sensor.classic_total_energy:
       friendly_name: 'Total Energy'
@@ -406,11 +406,17 @@ sensor:
   ##############################################################
   - platform: template
     sensors:
+      # Charge Mode Elapsed Timer
+      classic_charge_mode_elapsed_time:
+        friendly_name: 'Elapsed Time'
+        value_template: >-
+          {{ (as_timestamp(now()) - state_attr('input_datetime.classic_charge_mode', 'timestamp'))| timestamp_custom('%H:%M:%S', false) }}
+
       # Mac Address
       classic_mac_address:
         friendly_name: 'Mac Address'
         value_template: >-
-          {% set mac = "{:02x}:{:02x}:{:02x}:{:02x}:{:02x}:{:02x}".format(states('sensor.classic_mac_5'), states('sensor.classic_mac_4'), states('sensor.classic_mac_3'), states('sensor.classic_mac_2'), states('sensor.classic_mac_1'), states('sensor.classic_mac_0')) %}
+          {% set mac = "{}:{}:{}:{}:{}:{}".format(states('sensor.classic_mac_5'), states('sensor.classic_mac_4'), states('sensor.classic_mac_3'), states('sensor.classic_mac_2'), states('sensor.classic_mac_1'), states('sensor.classic_mac_0')) %}
           "{{ mac|upper }}"
 
       # Reason For Rest (Readable)
@@ -456,22 +462,28 @@ sensor:
           {{ mapper[state] if state in mapper else state}}
       
       # Temperature Conversions
-      classic_battery_temp_f:
+      classic_battery_temp:
         entity_id: sensor.classic_battery_temperature
         friendly_name: 'Battery Temperature'
-        value_template: "{{ ((state('sensor.classic_battery_temperature')|float(2) * 9) /5) + 32 }}"
+        value_template: >-
+          {% set temp = states('sensor.classic_battery_temperature') %}
+          {{ ((temp|float * 9 / 5)+ 32)|round(1) }}
         unit_of_measurement: F
 
-      classic_pcb_temp_f:
+      classic_pcb_temp:
         friendly_name: PCB Temperature
         entity_id: sensor.classic_pcb_temperature
-        value_template: "{{ ((state('sensor.classic_pcb_temp_c')|int) *9 /5) + 32 }}"
+        value_template: >-
+          {% set temp = states('sensor.classic_pcb_temperature') %}
+          {{ ((temp|float * 9 / 5)+ 32)|round(1) }}
         unit_of_measurement: F
 
-      classic_fet_temp_f:
+      classic_fet_temp:
         entity_id: sensor.classic_fet_temperature
         friendly_name: FET Temperature
-        value_template: "{{ ((state('sensor.classic_fet_temp_c')|int) *9 /5) + 32 }}"
+        value_template: >-
+          {% set temp = states('sensor.classic_fet_temperature') %}
+          {{ ((temp|float * 9 / 5)+ 32)|round(1) }}
         unit_of_measurement: F
 
       # Mode
@@ -489,20 +501,8 @@ sensor:
             10: 'HyperVOC',
             18: 'EQ MPPT' } %}
           {{ map[mode] if mode in map else 'Unknown' }}
-          
-      classic_mode_time:
-        friendly_name: Time
-        value_template: >-
-          {% set mode = states('sensor.classic_charge_state')|int %}
-          {% set map = {
-            0: states('sensor.classic_reason_for_rest'),
-            3: states('sensor.classic_absorb_time'),
-            5: states('sensor.classic_float_time_today'),
-            6: states('sensor.classic_float_time_today'),
-            7: states('sensor.classic_equalize_time'),
-            18: states('sensor.classic_equalize_time') } %}
-          {{ map[mode] if mode in map else states('timer.classic_charge_time') }}
-          
+         
+      # Build Date
       classic_build_date:
         friendly_name: Build Date
         value_template: >-
@@ -510,6 +510,15 @@ sensor:
           {% set m = states('sensor.classic_revision_month')|int %}
           {% set d = states('sensor.classic_revision_day')|int %}
           {{m}}/{{d}}/{{y}}
+
+##############################################################
+# Input Datetime                                             #
+##############################################################
+input_datetime:
+  classic_charge_mode:
+    has_date: true
+    has_time: true
+
 ##############################################################
 # Input Selects                                              #
 ##############################################################
@@ -526,6 +535,8 @@ input_select:
       - EQ
       - HyperVOC
       - Float
+
+  # Rest Reason
   classic_reason_for_rest:
     name: Reason For Rest
     initial: Unknown
@@ -545,75 +556,62 @@ input_boolean:
     name: In Float
     initial: False
 
-################################################################
-# Timers                                                       #
-################################################################
-timer:
-  classic_charge_time:
-    name: Charge Time
 
 ################################################################
 # Automations                                                  #
 ################################################################
 automation:
-  # Update Input Select From Sensor
-  - alias: Update charge state
+  # Set input_select charge mode
+  - alias: Set Charge Mode input_select
     trigger:
-      - platform: state
-        entity_id: sensor.classic_charge_state
+      platform: state
+      entity_id: sensor.classic_charge_stage
     action:
-      - service: timer.start
-        entity_id: timer.classic_charge_time
       - service: input_select.select_option
         data:
           entity_id: input_select.classic_charge_mode
-          option: >
-            {% set map = {
-              0: 'Resting',
-              3: 'Absorb',
-              4: 'Bulk',
-              5: 'Float',
-              6: 'Float',
-              7: 'EQ',
-              10: 'HyperVOC',
-              18: 'EQ' } %}
-            {% set mode = states('sensor.classic_charge_stage')|int %}
-            {{ map[mode] if mode in map else 'Unknown'}}
-            
-  # Toggle Input Boolean From Sensor
-  - alias: Map eq sensor to input boolean
-    trigger:
-      - platform: state
-        entity_id: sensor.classic_charge_stage
-        to: '7'
-      - platform: state
-        entity_id: sensor.classic_charge_stage
-        to: '18'
-      - platform: state
-        entity_id: sensor.classic_charge_stage
-        from: '7'
-      - platform: state
-        entity_id: sensor.classic_charge_stage
-        from: '18'
-    action:
-      service: input_boolean.toggle
-      entity_id: input_boolean.classic_in_eq
+          option: >-
+            {% set mode = 'sensor.classic_charge_stage' %}
+            {% if is_state(mode, 0) %}
+            Resting
+            {% elif is_state(mode, 3) %}
+            Absorb
+            {% elif is_state(mode, 4) %}
+            Bulk
+            {% elif is_state(mode, 5) %}
+            Float
+            {% elif is_State(mode, 6) %}
+            {# Float MPPT #}
+            Float
+            {% elif is_state(mode, 7) %}
+            EQ
+            {% elif is_state(mode, 10) %}
+            HyperVOC
+            {% elif is_state(mode, 18) %}
+            {# MPPT #}
+            EQ
+            {%- else %}
+            Unknown
 
-  # Float Stage Input boolean toggle
-  - alias: Map float sensor to input boolean
+  # Set charge mode elapsed timer
+  - alias: Start Charge Mode Elapsed Timer
     trigger:
-      - platform: state
-        entity_id: sensor.classic_charge_stage
-        to: '5'
-      - platform: state
-        entity_id: sensor.classic_charge_stage
-        to: '6'
-      - platform: state
-        entity_id: sensor.classic_charge_stage
-        from: '5'
-      - platform: state
-        entity_id: sensor.classic_charge_stage
-        from: '6'
+      platform: state
+      entity_id: input_select.classic_charge_mode
     action:
-      service: input_boolean.toggle
-      entity_id: input_boolean.classic_in_float
+      service: input_datetime.set_datetime
+      data_template:
+        entity_id: input_datetime.classic_charge_mode
+        datetime: "{{ now().strftime('%Y-%m-%d %H:%M:%S') }}" 
+
+  # Update charge mode elapsed timer
+  - alias: Update Charge Mode Elapsed Timer
+    trigger:
+      - platform: time_pattern
+        seconds: '*'
+    action:
+      service: homeassistant.update_entity
+      entity_id:  sensor.classic_charge_mode_elapsed_time
+
+
+  

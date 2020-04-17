@@ -186,7 +186,7 @@ cards:
         name_state: Time
         secondary_info: last-changed
         entities:
-          - entity: timer.classic_charge_time
+          - entity: sensor.classic_charge_mode_time
     
     # Float / Float MPPT Mode
     - type: conditional
@@ -200,7 +200,7 @@ cards:
         name_state: Time
         secondary_info: last-changed
         entities:
-          - entity: timer.classic_charge_time
+          - entity: sensor.classic_charge_mode_time
     
     # Bulk
     - type: conditional
@@ -214,7 +214,7 @@ cards:
         name_state: Time
         secondary_info: last-changed
         entities:
-          - entity: timer.classic_charge_time
+          - entity: sensor.classic_charge_mode_time
     
     - type: section
     ############
@@ -236,14 +236,14 @@ cards:
     # Temperatures #
     ################
     - type: custom:multiple-entity-row
-      entity: sensor.classic_battery_temperature
+      entity: sensor.classic_battery_temp
       name: Temperatures
       state_header: Battery
       secondary_info: last-changed
       entities:
-        - entity: sensor.classic_fet_temperature
+        - entity: sensor.classic_fet_temp
           name: FET
-        - entity: sensor.classic_pcb_temperature
+        - entity: sensor.classic_pcb_temp
           name: PCB
 
     - type: section
