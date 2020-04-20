@@ -63,11 +63,26 @@ cards:
           - entity: sensor.magnum_fault
           - entity: sensor.magnum_inverter_vacout
             name: VAC Out
-        footer:
-          type: buttons
-          entities:
-            - entity: input_boolean.school_mode
-            - entity: input_boolean.guest_mode
+
+      - type: section
+      #############
+      # PV Status #
+      #############
+      - type: custom:multiple-entity-row
+        entity: sensor.classic_mode
+        name: PV Status
+        state_header: Charge Mode
+        secondary_info: last-changed
+        entities:
+          - entity: sensor.classic_charge_mode_time
+      - type: custom:multiple-entity-row
+        entity: sensor.classic_avg_energy_today
+        name: ''
+        state_header: Energy
+        entities:
+          - entity: sensor.classic_avg_power
+          - entity: sensor.classic_avg_pv_current
+          - entity: sensor.classic_avg_pv_voltage
       - type: section
       ###################
       # Device Tracking #

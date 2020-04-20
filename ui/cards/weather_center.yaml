@@ -1,0 +1,82 @@
+type: vertical-stack
+cards:      
+  ####################
+  # Weather Forecast #
+  ####################
+  - type: weather-forecast
+    entity: weather.home
+  ################
+  # Storm Center #
+  ################
+
+  ###############
+  # Storm Alert #
+  ###############
+  - !include weather_alert.yaml
+
+  #####################
+  # Storm Information #
+  #####################
+  - entity: sensor.storm_center_wind_direction
+    type: custom:multiple-entity-row
+    name: Storm Information
+    state_header: Wind Bearing
+    secondary_info: last-changed
+    entities:
+      - entity: sensor.storm_center_nearest_storm_distance
+        name: Nearest Storm
+      - entity: sensor.storm_center_storm_direction
+        name: Storm Bearing
+      - entity: sensor.storm_center_wind_speed
+        name: Wind Speed
+  ################
+  # Temperatures #
+  ################
+  - entity: sensor.storm_center_temperature
+    type: custom:multiple-entity-row
+    name: Temperatures
+    state_header: Current Temperature
+    secondary_info: last-changed
+    entities:
+      - entity: sensor.storm_center_apparent_temperature
+        name: 'Feels Like'
+  #################
+  # Precipitation #
+  #################
+  # Snow
+  - type: conditional
+    conditions:
+      - entity: binary_sensor.storm_center_precip
+        state: 'snow'
+    card:
+      entity: sensor.storm_center_precip
+      type: custom:multiple-entity-row
+      name: Precipitation
+      state_header: Type
+      secondary_info: last-changed
+      entities:
+        - entity: sensor.storm_center_precip_intensity
+          name: Intensity
+        - entity: sensor.storm_center_precip_accumulation
+          name: Total
+  # Rain/ Sleet
+  - type: conditional
+    conditions:
+      - entity: sensor.storm_center_precip
+        state_not: 'snow'
+      - entity: sensor.storm_center_precip
+        state_not: 'unknown'
+    card:
+      entity: sensor.storm_center_precip
+      type: custom:multiple-entity-row
+      name: Precipitation
+      state_header: Type
+      secondary_info: last-changed
+      entities:
+        - entity: sensor.storm_center_precip_intensity
+          name: Intensity
+  #################  
+  # Weather radar #
+  #################
+  - type: picture-entity
+    entity: camera.gyx

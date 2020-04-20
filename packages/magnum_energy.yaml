@@ -117,7 +117,7 @@ sensor:
     unit_of_measurement: A
   # AC Output Voltage
   - platform: mqtt
-    name: magnum_inverter_VACout
+    name: magnum_inverter_vac_out
     state_topic: "powerpi/inverter"
     value_template: "{{ value_json.data.VACout }}"
     json_attributes_topic: "powerpi/inverter"
@@ -125,7 +125,7 @@ sensor:
     unit_of_measurement: V
   # AC Input Voltage
   - platform: mqtt
-    name: magnum_inverter_VACin
+    name: magnum_inverter_vac_in
     state_topic: "powerpi/inverter"
     value_template: "{{ value_json.data.VACin }}"
     json_attributes_topic: "powerpi/inverter"
@@ -133,7 +133,7 @@ sensor:
     unit_of_measurement: V
   # AC Input Amps
   - platform: mqtt
-    name: magnum_inverter_AACin
+    name: magnum_inverter_aac_in
     state_topic: "powerpi/inverter"
     value_template: "{{ value_json.data.AACin }}"
     json_attributes_topic: "powerpi/inverter"
@@ -141,7 +141,7 @@ sensor:
     unit_of_measurement: A
   # AC Output Amps
   - platform: mqtt
-    name: magnum_inverter_AACout
+    name: magnum_inverter_aac_out
     state_topic: "powerpi/inverter"
     value_template: "{{ value_json.data.AACout }}"
     json_attributes_topic: "powerpi/inverter"
@@ -149,7 +149,7 @@ sensor:
     unit_of_measurement: A
   # Battery Temperature
   - platform: mqtt
-    name: magnum_inverter_bat
+    name: magnum_inverter_battery_temperature
     state_topic: "powerpi/inverter"
     value_template: "{{ value_json.data.bat }}"
     json_attributes_topic: "powerpi/inverter"
@@ -157,7 +157,7 @@ sensor:
     unit_of_measurement: C
   # Transformer Temperature
   - platform: mqtt
-    name: magnum_inverter_tfmr
+    name: magnum_inverter_transformer_temperature
     state_topic: "powerpi/inverter"
     value_template: "{{ value_json.data.tfmr }}"
     json_attributes_topic: "powerpi/inverter"
@@ -165,7 +165,7 @@ sensor:
     unit_of_measurement: C
   # FET Temperature
   - platform: mqtt
-    name: magnum_inverter_fet
+    name: magnum_inverter_fet_temperature
     state_topic: "powerpi/inverter"
     value_template: "{{ value_json.data.fet }}"
     json_attributes_topic: "powerpi/inverter"
@@ -330,25 +330,44 @@ sensor:
     json_attributes_topic: "powerpi/remote"
     json_attributes_template: "{{ value_json.data.revision | tojson }}"
   
-
-################################################################
-# Datetime Sensors                                             #
-################################################################
-  - platform: time_date
-    display_options:
-      - 'time'
-      - 'date'
-      - 'date_time'
-
 ################################################################
 # Template Sensors                                             #
 ################################################################
   - platform: template
     sensors:
-      # Elapsed Time [HACK]
-      magnum_inverter_ac_input_on_time:
+      # Elapsed Times
+      magnum_inverter_ac_input_elapsed_time:
+        entity_id: sensor.time
+        value_template: "{{ (as_timestamp(now()) - state_attr('input_datetime.magnum_inverter_ac_input', 'timestamp'))| timestamp_custom('%H:%M:%S', false) }}"
+
+      magnum_inverter_mode_elapsed_time:
+        entity_id: sensor.time
+        value_template: "{{ (as_timestamp(now()) - state_attr('input_datetime.magnum_inverter_mode', 'timestamp'))| timestamp_custom('%H:%M:%S', false) }}"
+
+      # Temperature Conversions
+      magnum_inverter_battery_temp:
+        entity_id: sensor.magnum_inverter_battery_temperature
+        friendly_name: 'Battery Temperature'
         value_template: >-
-          {{ (as_timestamp(now()) - state_attr('input_datetime.magnum_inverter_ac_input', 'timestamp'))| timestamp_custom('%H:%M:%S', false) }}
+          {% set temp = states('sensor.magnum_inverter_battery_temperature') %}
+          {{ ((temp|float * 9 / 5)+ 32)|round(1) }}
+        unit_of_measurement: F
+
+      magnum_inverter_transformer_temp:
+        friendly_name: Transformer Temperature
+        entity_id: sensor.magnum_inverter_transformer_temperature
+        value_template: >-
+          {% set temp = states('sensor.magnum_inverter_transformer_temperature') %}
+          {{ ((temp|float * 9 / 5)+ 32)|round(1) }}
+        unit_of_measurement: F
+
+      magnum_inverter_fet_temp:
+        entity_id: sensor.magnum_inverter_fet_temperature
+        friendly_name: FET Temperature
+        value_template: >-
+          {% set temp = states('sensor.magnum_inverter_fet_temperature') %}
+          {{ ((temp|float * 9 / 5)+ 32)|round(1) }}
+        unit_of_measurement: F
 
       # Inverter Mode Text
       magnum_inverter_mode_text:
@@ -471,34 +490,38 @@ input_datetime:
   magnum_inverter_ac_input:
     has_date: true
     has_time: true
+  magnum_inverter_mode:
+    has_date: true
+    has_time: true
 
 ################################################################
 # Input Select                                                 #
 ################################################################
 input_select:
 # AGS Mode
-  # magnum_ags_mode:
-  #   name: AGS Mode
-  #   options:
-  #     - "Off"
-  #     - Auto
-  #     - Manual
-  #   intial: Auto
+  magnum_ags_mode:
+    name: AGS Mode
+    options:
+      - "Off"
+      - Auto
+      - Manual
+    initial: "Off"
   
 # Inverter Mode
-  # magnum_inverter_mode:
-  #   name: Inverter Mode
-  #   options:
-  #     - Charging
-  #     - Inverting
-  #     - "Off"
-  #     - Equalizing
-  #     - Float
-  #     - Absorb
-  #     - Bulk
-  #     - Searching
-  #     - Standby
-  #   initial: Inverting
+  magnum_inverter_mode:
+    name: Inverter Mode
+    options:
+      - Charging
+      - Inverting
+      - "Off"
+      - Equalizing
+      - Float
+      - Absorb
+      - Bulk
+      - Searching
+      - Standby
+      - Unknown
+    initial: Unknown
 
 ################################################################
 # Switches                                                     #
@@ -558,8 +581,10 @@ automation:
   # AGS ########################################################
 
   # Inverter ###################################################
-  # Activate AC Input Boolean
-  - alias: Activate AC Input Boolean
+
+  ## AC Input ##
+  ## ON
+  - alias: Start AC Input Boolean
     trigger:
       - platform: numeric_state
         entity_id: sensor.magnum_inverter_aacin
@@ -568,8 +593,7 @@ automation:
       service: input_boolean.turn_on
       data:
         entity_id: input_boolean.magnum_inverter_ac_input
-
-  # Deavtivate AC Input Boolean
+  ## OFF
   - alias: Deavtivate AC Input Boolean
     trigger:
       - platform: numeric_state
@@ -579,8 +603,7 @@ automation:
       service: input_boolean.turn_off
       data:
         entity_id: input_boolean.magnum_inverter_ac_input
-
-  # Set AC Input Elapsed Timer
+  ## Start Elapsed Timer
   - alias: Start AC Input Elapsed Timer
     trigger:
       platform: state
@@ -588,11 +611,10 @@ automation:
       to: 'on'
     action:
       service: input_datetime.set_datetime
-      entity_id: input_datetime.magnum_inverter_ac_input
-      data:
-        data_template: "{{ now().strftime('%Y-%m-%d %H:%M:%S') }}"
-  
-  # Update AC Input Elapsed Timer
+      data_template:
+        entity_id: input_datetime.magnum_inverter_ac_input
+        datetime: "{{ now().strftime('%Y-%m-%d %H:%M:%S') }}"
+  ## Update Elapsed Timer
   - alias: Update Magnum Elapsed Timer
     trigger:
       platform: time_pattern
@@ -605,9 +627,69 @@ automation:
       service: homeassistant.update_entity
       entity_id:  sensor.magnum_inverter_ac_input_on_time
 
+  ## Inverter Mode ##
+  ## Set Inverter Mode input_select
+  - alias: Set Inverter Mode input_select
+    trigger:
+      platform: state
+      entity_id: sensor.magnum_inverter_mode
+    action:
+      - service: input_select.set_option
+        data:
+          entity_id: input_select.magnum_inverter_mode
+          option: >-
+            {% set mode = 'sensor.magnum_inverter_mode' %}
+            {% if is_state(mode, 0) %}
+            Charger In Standby
+            {% elif is_state(mode, 1) %}
+            Equalizing
+            {% elif is_state(mode, 2) %}
+            Float
+            {% elif is_state(mode, 4) %}
+            Absorb
+            {% elif is_state(mode, 8) %}
+            Bulk
+            {% elif is_state(mode, 9) %}
+            Battery Save
+            {% elif is_state(mode, 16) %}
+            Charging
+            {% elif is_state(mode, 32) %}
+            Off
+            {% elif is_state(mode, 64) %}
+            Inverting
+            {% elif is_state(mode, 80) %}
+            Inverter In Standby
+            {% elif is_state(mode, 128) %}
+            Searching
+            {% else %}
+            Unknown
+
+  ## Start Elapsed Timer
+  - alias: Start Inverter Mode Elapsed Timer
+    trigger:
+      platform: state
+      entity_id: input_select.magnum_inverter_mode
+      to: 'on'
+    action:
+      service: input_datetime.set_datetime
+      data_template:
+        entity_id: input_datetime.magnum_inverter_mode
+        datetime: "{{ now().strftime('%Y-%m-%d %H:%M:%S') }}"
+  ## Update Elapsed Timer
+  - alias: Update Inverter Mode Elapsed Timer
+    trigger:
+      platform: time_pattern
+      seconds: '*'
+    action:
+      service: homeassistant.update_entity
+      entity_id:  sensor.magnum_inverter_mode_elapsed_time
+
   # BMK ########################################################
 
   # Remote #####################################################
 
   # Globals ####################################################
 
+################################################################
+# History / Recorder                                           #
+################################################################

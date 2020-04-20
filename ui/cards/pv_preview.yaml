@@ -1,0 +1,8 @@
+type: custom:multiple-entity-row
+entity: sensor.classic_mode
+name: PV Status
+state_header: Charge Mode
+secondary_info: last-changed
+entities:
+  - entity: sensor.classic_charge_mode_elapsed_time
+    
