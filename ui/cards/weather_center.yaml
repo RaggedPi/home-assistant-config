@@ -3,8 +3,9 @@ cards:
   ####################
   # Weather Forecast #
   ####################
-  - type: weather-forecast
-    entity: weather.home
+  - type: custom:weather-card
+    entity: weather.dark_sky
+
   ################
   # Storm Center #
   ################

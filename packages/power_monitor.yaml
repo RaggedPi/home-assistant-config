@@ -27,7 +27,7 @@ automation:
             {% set mode = "{}: {}".format(mode, states('sensor.magnum_inverter_mode')) if mode == 'Resting' else mode %}
             {% set soc = states('sensor.magnum_bmk_soc') %}
             {% set vdc = states('sensor.magnum_bmk_vdc') %}
-            {% set acout = states('sensor.magnum_inverter_aacout') %}
+            {% set acout = states('sensor.magnum_inverter_aac_out') %}
             [RaggedPi] [{{mode}}][SOC: {{soc}}%][{{vdc}}V][AC load: {{acout}}A]
       - condition: and
         conditions:
@@ -52,7 +52,7 @@ automation:
       - service: notify.david
         data:
           message: >
-            [Aux Generator: ON][{{ states('timer.magnum_charge_state_time') }}s]
+            [Aux Generator: ON][{{ states('sensor.magnum_inverter_ac_input_elapsed_time') }}]
 
   # Turn Off Aux. Generator Notification
   - alias: 'System nearly full'
@@ -91,7 +91,7 @@ automation:
       - condition: and
         conditions:
           - condition: template
-            value_template: "{{ states('sensor.magnum_inverter_aacin')|int > 0 }}"
+            value_template: "{{ states('binary_sensor.magnum_inverter_chgled')|int > 0 }}"
       - service: notify.david
         data:
           message: "Engage the aux generator."

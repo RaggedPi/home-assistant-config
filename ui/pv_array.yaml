@@ -43,6 +43,10 @@ cards:
         - entity: sensor.pv_visibility_1d
           name: Visibility
 
+  - type: sensor
+    entity: sensor.classic_avg_energy_today
+    graph: line
+
   #####################
   # PV Status Section #
   #####################
@@ -51,93 +55,8 @@ cards:
     ############
     # PV Gauge #
     ############
-    - type: 'custom:flex-horseshoe-card'
-      entities:
-        - entity: sensor.classic_avg_pv_voltage
-          decimals: 1
-          unit: 'V'
-          name: PV Input
-          tap_action:
-            action: more-info
-        - entity: sensor.classic_avg_power
-          decimals: 1
-          unit: 'W'
-          tap_action:
-            action: more-info
-        - entity: sensor.classic_avg_pv_current
-          decimals: 1
-          unit: 'A'
-          tap_action:
-            action: more-info
-      show:
-        horseshoe_style: 'lineargradient'
-      layout:
-        hlines:
-          - id: 0
-            xpos: 50
-            ypos: 48
-            length: 40
-            styles:
-              - stroke: var(--primary-text-color);
-              - stroke-width: 2;
-              - opacity: 0.5;
-          - id: 1
-            xpos: 50
-            ypos: 20
-            length: 40
-            styles:
-              - stroke: var(--primary-text-color);
-              - stroke-width: 2;
-              - opacity: 0.5;
-        circles:
-          - xpos: 50
-            ypos: 61
-            radius: 5
-            styles:
-              - fill: var(--primary-text-color);
-              - opacity: 0.5;
-        states:
-          - id: 0
-            entity_index: 0
-            xpos: 50
-            ypos: 40
-            styles:
-              - font-size: 3em;
-          - id: 1
-            entity_index: 1
-            xpos: 46
-            ypos: 64
-            styles:
-              - text-anchor: end;
-              - font-size: 1.6em;
-          - id: 2
-            entity_index: 2
-            xpos: 54
-            ypos: 64
-            styles:
-              - text-anchor: start;
-              - font-size: 1.6em;
-        names:
-          - id: 0
-            entity_index: 0
-            xpos: 50
-            ypos: 80
-        
-      horseshoe_scale:
-        min: 15
-        max: 110
-        ticksize: 1
-      color_stops:
-        16: '#FFF6E3'
-        17: '#FFE9B9'
-        18: '#FFDA8A'
-        19: '#FFCB5B'
-        20: '#FFBF37'
-        21: '#ffb414'
-        22: '#FFAD12'
-        23: '#FFA40E'
-        24: '#FF9C0B' 
-        25: '#FF8C06' 
+    - !include cards/pv_gauge.yaml
+#    - !include cards/pv_flex.yaml
 
   - type: entities
     title: Charge Controller
@@ -146,90 +65,13 @@ cards:
     #############
     # Mode data #
     #############
-    # EQ / EQ MPPT Mode
-    - type: conditional
-      conditions:
-        - entity: input_boolean.classic_in_eq
-          state: "on"
-      row:
-        type: custom:multiple-entity-row
-        entity: sensor.classic_mode
-        name: Charge Mode
-        name_state: Time
-        secondary_info: last-changed
-        entities:
-          - entity: sensor.classic_equalize_time
-
-    # Resting Mode
-    - type: conditional
-      conditions:
-        - entity: sensor.classic_mode
-          state: Resting
-      row:
-        type: custom:multiple-entity-row
-        entity: sensor.classic_mode
-        name: Charge Mode
-        name_state: Reason
-        secondary_info: last-changed
-        entities:
-          - entity: sensor.classic_reason_for_rest_text
-    
-    # Absorb Mode
-    - type: conditional
-      conditions:
-        - entity: sensor.classic_mode
-          state: Absorb
-      row:
-        type: 'custom:multiple-entity-row'
-        entity: sensor.classic_mode
-        name: Charge Mode
-        name_state: Time
-        secondary_info: last-changed
-        entities:
-          - entity: sensor.classic_charge_mode_time
-    
-    # Float / Float MPPT Mode
-    - type: conditional
-      conditions:
-        - entity: input_boolean.classic_in_float
-          state: "on"
-      row:
-        type: 'custom:multiple-entity-row'
-        entity: sensor.classic_mode
-        name: Charge Mode
-        name_state: Time
-        secondary_info: last-changed
-        entities:
-          - entity: sensor.classic_charge_mode_time
-    
-    # Bulk
-    - type: conditional
-      conditions:
-        - entity: sensor.classic_mode
-          state: 'Bulk MPPT'
-      row:
-        type: 'custom:multiple-entity-row'
-        entity: sensor.classic_mode
-        name: Charge Mode
-        name_state: Time
-        secondary_info: last-changed
-        entities:
-          - entity: sensor.classic_charge_mode_time
+    - !include cards/pv_preview.yaml
     
     - type: section
     ############
     # PV Array #
     ############
-    - type: custom:multiple-entity-row
-      entity: sensor.classic_avg_power
-      name: PV Array
-      state_header: Power
-      secondary_info: last-changed
-      entities:
-        - entity: sensor.classic_avg_pv_current
-          name: Current
-        - entity: sensor.classic_avg_pv_voltage
-          name: Voltage
+    - !include cards/pv_power.yaml
 
     - type: section
     ################

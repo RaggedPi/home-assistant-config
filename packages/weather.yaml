@@ -1,6 +1,6 @@
 ################################################################
 ## Ragged Jack Farm                                           ##
-## Package: Darksky Weather                                   ##
+## Package: Weather                                           ##
 ## Author: David Durost <david.durost@gmail.com>              ##
 ## Url: http://ragedjackfarm.net                              ##
 ################################################################
@@ -8,12 +8,17 @@ homeassistant:
   customize:
       package.node_anchors:
         customize: &customize
-          package: 'darksky'
+          package: 'weather'
 
-sensor:
 ################################################################
 # DarkSky                                                      #
 ################################################################
+weather:
+  - platform: darksky
+    api_key: !secret darksky_key
+    mode: daily
+
+sensor:
   # PV related forecasts
   - platform: darksky
     name: pv

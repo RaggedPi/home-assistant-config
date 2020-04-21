@@ -218,7 +218,7 @@ sensor:
     value_template: "{{ value_json.data.adc }}"
     json_attributes_topic: "powerpi/bmk"
     json_attributes_template: "{{ value_json.data.adc | tojson }}" 
-    unit_of_measurement: V
+    unit_of_measurement: A
   # Min Voltage
   - platform: mqtt
     name: magnum_bmk_vmin
@@ -520,6 +520,7 @@ input_select:
       - Bulk
       - Searching
       - Standby
+      - Battery Save
       - Unknown
     initial: Unknown
 
@@ -587,7 +588,7 @@ automation:
   - alias: Start AC Input Boolean
     trigger:
       - platform: numeric_state
-        entity_id: sensor.magnum_inverter_aacin
+        entity_id: sensor.magnum_inverter_aac_in
         above: 0
     action:
       service: input_boolean.turn_on
@@ -597,7 +598,7 @@ automation:
   - alias: Deavtivate AC Input Boolean
     trigger:
       - platform: numeric_state
-        entity_id: sensor.magnum_inverter_aacin
+        entity_id: sensor.magnum_inverter_aac_in
         below: 0.1
     action:
       service: input_boolean.turn_off
@@ -625,7 +626,7 @@ automation:
       state: 'on'
     action:
       service: homeassistant.update_entity
-      entity_id:  sensor.magnum_inverter_ac_input_on_time
+      entity_id:  sensor.magnum_inverter_ac_input_elapsed_time
 
   ## Inverter Mode ##
   ## Set Inverter Mode input_select
@@ -634,13 +635,13 @@ automation:
       platform: state
       entity_id: sensor.magnum_inverter_mode
     action:
-      - service: input_select.set_option
-        data:
+      - service: input_select.select_option
+        data_template:
           entity_id: input_select.magnum_inverter_mode
           option: >-
             {% set mode = 'sensor.magnum_inverter_mode' %}
             {% if is_state(mode, 0) %}
-            Charger In Standby
+            Standby
             {% elif is_state(mode, 1) %}
             Equalizing
             {% elif is_state(mode, 2) %}
@@ -658,11 +659,12 @@ automation:
             {% elif is_state(mode, 64) %}
             Inverting
             {% elif is_state(mode, 80) %}
-            Inverter In Standby
+            Standby
             {% elif is_state(mode, 128) %}
             Searching
             {% else %}
             Unknown
+            {% endif %}
 
   ## Start Elapsed Timer
   - alias: Start Inverter Mode Elapsed Timer

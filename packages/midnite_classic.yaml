@@ -568,7 +568,7 @@ automation:
       entity_id: sensor.classic_charge_stage
     action:
       - service: input_select.select_option
-        data:
+        data_template:
           entity_id: input_select.classic_charge_mode
           option: >-
             {% set mode = 'sensor.classic_charge_stage' %}
@@ -580,7 +580,7 @@ automation:
             Bulk
             {% elif is_state(mode, 5) %}
             Float
-            {% elif is_State(mode, 6) %}
+            {% elif is_state(mode, 6) %}
             {# Float MPPT #}
             Float
             {% elif is_state(mode, 7) %}
@@ -590,8 +590,9 @@ automation:
             {% elif is_state(mode, 18) %}
             {# MPPT #}
             EQ
-            {%- else %}
+            {% else %}
             Unknown
+            {% endif %}
 
   # Set charge mode elapsed timer
   - alias: Start Charge Mode Elapsed Timer
@@ -613,5 +614,6 @@ automation:
       service: homeassistant.update_entity
       entity_id:  sensor.classic_charge_mode_elapsed_time
 
-
-  
+history:
+  include:
+    - sensor.classic_avg_energy_today

@@ -1,6 +1,6 @@
 type: custom:multiple-entity-row
 entity: sensor.classic_avg_energy_today
-name: ''
+name: PV Power
 state_header: Energy
 entities:
   - entity: sensor.classic_avg_power

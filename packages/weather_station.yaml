@@ -109,3 +109,18 @@ sensor:
     value_template: "{{ value_json.data.wind.direction_volts }}"
     json_attributes_topic: "weather/wind/direction_volts"
     json_attributes_template: "{{ value_json.data.wind.direction_volts | tojson }}"        
+
+################################################################
+# Template Sensors                                             #
+################################################################
+  - platform: template
+    sensors:
+      # Wind Direction degrees to compass points
+      weather_station_wind_direction_text:
+        friendly_name: Wind Direction
+        value_template: >
+          {% set deg = states('sensor.weather_station_wind_direction')|float(0) %}
+          {% set abr = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'] %}
+          {%- set i = ((deg/22.5)| round(0))| int %}
+          {%- set i = 0 if i == 16 else i %}
+          {{ abr[i] }}

@@ -3,7 +3,7 @@
 ################################################################
 title: Home
 icon: 'mdi:castle'
-path: default_view
+path: home
 badges: []
 cards:
   - type: entities
@@ -11,78 +11,18 @@ cards:
       ################
       # Power Status #
       ################
-      - type: 'custom:dual-gauge-card'
-        title: System Power
-        inner:
-          colors:
-            - color: var(--label-badge-red)
-              value: 43
-            - color: var(--label-badge-blue)
-              value: 48
-            - color: var(--label-badge-yellow)
-              value: 47.3
-            - color: var(--label-badge-blue)
-              value: 0
-          entity: sensor.magnum_bmk_vdc
-          label: Volts
-          max: 62.5
-          min: 40
-          unit: V
-        outer:
-          colors:
-            - color: var(--label-badge-red)
-              value: 80
-            - color: var(--label-badge-green)
-              value: 94
-            - color: var(--label-badge-yellow)
-              value: 90
-            - color: var(--label-badge-blue)
-              value: 0
-          entity: sensor.magnum_bmk_soc
-          label: SOC
-          max: 100
-          min: 70
-          unit: '%'
-        footer:
-          type: buttons
-          entites:
-            - switch.magnum_eq_toggle
-
+      - !include cards/power_center_gauge.yaml
       - type: section
       #################
       # System Status #
       #################
-      - entity: sensor.magnum_inverter_aacout
-        type: custom:multiple-entity-row
-        name: System Status
-        state_header: Amps Out
-        secondary_info: last-changed
-        entities:
-          - entity: sensor.magnum_inverter_mode_text
-            name: Charging Stage
-          - entity: sensor.magnum_fault
-          - entity: sensor.magnum_inverter_vacout
-            name: VAC Out
-
+      - !include cards/power_center_preview.yaml
       - type: section
       #############
       # PV Status #
       #############
-      - type: custom:multiple-entity-row
-        entity: sensor.classic_mode
-        name: PV Status
-        state_header: Charge Mode
-        secondary_info: last-changed
-        entities:
-          - entity: sensor.classic_charge_mode_time
-      - type: custom:multiple-entity-row
-        entity: sensor.classic_avg_energy_today
-        name: ''
-        state_header: Energy
-        entities:
-          - entity: sensor.classic_avg_power
-          - entity: sensor.classic_avg_pv_current
-          - entity: sensor.classic_avg_pv_voltage
+      - !include cards/pv_preview.yaml
+      - !include cards/pv_power.yaml
       - type: section
       ###################
       # Device Tracking #
@@ -99,130 +39,10 @@ cards:
             name: Catherine
           - entity: person.haven
             name: Haven
-      
-      # - type: entity-filter
-      #   entities:
-      #     - person.david
-      #     - person.cat
-      #   state_filter:
-      #     - 'home'
-      #   card:
-      #     type: glance
-      #     title: People at Home
-          
-      # - type: entity-filter
-      #   entities:
-      #     - person.david
-      #     - person.cat
-      #   state_filter:
-      #     - 'work'
-      #   card:
-      #     type: glance
-      #     title: People at Work              
-
-      # - type: entity-filter
-      #   entities:
-      #     - person.david
-      #     - person.cat
-      #   state_filter:
-      #     - 'not_home'
-      #   card:
-      #     type: glance
-      #     title: People enjoying the life
-
   ###########
   # Weather #
   ###########
-  - type: vertical-stack
-    cards:      
-      ####################
-      # Weather Forecast #
-      ####################
-      - type: weather-forecast
-        entity: weather.home
-      ################
-      # Storm Center #
-      ################
-
-      ###############
-      # Storm Alert #
-      ###############
-      # - type: conditional
-      #   conditions:
-      #     - entity: sensor.storm_center_alerts
-      #       state_not: 0
-      #   card:
-      #     type: glance
-      #     title: Storm Alert
-      #     entities:
-      #       - sensor.storm_center_alerts
-
-      #####################
-      # Storm Information #
-      #####################
-      - entity: sensor.storm_center_wind_direction
-        type: custom:multiple-entity-row
-        name: Storm Information
-        state_header: Wind Bearing
-        secondary_info: last-changed
-        entities:
-          - entity: sensor.storm_center_nearest_storm_distance
-            name: Nearest Storm
-          - entity: sensor.storm_center_storm_direction
-            name: Storm Bearing
-          - entity: sensor.storm_center_wind_speed
-            name: Wind Speed
-      ################
-      # Temperatures #
-      ################
-      - entity: sensor.storm_center_temperature
-        type: custom:multiple-entity-row
-        name: Temperatures
-        state_header: Current Temperature
-        secondary_info: last-changed
-        entities:
-          - entity: sensor.storm_center_apparent_temperature
-            name: 'Feels Like'
-      #################
-      # Precipitation #
-      #################
-      # Snow
-      - type: conditional
-        conditions:
-          - entity: binary_sensor.storm_center_precip
-            state: 'snow'
-        card:
-          entity: sensor.storm_center_precip
-          type: custom:multiple-entity-row
-          name: Precipitation
-          state_header: Type
-          secondary_info: last-changed
-          entities:
-            - entity: sensor.storm_center_precip_intensity
-              name: Intensity
-            - entity: sensor.storm_center_precip_accumulation
-              name: Total
-      # Rain/ Sleet
-      - type: conditional
-        conditions:
-          - entity: sensor.storm_center_precip
-            state_not: 'snow'
-          - entity: sensor.storm_center_precip
-            state_not: 'unknown'
-        card:
-          entity: sensor.storm_center_precip
-          type: custom:multiple-entity-row
-          name: Precipitation
-          state_header: Type
-          secondary_info: last-changed
-          entities:
-            - entity: sensor.storm_center_precip_intensity
-              name: Intensity
-      #################  
-      # Weather radar #
-      #################
-      - type: picture-entity
-        entity: camera.gyx
+  - !include cards/weather_center.yaml
 
   ###############################
   # International Space Station #

@@ -4,7 +4,7 @@
 ## Author: David Durost <david.durost@gmail.com>              ##
 ## Url: http://ragedjackfarm.net                              ##
 ################################################################
-resources: !include ui/resources.yaml
+#resources: !include ui/resources.yaml
   
 animated_background:
   default_url: /local/background-animations/sunny.html

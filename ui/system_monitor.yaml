@@ -91,11 +91,6 @@ cards:
                 color: orange
               - value: 100
                 color: red
-          ###
-          - type: divider
-          # External IP
-          - entity: sensor.public_ip_address
-            icon: mdi:ip-network
 
   ####################
   # Component Counts #

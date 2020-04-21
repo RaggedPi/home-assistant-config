@@ -13,14 +13,16 @@
 - type: module
   url: /community_plugin/sun-card/sun-card.js
 - type: module
-  url: /local/lovelace-animated-background/dist/lovelace-animated-background.js
+  url: /local/lovelace-animated-background/dist/animated-background.js
 - type: module
   url: /community_plugin/button-card/button-card.js
 - type: module
-  url: /community_plugin/bar-card/bar-card.js
+  url: /community_plugin/bar-card/bar-card.js?v=0
 - type: module
-  url: /local/tracker-card/tracker-card.js?track=true
+  url: /local/tracker-card/tracker-card.js?v=0
 - type: module
-  url: /local/lovelace-state-switch/state-switch.js
+  url: /local/lovelace-state-switch/state-switch.js?v=0
 - type: module
-  url: /community_plugin/lovelace-card-tools/card-tools.js
+  url: /community_plugin/lovelace-card-tools/card-tools.js?v=0
+- type: module
+  url: /local/entity-attributes-card/entity-attributes-card.js
