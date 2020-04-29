@@ -198,7 +198,7 @@ sensor:
     value_template: "{{ value_json.data.avg_energy_today }}"
     json_attributes_topic: "powerpi/classic"
     json_attributes_template: "{{ value_json.data.avg_energy_today | tojson }}" 
-    unit_of_measurement: Kw
+    unit_of_measurement: Kwh
   # Average Power - 4119
   - name: classic_avg_power
     platform: mqtt
@@ -593,17 +593,11 @@ automation:
             {% else %}
             Unknown
             {% endif %}
-
-  # Set charge mode elapsed timer
-  - alias: Start Charge Mode Elapsed Timer
-    trigger:
-      platform: state
-      entity_id: input_select.classic_charge_mode
-    action:
-      service: input_datetime.set_datetime
-      data_template:
-        entity_id: input_datetime.classic_charge_mode
-        datetime: "{{ now().strftime('%Y-%m-%d %H:%M:%S') }}" 
+      # Set charge mode elapsed timer
+      - service: input_datetime.set_datetime
+        data_template:
+          entity_id: input_datetime.classic_charge_mode
+          datetime: "{{ now().strftime('%Y-%m-%d %H:%M:%S') }}"      
 
   # Update charge mode elapsed timer
   - alias: Update Charge Mode Elapsed Timer
@@ -613,7 +607,3 @@ automation:
     action:
       service: homeassistant.update_entity
       entity_id:  sensor.classic_charge_mode_elapsed_time
-
-history:
-  include:
-    - sensor.classic_avg_energy_today

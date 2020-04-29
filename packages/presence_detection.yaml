@@ -84,9 +84,10 @@ person:
   #########
   - name: david
     id: david_durost
-    user_id: 1d6561aa60264300b734f222c8fdc270
+    user_id: 9b0955de5d074302ac61236de43efb2e
     device_trackers:
       - device_tracker.david_ping
+      - device_tracker.sm_n960u
     #  - device_tracker.smn960u
     #  - device_tracker.david_nmap
 
@@ -95,7 +96,6 @@ person:
   #############
   - name: cat
     id: catherine_durost
-    user_id: d3779f3079844141a2ab057b9320633b
     device_trackers:
       - device_tracker.catherine_ping
       # - device_tracker.smn775n
@@ -106,14 +106,12 @@ person:
   #########
   - name: haven
     id: haven_audet
-    user_id: d2b40abeaa214ce596b23958f0e0ac04
 
   ########
   # Nova #
   ########
   - name: nova
     id: nova_durost
-    user_id: 5ec59da310d44d32ae0658a4e9c8d254
 
 ##########
 # Groups #
@@ -125,26 +123,26 @@ group:
   adults_home:
     name: Adults at home
     entities:
-      - person.david
-      - person.cat
+      - person.david_durost
+      - person.catherine_durost
   ############
   # Children #
   ############
   children_home:
     name: Children at home
     entities:
-      - person.haven
-      - person.nova
+      - person.haven_audet
+      - person.nova_durost
   ############
   # Everyone #
   ############
   anyone_home:
     name: anyone at home
     entities:
-      - person.david
-      - person.cat
-      - person.haven
-      - person.nova
+      - person.david_durost
+      - person.catherine_durost
+      - person.haven_audet
+      - person.nova_durost
 
 ###############
 # Automations #
@@ -260,25 +258,10 @@ script:
 recorder:
   include:
     entities:
-      - person.david
-      - person.cat
-      - person.haven
-      - person.nova
-      - group.adults_home
-      - group.children_home
-      - group.anyone_home
-      - input_boolean.guest_mode
-
-###########
-# History #
-###########
-history:
-  include:
-    entities:
-      - person.david
-      - person.cat
-      - person.haven
-      - person.nova
+      - person.david_durost
+      - person.catherine_durost
+      - person.haven_audet
+      - person.nova_durost
       - group.adults_home
       - group.children_home
       - group.anyone_home

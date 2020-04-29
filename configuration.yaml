@@ -14,47 +14,48 @@ homeassistant:
   customize: !include customizations.yaml
   packages: !include_dir_named packages
 
+# Frontend Configs
 frontend:   
   javascript_version: latest
   themes: !include_dir_merge_named themes
+
+# Updater Config
 updater:
   include_used_components: true
+
+# Logger Config
 logger:
+
+# HTTP Config
 #http:
+
+# Logbook Config
 logbook:
-recorder:
-  exclude:
-    domains:
-      - sensor
-      - binary_sensor
-      - input_boolean
-      - input_datetime
-      - input_select
-map: 
-sun: 
-config:
-conversation:
-discovery:
-system_health:
+
+# History Config
 history:
-  include:
-    domains:
-      - sensor
-  exclude:
-    entities: 
-      - sensor.date
-      - sensor.time
-      - sensor.dark_sky_summary
-      - sensor.dark_sky_daily_summary
-      - sensor.dark_sky_hourly_summary
-      - sensor.dark_sky_minutely_summary
-      - sensor.dark_sky_daily_high_temperature
-      - sensor.dark_sky_daily_low_temperature
-      - sensor.dark_sky_precip_probability
-      - sensor.dark_sky_nearest_storm_bearing
-      - sensor.dark_sky_nearest_storm_distance
+
+# Map Config
+map: 
+
+# Aun Config
+sun: 
+
+# Stock Config
+config:
+
+# Conversation Config
+conversation:
+
+# Discovery Config
+discovery:
+
+# System Health Config
+system_health:
+
+# HACS Config
 hacs:
   token: !secret hacs_token
-lovelace: 
-  mode: yaml
+
+# Mobile App Config
 mobile_app:

@@ -335,6 +335,16 @@ sensor:
 ################################################################
   - platform: template
     sensors:
+      # Calculations
+      magnum_realtime_power:
+        friendly_name: 'Realtime Power'
+        value_template: >-
+          {% set a = states('sensor.magnum_inverter_adc')| float %}
+          {% set v = states('sensor.magnum_inverter_vdc')| float %}
+          {% set w = (a * v) | float(2) %}
+          {{ w }}
+        unit_of_measurement: W
+
       # Elapsed Times
       magnum_inverter_ac_input_elapsed_time:
         entity_id: sensor.time
@@ -665,18 +675,12 @@ automation:
             {% else %}
             Unknown
             {% endif %}
+      # Set inverter mode elasped timer
+      - service: input_datetime.set_datetime
+        data_template:
+          entity_id: input_datetime.magnum_inverter_mode
+          datetime: "{{ now().strftime('%Y-%m-%d %H:%M:%S') }}"
 
-  ## Start Elapsed Timer
-  - alias: Start Inverter Mode Elapsed Timer
-    trigger:
-      platform: state
-      entity_id: input_select.magnum_inverter_mode
-      to: 'on'
-    action:
-      service: input_datetime.set_datetime
-      data_template:
-        entity_id: input_datetime.magnum_inverter_mode
-        datetime: "{{ now().strftime('%Y-%m-%d %H:%M:%S') }}"
   ## Update Elapsed Timer
   - alias: Update Inverter Mode Elapsed Timer
     trigger:

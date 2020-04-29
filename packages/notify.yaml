@@ -9,11 +9,11 @@ notify:
   #########
   # HTML5 #
   #########
-  - platform: html5
-    name: html5
-    vapid_pub_key: !secret html5_pub_key
-    vapid_prv_key: !secret html5_prv_key
-    vapid_email: david.durost@gmail.com
+  # - platform: html5
+  #   name: html5
+  #   vapid_pub_key: !secret html5_pub_key
+  #   vapid_prv_key: !secret html5_prv_key
+  #   vapid_email: david.durost@gmail.com
 
   ##########
   # Adults #
@@ -68,5 +68,21 @@ notify:
 #########
   - name: slack_hass_io
     platform: slack
-    api_key: !secret bot_oauth_access_token
+    api_key: !secret slackbot_oauth_access_token
     default_channel: '#hass_io'
+
+########
+# SMTP #
+########
+  # - name: email_david
+  #   platform: smtp
+  #   server: !secret smtp_server
+  #   port: !secret smtp_port
+  #   timeout: 15
+  #   sender: info@raggedjackfarm.net
+  #   encryption: starttls
+  #   username: !secret smtp_user
+  #   password: !secret smtp_password
+  #   recipient:
+  #     - david.durost@gmail.com
+  #   sender_name: RaggedPi Home Automation

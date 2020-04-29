@@ -1,0 +1,84 @@
+################################################################
+## Ragged Jack Farm                                           ##
+## Package: House Mode                                        ##
+## Author: David Durost <david.durost@gmail.com>              ##
+## Url: http://ragedjackfarm.net                              ##
+################################################################
+homeassistant:
+  customize:
+      package.node_anchors:
+        customize: &customize
+          package: 'house_mode'
+
+##################
+# Input Booleans #
+##################
+input_boolean:
+  # Guest Mode
+  guest_mode:
+    name: Guest Mode
+    icon: mdi:account-alert
+    initial: off
+  # School Mode
+  school_mode:
+    name: School Mode
+    icon: mdi:school
+    initial: off
+  # Alert Mode
+  alert_mode:
+    name: Alert Mode
+    icon: mdi:alert-octagram
+    initial: off
+  # Speech Notifications
+  speech_notifications:
+    name: Speech Notifications
+    icon: mdi:speaker-wireless
+    initial: on
+  # Text Notifications
+  text_notifications:
+    name: Text Notifications
+    icon: mdi:cellphone-wireless
+    initial: on
+  good_night:
+    name: Night Mode
+    initial: off
+##########
+# Groups #
+##########
+group:
+  home_modes:
+    entities:
+      - input_boolean.guest_mode
+      - input_boolean.school_mode
+      - input_boolean.alert_mode
+      - input_boolean.speech_notifications
+      - input_boolean.text_notifications
+#      - input_boolean.last_message
+#      - sensor.low_battery
+
+###############
+# Automations #
+###############
+automation:
+  - alias: 'Away Mode'
+    trigger:
+#    - platform: state
+#      entity_id: binary_sensor.away_mode
+#      to: 'True'
+    - platform: state
+      entity_id: group.family
+      to: 'not_home'
+    - platform: event
+      event_type: ifttt_webhook_received
+      event_data:
+        action: IFTTT_Away
+    condition:
+    - condition: state
+      entity_id: group.family
+      state: 'not_home'
+    - condition: state
+      entity_id: input_boolean.guest_mode
+      state: 'off'
+    action:
+    - service: input_boolean.turn_off
+      entity_id: input_boolean.good_night

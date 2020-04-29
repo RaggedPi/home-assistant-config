@@ -70,7 +70,7 @@ automation:
       - condition: and
         conditions:      
           - condition: template
-            value_template: "{{ states('sensor.magnum_inverter_aacin')|int > 0 }}"
+            value_template: "{{ states('sensor.magnum_inverter_aac_in')|int > 0 }}"
       - service: notify.david
         data:
           message: "[RaggedPi] Disengage the aux generator."

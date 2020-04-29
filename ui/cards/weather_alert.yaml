@@ -1,9 +1,0 @@
-type: conditional
-conditions:
-  - entity: sensor.storm_center_alerts
-    state_not: '0'
-card:
-  type: entity
-  title: Storm Alert
-  entities:
-    - sensor.storm_center_alerts
