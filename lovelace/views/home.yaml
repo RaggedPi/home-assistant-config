@@ -1,0 +1,51 @@
+################################################################
+# Home #########################################################
+################################################################
+title: Home
+icon: 'mdi:castle'
+path: home
+badges: []
+cards:
+  - type: entities
+    entities:
+      ################
+      # Power Status #
+      ################
+      - !include ../partials/power_center_gauge.yaml
+      - type: section
+      #################
+      # System Status #
+      #################
+      - !include ../partials/power_center_preview.yaml
+      - type: section
+      #############
+      # PV Status #
+      #############
+      - !include ../partials/pv_status.yaml
+      - !include ../partials/pv_power.yaml
+      - type: section
+      ###################
+      # Device Tracking #
+      ###################
+      - entity: person.nova_durost
+        type: custom:multiple-entity-row
+        name: People
+        state_header: Nova
+        secondary_info: last-changed
+        entities:
+          - entity: person.david_durost
+            name: David
+          - entity: person.catherine_durost
+            name: Catherine
+          - entity: person.haven_audet
+            name: Haven
+  ###########
+  # Weather #
+  ###########
+  - !include ../partials/weather_center.yaml
+
+  ###############################
+  # International Space Station #
+  ###############################
+  # - type: picture-entity
+  #   entity: camera.iss

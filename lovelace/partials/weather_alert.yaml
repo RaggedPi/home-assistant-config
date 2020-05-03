@@ -1,0 +1,47 @@
+card:
+  color: red
+  color_type: card
+  entity: sensor.storm_center_alert_text
+  layout: icon_state
+  show_name: false
+  show_state: true
+  size: 100%
+  styles:
+    card:
+      - height: 60px
+    grid:
+      - grid-template-areas: '"i s" "n n" "l l"'
+      - grid-template-columns: 20% 1fr
+      - grid-template-rows: 1fr min-content min-content
+    state:
+      - text-transform: uppercase
+      - font-weight: bold
+      - justify-self: start
+  tap_action:
+    action: call-service
+    service: browser_mod.popup
+    service_data:
+      card:
+        content: >
+          ##{% if is_state('sensor.storm_center_alerts','1') %} {{
+          states.sensor.storm_center_alerts.attributes.title }} {% else %} {{
+          states.sensor.storm_center_alerts.attributes.title_0 }} {% endif %}  
+
+          ###{% if is_state('sensor.storm_center_alerts','0') %} No Weather Alerts
+          {% elif is_state('sensor.storm_center_alerts','1') %} Expires at {{
+          states.sensor.storm_center_alerts.attributes.expires | int |
+          timestamp_custom("%-I:%M %p on %A")}} {% else %} Expires at {{
+          states.sensor.storm_center_alerts.attributes.expires_0 | int |
+          timestamp_custom("%-I:%M %p on %A")}} {% endif %} {% if
+          is_state('sensor.storm_center_alerts','1') %} {{
+          states.sensor.storm_center_alerts.attributes.description }} {% else %} {{
+          states.sensor.storm_center_alerts.attributes.description_0 }} {% endif %}
+        type: markdown
+      deviceID:
+        - this
+      title: Alert Detail
+  type: 'custom:button-card'
+conditions:
+  - entity: sensor.storm_center_alerts
+    state_not: '0'
+type: conditional

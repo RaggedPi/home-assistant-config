@@ -1,0 +1,32 @@
+type: 'custom:dual-gauge-card'
+title: System Power
+inner:
+  colors:
+    - color: var(--label-badge-red)
+      value: 43
+    - color: var(--label-badge-blue)
+      value: 48
+    - color: var(--label-badge-yellow)
+      value: 47.3
+    - color: var(--label-badge-blue)
+      value: 0
+  entity: sensor.magnum_bmk_vdc
+  label: Volts
+  max: 62.5
+  min: 40
+  unit: V
+outer:
+  colors:
+    - color: var(--label-badge-red)
+      value: 80
+    - color: var(--label-badge-green)
+      value: 94
+    - color: var(--label-badge-yellow)
+      value: 90
+    - color: var(--label-badge-blue)
+      value: 0
+  entity: sensor.magnum_bmk_soc
+  label: SOC
+  max: 100
+  min: 70
+  unit: '%'
