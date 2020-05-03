@@ -64,14 +64,14 @@ automation:
         for:
           minutes: 3
     action:
-      - service: notify.david
+      - service: notify.mobile_app_sm_n960u
         data:
           message: "[RaggedPi] System nearing full."
       - condition: and
         conditions:      
           - condition: template
             value_template: "{{ states('sensor.magnum_inverter_aac_in')|int > 0 }}"
-      - service: notify.david
+      - service: notify.mobile_app_sm_n960u
         data:
           message: "[RaggedPi] Disengage the aux generator."
   

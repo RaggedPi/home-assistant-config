@@ -1,3 +1,5 @@
 lovelace:
   mode: yaml
   resources: !include ../lovelace/resources.yaml
+
+browser_mod:

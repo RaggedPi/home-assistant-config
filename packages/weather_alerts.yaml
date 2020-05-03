@@ -16,7 +16,7 @@ homeassistant:
 sensor:
   - platform: template
     sensors:
-      dark_sky_alert_text:
+      storm_center_alert_text:
         entity_id: sensor.storm_center_alerts
         friendly_name: 'Weather Alert Text'
         value_template: >-
