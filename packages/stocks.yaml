@@ -1,0 +1,42 @@
+################################################################
+## Ragged Jack Farm                                           ##
+## Package: Alpha Vantage                                     ##
+## Author: David Durost <david.durost@gmail.com>              ##
+## Url: http://ragedjackfarm.net                              ##
+################################################################
+homeassistant:
+  customize:
+    sensor.stocks_fdx:
+      friendly_name: 'Fedex Corp.'
+      icon: fab:fedex
+    sensor.stocks_nvda:
+      friendly_name: 'Nvidia Corp.'
+    package.node_anchors:
+      customize: &customize
+        package: 'stocks'
+  customize_glob:
+    "sensor.stocks_*":
+      icon: mdi:finance
+
+################################################################
+# Sensors                                                      #
+################################################################
+sensor:
+  # Stocks #####################################################
+  # NVDA - Nvidia Corp.
+  - name: stocks_nvda
+    platform: mqtt
+    state_topic: "stocks/nvda"
+    value_template: "{{ value_json.price | float(2) }}"
+    json_attributes_topic: "stocks/nvda"
+    json_attributes_template: "{{ value_json.price | tojson }}" 
+    unit_of_measurement: $
+
+  # FDX - Fedex Corp.
+  - name: stocks_fdx
+    platform: mqtt
+    state_topic: "stocks/fdx"
+    value_template: "{{ value_json.price | float(2) }}"
+    json_attributes_topic: "stocks/fdx"
+    json_attributes_template: "{{ value_json.price | tojson }}" 
+    unit_of_measurement: $

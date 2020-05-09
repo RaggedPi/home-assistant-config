@@ -1,0 +1,14 @@
+################################################################
+# Stocks And Finances ##########################################
+################################################################
+title: Stock And Finances
+icon: 'fas:fil-invoice-dollar'
+path: finances
+badges: []
+cards: 
+  - type: glance
+    title: Stocks
+    show_header_toggle: false
+    entities:
+      - sensor.stocks_nvda
+      - sensor.stocks_fdx

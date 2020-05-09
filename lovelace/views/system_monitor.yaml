@@ -35,9 +35,11 @@ cards:
           # Hass.io Uptime
           - entity: sensor.ha_uptime
             icon: mdi:home-assistant
+          ###
+          - type: divider
           # CPU Usage
           - type: custom:bar-card
-            title: Processor Use
+            #title: Processor Use
             entity: sensor.processor_use
             height: 30px
             animation: 'off'
@@ -51,7 +53,7 @@ cards:
                 color: red
           # CPU Temp
           - type: custom:bar-card
-            title: CPU Temp
+            #title: CPU Temp
             entity: sensor.cpu_temp
             animation: 'off'
             indicator: 'off'
@@ -65,7 +67,7 @@ cards:
                 color: red
           # Memory Usage
           - type: custom:bar-card
-            title: Memory Use
+            #title: Memory Use
             entity: sensor.memory_use_percent
             height: 30px
             animation: 'off'
@@ -79,7 +81,7 @@ cards:
                 color: red
           # Disk Usage
           - type: custom:bar-card
-            title: Disk Use
+            #title: Disk Use
             entity: sensor.disk_use_percent
             height: 30px
             animation: 'off'
@@ -153,10 +155,10 @@ cards:
       ############################
       # Custom Component Updates #
       ############################
-  - type: vertical-stack
-    cards:
-      - type: custom:tracker-card
-        title:
-        trackers:
-          - sensor.custom_card_tracker
-          - sensor.custom_component_tracker
+  # - type: vertical-stack
+  #   cards:
+  #     - type: custom:tracker-card
+  #       title:
+  #       trackers:
+  #         - sensor.custom_card_tracker
+  #         - sensor.custom_component_tracker

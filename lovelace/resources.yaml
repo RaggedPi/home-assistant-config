@@ -28,4 +28,5 @@
   url: /local/entity-attributes-card/entity-attributes-card.js
 - type: module
   url: /browser_mod.js
-    
+- type: module
+  url: /local/hui-element/hui-element.js    
