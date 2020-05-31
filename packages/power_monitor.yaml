@@ -14,6 +14,17 @@ homeassistant:
 # Automation                                                   #
 ################################################################
 automation:
+  # Notify of (re)starting
+  - alias: 'System Status - Startup'
+    trigger:
+      - platform: homeassistant
+        event: start
+    action:
+      - service: notify.mobile_app_sm_n960u
+        data_template:
+          message: >-
+            {% set start_time = as_timestamp(now())| timestamp_custom('%H:%M:%S', false) %}
+            [RaggedPi] started at {{ start_time }}
   # Periodic System Status Notification
   - alias: 'System Status - Periodic'
     trigger:

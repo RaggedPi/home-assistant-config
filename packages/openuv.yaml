@@ -1,0 +1,22 @@
+openuv:
+  api_key: !secret openUV_key
+
+automation:
+  - alias: Update OpenUV every 30 minutes while the sun is at least 10 degrees above the horizon
+    trigger:
+      platform: time_pattern
+      minutes: '/60'
+    condition:
+      condition: numeric_state
+      entity_id: sun.sun
+      value_template: '{{ state.attributes.elevation }}'
+      above: 10
+    action:
+      service: openuv.update_uv_index_data
+
+  - alias: Update OpenUV protection window once a day
+    trigger:
+      platform: time
+      at: "02:12:00"
+    action:
+      service: openuv.update_protection_data

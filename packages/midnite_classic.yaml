@@ -511,6 +511,24 @@ sensor:
           {% set d = states('sensor.classic_revision_day')|int %}
           {{m}}/{{d}}/{{y}}
 
+  ##############################################################
+  # Statistics                                                 #
+  ##############################################################
+  - platform: statistics
+    entity_id: sensor.classic_avg_energy_today
+  - platform: statistics
+    entity_id: sensor.classic_avg_battery_current
+  - platform: statistics
+    entity_id: sensor.classic_avg_battery_voltage
+  - platform: statistics
+    entity_id: sensor.classic_avg_power
+  - platform: statistics
+    entity_id: sensor.classic_avg_pv_current
+  - platform: statistics
+    entity_id: sensor.classic_avg_pv_voltage
+  - platform: statistics
+    entity_id: sensor.classic_soc 
+
 ##############################################################
 # Input Datetime                                             #
 ##############################################################
@@ -607,3 +625,25 @@ automation:
     action:
       service: homeassistant.update_entity
       entity_id:  sensor.classic_charge_mode_elapsed_time
+
+################################################################
+# Recorder/ History                                            #
+################################################################
+recorder:
+  include:
+    entities:
+      - sensor.classic_avg_energy_today
+      - sensor.classic_avg_power
+      - sensor.classic_avg_battery_current
+      - sensor.classic_avg_battery_voltage
+      - sensor.classic_avg_pv_current
+      - sensor.classic_avg_pv_voltage
+history:
+  include:
+    entities:
+      - sensor.classic_avg_energy_today
+      - sensor.classic_avg_power
+      - sensor.classic_avg_battery_current
+      - sensor.classic_avg_battery_voltage
+      - sensor.classic_avg_pv_current
+      - sensor.classic_avg_pv_voltage

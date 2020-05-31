@@ -699,3 +699,23 @@ automation:
 ################################################################
 # History / Recorder                                           #
 ################################################################
+recorder:
+  include:
+    entities:
+      - sensor.magnum_inverter_aac_in
+      - sensor.magnum_inverter_aac_out
+      - sensor.magnum_inverter_adc
+      - sensor.magnum_inverter_vac_in
+      - sensor.magnum_inverter_vac_out
+      - sensor.magnum_inverter_vdc
+      - sensor.magnum_bmk_soc
+history:
+  include:
+    entities:
+      - sensor.magnum_inverter_aac_in
+      - sensor.magnum_inverter_aac_out
+      - sensor.magnum_inverter_adc
+      - sensor.magnum_inverter_vac_in
+      - sensor.magnum_inverter_vac_out
+      - sensor.magnum_inverter_vdc
+      - sensor.magnum_bmk_soc
