@@ -1,0 +1,38 @@
+# Temperatures
+type: custom:stack-in-card
+mode: horizontal
+title: Temperatures
+cards:
+  - type: custom:gauge-card
+    entity: sensor.classic_pcb_temp
+    title: PCB
+    min: 0
+    max: 200
+    scale: 40px
+    severity:
+      green: 0
+      yellow: 130
+      red: 150
+    styles:
+      cards:
+        - --keep-bakground: 'true'
+  - type: custom:gauge-card
+    entity: sensor.classic_fet_temp
+    title: FET
+    min: 0
+    max: 120
+    scale: 40px
+    severity:
+      green: 0
+      yellow: 105
+      red: 115
+  - type: custom:gauge-card
+    entity: sensor.classic_battery_temp
+    title: Battery
+    min: 0
+    max: 80
+    scale: 40px
+    severity:
+      green: 0
+      yellow: 80
+      red: 95

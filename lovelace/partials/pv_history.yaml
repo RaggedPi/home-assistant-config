@@ -1,0 +1,39 @@
+type: vertical-stack
+cards:
+  - type: custom:mini-graph-card
+    hour_to_show: 168
+    points_per_dot: 0.25
+    aggregate_func: last
+    group_by: hour
+    entities:
+    - sensor.classic_avg_energy_today
+    show:
+      graph: bar
+  - type: horizontal-stack
+    cards:
+      - type: custom:mini-graph-card
+        hours_to_show: 72
+        points_per_hour: 1
+        hour24: true
+        entities:
+          - entity: sensor.classic_avg_power
+      - type: custom:mini-graph-card
+        hours_to_show: 72
+        points_per_hour: 1
+        hour24: true
+        entities:
+          - entity: sensor.classic_avg_battery_voltage
+  - type: horizontal-stack
+    cards:
+      - type: custom:mini-graph-card
+        hours_to_show: 72
+        points_per_hour: 1
+        hour24: true
+        entities:
+          - entity: sensor.classic_avg_pv_voltage
+      - type: custom:mini-graph-card
+        hours_to_show: 72
+        points_per_hour: 1
+        hour24: true
+        entities:
+          - entity: sensor.classic_avg_pv_current

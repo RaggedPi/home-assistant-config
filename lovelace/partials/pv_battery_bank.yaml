@@ -1,0 +1,16 @@
+type: entities
+title: Battery Bank
+show_header_toggle: false
+entities:
+- type: custom:multiple-entity-row
+  entity: sensor.classic_avg_battery_current
+  name: 'Battery Bank'
+  state_header: Current
+  secondary_info: last-changed
+  entities:
+    - entity: sensor.classic_amphours_today
+      name: Amp Hours
+    - entity: sensor.classic_avg_battery_voltage
+      name: Voltage
+    - entity: sensor.classic_nom_battery_voltage
+      name: Nominal Voltage

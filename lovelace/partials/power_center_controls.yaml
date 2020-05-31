@@ -1,0 +1,20 @@
+# Controls
+type: custom:multiple-entity-row
+entity: input_boolean.magnum_inverter_ac_input
+name: Control
+state_header: AC Input
+toggle: false
+state_color: true
+icon: 'mdi:power-socket-us'
+entities:
+  - entity: switch.magnum_inverter_toggle
+    name: Inverter
+    toggle: true
+  - entity: switch.magnum_charger_toggle
+    name: Charger
+    toggle: true
+  - entity: switch.magnum_eq_toggle
+    name: EQ
+    toggle: true
+  - entity: sensor.magnum_inverter_ac_input_elapsed_time
+    name: On Time

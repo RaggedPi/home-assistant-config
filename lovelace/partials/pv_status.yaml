@@ -1,27 +1,29 @@
 # Resting
-type: conditional
-conditions:
-  - entity: sensor.classic_charge_mode
-    state: Resting
-row:
-  type: custom:multiple-entity-row
-  entity: sensor.classic_mode
-  name: PV Status
-  state_header: Charge Mode
-  secondary_info: last-changed
-  entities:
-    - entity: sensor.classic_reason_for_rest_text
-    - entity: sensor.classic_charge_mode_elapsed_time
-# All Others
-type: conditional
-conditions:
-  - entity: sensor.classic_charge_mode
-    state_not: Resting
-row:
-  type: custom:multiple-entity-row
-  entity: sensor.classic_mode
-  name: PV Status
-  state_header: Charge Mode
-  secondary_info: last-changed
-  entities:
-    - entity: sensor.classic_charge_mode_elapsed_time
+type: vertical-stack
+cards:
+  - type: conditional
+    conditions:
+      - entity: sensor.classic_mode
+        state: Resting
+    card:
+      type: custom:multiple-entity-row
+      entity: sensor.classic_mode
+      name: PV Status
+      state_header: Charge Mode
+      secondary_info: last-changed
+      entities:
+        - entity: sensor.classic_reason_for_rest_text
+        - entity: sensor.classic_charge_mode_elapsed_time
+  # All Others
+  - type: conditional
+    conditions:
+      - entity: sensor.classic_mode
+        state_not: Resting
+    card:
+      type: custom:multiple-entity-row
+      entity: sensor.classic_mode
+      name: PV Status
+      state_header: Charge Mode
+      secondary_info: last-changed
+      entities:
+        - entity: sensor.classic_charge_mode_elapsed_time

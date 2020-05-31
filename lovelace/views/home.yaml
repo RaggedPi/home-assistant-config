@@ -6,24 +6,22 @@ icon: 'mdi:castle'
 path: home
 badges: []
 cards:
-  - type: entities
-    entities:
+  - type: custom:stack-in-card
+    mode: vertical
+    cards:
       ################
       # Power Status #
       ################
       - !include ../partials/power_center_gauge.yaml
-      - type: section
       #################
       # System Status #
       #################
-      - !include ../partials/power_center_preview.yaml
-      - type: section
+      - !include ../partials/power_center_status.yaml
       #############
       # PV Status #
       #############
       - !include ../partials/pv_status.yaml
       - !include ../partials/pv_power.yaml
-      - type: section
       ###################
       # Device Tracking #
       ###################
@@ -39,6 +37,7 @@ cards:
             name: Catherine
           - entity: person.haven_audet
             name: Haven
+
   ###########
   # Weather #
   ###########

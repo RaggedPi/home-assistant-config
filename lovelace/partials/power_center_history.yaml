@@ -1,0 +1,68 @@
+type: vertical-stack
+cards:
+  - type: custom:mini-graph-card
+    hour_to_show: 168
+    points_per_dot: 0.25
+    #aggregate_func: last
+    group_by: hour
+    color_thresholds:
+      - value: 0
+        color: var(--accent-color)
+      - value: 80
+        color: "#c0392b" # red
+      - value: 85
+        color: "#d35400" # red-orange
+      - value: 90
+        color: "#f39c12" # yellow-orange
+      - value: 94
+        color: "#a9bf2a" # yellow-green
+      - value: 99
+        color: "#40bf2a" # "#3dc736" # green
+    entities:
+    - sensor.magnum_bmk_soc
+  - type: horizontal-stack
+    cards:
+      - type: custom:mini-graph-card
+        hours_to_show: 72
+        points_per_hour: 1
+        hour24: true
+        entities:
+          - entity: sensor.magnum_inverter_aac_out
+            name: AC Amps Out
+      - type: custom:mini-graph-card
+        hours_to_show: 72
+        points_per_hour: 1
+        hour24: true
+        entities:
+          - entity: sensor.magnum_inverter_vac_out
+            name: AC Voltage Out
+  - type: horizontal-stack
+    cards:
+      - type: custom:mini-graph-card
+        hours_to_show: 72
+        points_per_hour: 1
+        hour24: true
+        entities:
+          - entity: sensor.magnum_inverter_adc
+      - type: custom:mini-graph-card
+        hours_to_show: 72
+        points_per_hour: 1
+        hour24: true
+        entities:
+          - entity: sensor.magnum_inverter_vdc
+  - type: horizontal-stack
+    cards:
+      - type: custom:mini-graph-card
+        hours_to_show: 72
+        points_per_hour: 1
+        hour24: true
+        entities:
+          - entity: sensor.magnum_inverter_aac_in
+            name: AC Amps In
+      - type: custom:mini-graph-card
+        hours_to_show: 72
+        points_per_hour: 1
+        hour24: true
+        entities:
+          - entity: sensor.magnum_inverter_vac_in
+            name: AC Voltage In

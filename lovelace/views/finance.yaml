@@ -2,7 +2,7 @@
 # Stocks And Finances ##########################################
 ################################################################
 title: Stock And Finances
-icon: 'fas:fil-invoice-dollar'
+icon: 'fas:file-invoice-dollar'
 path: finances
 badges: []
 cards: 

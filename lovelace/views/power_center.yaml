@@ -1,146 +1,33 @@
-################################################################
 # Power Center #################################################
-################################################################
 title: Power Center
 icon: 'mdi:power-socket-us'
 path: inverter_stats
 badges: []
 cards:
-  - type: entities
-    entities:
-      ################
-      # Power Status #
-      ################
-      - !include ../partials/power_center_gauge.yaml
-      - type: section
-      #################
-      # System Status #
-      #################
-      - !include ../partials/power_center_preview.yaml
-      - type: section
-      ############
-      # Switches #
-      ############
-      - entity: input_boolean.magnum_inverter_ac_input
-        type: custom:multiple-entity-row
-        name: Control
-        state_header: AC Input
-        toggle: false
-        state_color: true
-        icon: 'mdi:power-socket-us'
-        entities:
-          - entity: switch.magnum_inverter_toggle
-            name: Inverter
-            toggle: true
-          - entity: switch.magnum_charger_toggle
-            name: Charger
-            toggle: true
-          - entity: switch.magnum_eq_toggle
-            name: EQ
-            toggle: true
-          - entity: sensor.magnum_inverter_ac_input_elapsed_time
-            name: On Time
-  ################
-  # Power States #
-  ################
-  - type: entities
-    title: Power
-    show_header_toggle: false
-    entities:
-      ############
-      # AC Power #
-      ############
-      - entity: sensor.magnum_inverter_vac_out
-        type: custom:multiple-entity-row
-        name: AC
-        state_header: VAC Out
-        secondary_info: last-changed
-        entities:
-          - entity: sensor.magnum_inverter_aac_in
-            name: Amps In
-          - entity: sensor.magnum_inverter_aac_out
-            name: Amps out
-          - entity: sensor.magnum_inverter_vac_in
-            name: VAC In
-
-      - type: section
-      ############
-      # DC Power #
-      ############
-      - entity: sensor.magnum_bmk_vdc
-        type: custom:multiple-entity-row
-        name: DC
-        state_header: Current Voltage
-        secondary_info: last-changed
-        entities:
-          - entity: sensor.magnum_inverter_adc
-            name: Amps Out
-
-  - type: entities
-    title: Stats
-    show_header_toggle: false
-    entities:
-      ################
-      # Temperatures #
-      ################
-      - entity: sensor.magnum_inverter_transformer_temp
-        type: custom:multiple-entity-row
-        name: Temperatures
-        secondary_info: last-changed
-        state_header: Transformer
-        entities: 
-          - entity: sensor.magnum_inverter_battery_temp
-            name: Battery
-          - entity: sensor.magnum_inverter_fet_temp
-            name: FET
-
-      - type: section
-      ######################
-      # Firmware Revisions #
-      ######################
-      - entity: sensor.magnum_remote_revision
-        type: custom:multiple-entity-row
-        name: Revisions
-        secondary_info: Firmware
-        state_header: Remote
-        entities:
-          - entity: sensor.magnum_inverter_model
-            name: Inverter Model
-          - entity: sensor.magnum_inverter_revision
-            name: Inverter
-          - entity: sensor.magnum_bmk_revision
-            name: BMK
-          - entity: sensor.magnum_ags_revision
-            name: AGS
-
-      - type: section
-      ################
-      # Misc Sensors #
-      ################
-      - entity: sensor.magnum_bmk_amph
-        type: custom:multiple-entity-row
-        name: 'Misc'
-        state_header: AmpHours
-        entities:
-          - entity: sensor.magnum_inverter_frequency
-
-  #######
-  # AGS #
-  #######
-  - type: entities
-    title: AGS
-    show_header_toggle: false
-    entities:
-      - entity: switch.magnum_ags_manual_run
-        type: custom:multiple-entity-row
-        name: Generac
-        secondary_info: last-changed
-        state_header: Run
-        toggle: true
-        entities:
-          - entity: binary_sensor.magnum_ags_running
-            name: Generator running
-          - entity: sensor.magnum_ags_runtime 
-            name: Runtime      
-          - entity: sensor.magnum_ags_status_text
-            name: Status
+  # Stats
+  - type: vertical-stack
+    cards:
+      - type: custom:stack-in-card
+        mode: vertical
+        cards:
+          # Gauge
+          - !include ../partials/power_center_gauge.yaml
+          # Controls
+          - !include ../partials/power_center_controls.yaml
+          # Status
+          - !include ../partials/power_center_status.yaml
+      # Power
+      - !include ../partials/power_center_power.yaml
+      # Infos
+      - !include ../partials/power_center_info.yaml
+  # History
+  - type: vertical-stack
+    cards:
+      - !include ../partials/power_center_history.yaml
+  # Misc
+  - type: vertical-stack
+    cards:
+      # AGS
+      - !include ../partials/power_center_ags.yaml
+      # Temperatures
+      - !include ../partials/power_center_temps.yaml

@@ -1,0 +1,27 @@
+type: entities
+title: Power
+show_header_toggle: false
+entities:
+  # AC Power
+  - entity: sensor.magnum_inverter_vac_out
+    type: custom:multiple-entity-row
+    name: AC
+    state_header: VAC Out
+    secondary_info: last-changed
+    entities:
+      - entity: sensor.magnum_inverter_aac_in
+        name: Amps In
+      - entity: sensor.magnum_inverter_aac_out
+        name: Amps out
+      - entity: sensor.magnum_inverter_vac_in
+        name: VAC In
+  - type: section
+  # DC Power
+  - entity: sensor.magnum_bmk_vdc
+    type: custom:multiple-entity-row
+    name: DC
+    state_header: Current Voltage
+    secondary_info: last-changed
+    entities:
+      - entity: sensor.magnum_inverter_adc
+        name: Amps Out

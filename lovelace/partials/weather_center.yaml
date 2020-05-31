@@ -1,5 +1,8 @@
-type: vertical-stack
-cards:      
+type: custom:stack-in-card
+mode: vertical
+keep:
+  - --keep-background: 'true' 
+cards:    
   ####################
   # Weather Forecast #
   ####################

@@ -1,0 +1,14 @@
+type: entities
+title: Charge Controller
+show_header_toggle: false
+entities:
+  - type: custom:multiple-entity-row
+    entity: sensor.classic_model
+    name: Classic
+    state_header: Model
+    secondary_info: last-changed
+    entities:
+      - entity: sensor.classic_pcb_revision
+        name: PCB Revision
+      - entity: sensor.classic_build_date
+        name: Revision Date

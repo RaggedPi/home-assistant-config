@@ -1,0 +1,28 @@
+type: entities
+title: System Info
+show_header_toggle: false
+entities:
+  # Firmware Revisions
+  - entity: sensor.magnum_remote_revision
+    type: custom:multiple-entity-row
+    name: Revisions
+    secondary_info: Firmware
+    state_header: Remote
+    entities:
+      - entity: sensor.magnum_inverter_model
+        name: Inverter Model
+      - entity: sensor.magnum_inverter_revision
+        name: Inverter
+      - entity: sensor.magnum_bmk_revision
+        name: BMK
+      - entity: sensor.magnum_ags_revision
+        name: AGS
+
+  - type: section
+  # Misc Sensors
+  - entity: sensor.magnum_bmk_amph
+    type: custom:multiple-entity-row
+    name: 'Misc'
+    state_header: AmpHours
+    entities:
+      - entity: sensor.magnum_inverter_frequency

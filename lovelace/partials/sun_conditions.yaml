@@ -1,0 +1,29 @@
+type: entities
+entities:
+  # Sun
+  - type: "custom:sun-card"
+    name: ''
+
+  - type: section
+
+  # Today's Conditions
+  - type: custom:multiple-entity-row
+    entity: sensor.pv_cloud_coverage_0d
+    name: Today
+    state_header: Cloud Coverage
+    secondary_info: last-changed
+    entities:
+      - entity: sensor.pv_visibility_0d
+        name: Visibility
+
+  - type: section
+
+  # Tomorrow's Conditions
+  - type: custom:multiple-entity-row
+    entity: sensor.pv_cloud_coverage_1d
+    name: Tomorrow
+    state_header: Cloud Coverage
+    secondary_info: last-changed
+    entities:
+      - entity: sensor.pv_visibility_1d
+        name: Visibility
