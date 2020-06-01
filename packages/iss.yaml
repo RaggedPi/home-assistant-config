@@ -5,8 +5,12 @@
 ## Url: http://ragedjackfarm.net                              ##
 ################################################################
 
+binary_sensor:
+  - platform: iss
+    show_on_map: true
+
 camera:
   - platform: generic
     name: ISS
-    still_image_url: http://staticmap.openstreetmap.de/staticmap.php?center={{ state_attr('binary_sensor.iss', 'lat') }},{{ state_attr('binary_sensor.iss', 'long') }}&zoom=4&size=865x512&maptype=mapnik&markers={{ state_attr('binary_sensor.iss', 'lat') }},{{ state_attr('binary_sensor.iss', 'long') }},lightblue
+    still_image_url: https://maps.googleapis.com/maps/api/staticmap?center={{ state_attr('binary_sensor.iss', 'latitude') }},{{ state_attr('binary_sensor.iss', 'longitude') }}&key=AIzaSyCI744Q21pyd6bNLBnIHXBLP-fiWp3vgIg&zoom=4&size=865x512&maptype=mapnik&markers={{ state_attr('binary_sensor.iss', 'lat') }},{{ state_attr('binary_sensor.iss', 'long') }},lightblue
     limit_refetch_to_url_change: true

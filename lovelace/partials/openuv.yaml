@@ -1,0 +1,14 @@
+type: custom:gauge-card
+entity: sensor.current_uv_index
+title: UV Index
+min: 0
+max: 13
+scale: 40px
+severity:
+  green: 0
+  yellow: 5.5
+  red: 7.5
+  # 10.5+ extreme
+styles:
+  cards:
+    - --keep-background: 'true'

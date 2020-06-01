@@ -4,46 +4,27 @@
 ## Author: David Durost <david.durost@gmail.com>              ##
 ## Url: http://ragedjackfarm.net                              ##
 ################################################################
-#resources: !include lovelace/views/resources.yaml
+# resources: !include lovelace/resources.yaml
   
-animated_background:
-  default_url: /local/background-animations/sunny.html
-  entity: "sensor.storm_center"
-  state_url:
-      'sunny': /local/background-animations/sunny.html
-      'partlycloudy': /local/background-animations/cloudy.html
-      'cloudy': /local/background-animations/cloudy.html
-      'mostlycloudy': /local/background-animations/mostlycloudy.html
-      'clear-night': /local/background-animations/night.html
-      'fog': /local/background-animations/fog.html
+animated_background: !include lovelace/animated_background.yaml
 
 title: Ragged Jack Mtn
+
+custom_header:
+  compact_mode: true
+
 views:
-  ################################################################
-  ## Home View ###################################################
-  ################################################################
+  # Home View
   - !include lovelace/views/home.yaml
-  ################################################################
-  ## Power Center View ###########################################
-  ################################################################
+  # Power Center View
   - !include lovelace/views/power_center.yaml  
-  ################################################################
-  ## PV System View ##############################################
-  ################################################################
+  # PV System View
   - !include lovelace/views/pv_array.yaml
-  ################################################################
-  ## Generator Management View ###################################
-  ################################################################
+  # Generator Management View
   - !include lovelace/views/generac.yaml
-  ################################################################
-  ## Stock And Finances ##########################################
-  ################################################################
+  # Stock And Finances
   - !include lovelace/views/finance.yaml
-  ################################################################
-  ## Media Control View ##########################################
-  ################################################################ 
+  # Media Control View
   - !include lovelace/views/media.yaml
-  ################################################################
-  ## System Monitor View #########################################
-  ################################################################
+  # System Monitor View
   - !include lovelace/views/system_monitor.yaml

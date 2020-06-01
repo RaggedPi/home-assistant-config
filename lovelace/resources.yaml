@@ -13,7 +13,7 @@
 - type: module
   url: /hacsfiles/sun-card/sun-card.js
 - type: module
-  url: /local/lovelace-animated-background/dist/animated-background.js
+  url: /hacsfiles/lovelace-animated-background/animated-background.js
 - type: module
   url: /hacsfiles/button-card/button-card.js
 - type: module

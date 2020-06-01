@@ -84,3 +84,4 @@ cards:
   #################
   - type: picture-entity
     entity: camera.gyx
+  - !include openuv.yaml

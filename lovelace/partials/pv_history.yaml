@@ -8,7 +8,7 @@ cards:
     entities:
     - sensor.classic_avg_energy_today
     show:
-      graph: bar
+      - graph: bar
   - type: horizontal-stack
     cards:
       - type: custom:mini-graph-card
